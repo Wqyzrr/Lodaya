@@ -1,0 +1,969 @@
+/* =========================================================
+   PESONA JAWA TIMUR — GLOBAL DESIGN SYSTEM & LANDING PAGE
+   Palet: Kayu Jati, Emas Antik, Hijau Hutan, Krem Hangat, Terakota
+   ========================================================= */
+:root {
+  --bg-night: #120B08;
+  --wood-dark: #1B100B;
+  --wood-teak: #361E13;
+  --wood-warm: #532E1C;
+  --gold-antique: #C99A55;
+  --gold-soft: #E8C58E;
+  --gold-bright: #FFE1A8;
+  --forest-deep: #183024;
+  --cream-warm: #F5E9D3;
+  --terracotta: #A84A28;
+
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Kalibrasi Presisi 4 Pintu pada struktur_joglo.png (Rasio 4:3) */
+  --door-top: 40.5%;
+  --door-height: 20.5%;
+  --door-width: 7.6%;
+
+  /* Safe area untuk perangkat berponi / notch */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--bg-night);
+  color: var(--gold-soft);
+  font-family: var(--font-body);
+  user-select: none;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================
+   ORIENTATION LOCK (PORTRAIT BLOCKER)
+   ========================================================= */
+#orientation-lock {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at center, #2B170E 0%, #100805 100%);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+#orientation-lock.is-visible {
+  display: flex;
+}
+
+.lock-content {
+  max-width: 320px;
+  padding: 2rem 1.5rem;
+  border: 1px solid rgba(232, 197, 142, 0.35);
+  border-radius: 12px;
+  background: rgba(18, 10, 7, 0.85);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+.lock-ornament {
+  width: 52px;
+  height: 2px;
+  margin: 0 auto 1.2rem;
+  background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+}
+
+.rotate-icon {
+  width: 68px;
+  height: 68px;
+  margin-bottom: 1rem;
+  animation: tiltPhone 2.4s ease-in-out infinite;
+}
+
+.lock-content h2 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin-bottom: 0.6rem;
+  color: var(--gold-bright);
+  line-height: 1.35;
+}
+
+.lock-content p {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(245, 233, 211, 0.84);
+}
+
+@keyframes tiltPhone {
+  0%, 20% { transform: rotate(0deg); }
+  50%, 70% { transform: rotate(-90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* CSS fallback sebelum JS aktif */
+@media screen and (orientation: portrait) and (max-width: 960px) {
+  #orientation-lock { display: flex; }
+}
+
+/* =========================================================
+   OVERLAY ATMOSFER & VEIL TRANSISI
+   ========================================================= */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 800;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: radial-gradient(#fff 0.5px, transparent 0.5px);
+  background-size: 4px 4px;
+}
+
+#transition-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 700;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at center, #FFF1CE 0%, #D99B4E 48%, #1A0E09 100%);
+  will-change: opacity;
+}
+
+/* =========================================================
+   GLOBAL HUD (ATAS)
+   ========================================================= */
+.global-hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding:
+    calc(clamp(0.55rem, 1.9dvh, 1.25rem) + var(--safe-top))
+    calc(clamp(0.85rem, 2.5vw, 2rem) + var(--safe-right))
+    0
+    calc(clamp(0.85rem, 2.5vw, 2rem) + var(--safe-left));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 600;
+  pointer-events: none;
+}
+
+.hud-left,
+.hud-right {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.hud-left {
+  position: relative;
+}
+
+.brand-mark {
+  display: flex;
+  flex-direction: column;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+}
+
+.brand-mark .eyebrow {
+  font-size: clamp(0.56rem, 1.3dvh, 0.72rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255, 225, 168, 0.88);
+}
+
+.brand-mark h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 3.1dvh, 1.7rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--gold-bright);
+  line-height: 1.15;
+}
+
+/* Tombol Pill Global (Target Sentuh Nyaman untuk Usia 40-50+) */
+.hud-pill {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 38px;
+  padding: 0.42rem 0.9rem;
+  background: rgba(24, 13, 8, 0.88);
+  border: 1px solid rgba(232, 197, 142, 0.48);
+  border-radius: 999px;
+  color: var(--gold-bright);
+  font-family: var(--font-body);
+  font-size: clamp(0.74rem, 1.8dvh, 0.86rem);
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.hud-pill[hidden] {
+  display: none;
+}
+
+.hud-pill:hover,
+.hud-pill:focus-visible {
+  background: rgba(54, 30, 19, 0.96);
+  border-color: var(--gold-bright);
+  outline: none;
+}
+
+.hud-pill:active {
+  transform: scale(0.97);
+}
+
+.hud-pill svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.btn-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+}
+
+/* Kontrol Audio Global */
+.audio-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  pointer-events: auto;
+}
+
+.btn-audio .icon-sound-off { display: none; }
+.btn-audio.is-muted .icon-sound-on { display: none; }
+.btn-audio.is-muted .icon-sound-off { display: block; }
+.btn-audio.is-muted {
+  color: rgba(232, 197, 142, 0.65);
+  border-color: rgba(232, 197, 142, 0.28);
+}
+
+.volume-popover {
+  display: flex;
+  align-items: center;
+  padding: 0.35rem 0.65rem;
+  min-height: 38px;
+  background: rgba(24, 13, 8, 0.88);
+  border: 1px solid rgba(232, 197, 142, 0.38);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+#audio-volume-slider {
+  width: clamp(58px, 8vw, 84px);
+  accent-color: var(--gold-bright);
+  cursor: pointer;
+}
+
+/* =========================================================
+   SISTEM SCENE (GPU-SAFE)
+   ========================================================= */
+.scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.scene.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* =========================================================
+   SCENE 0: LANDING PAGE — 5-LAYER PARALLAX
+   ========================================================= */
+#scene-landing {
+  background-color: #1A0E09;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.parallax-inner,
+.fg-parallax {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+/* LAYER 1: LANGIT */
+.layer-sky {
+  position: absolute;
+  inset: -6%;
+  width: 112%;
+  height: 112%;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.full-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* LAYER 2: PEGUNUNGAN */
+.layer-mountains {
+  position: absolute;
+  inset: -4%;
+  width: 108%;
+  height: 108%;
+  z-index: 2;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.mountain-img {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 96%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.ambient-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold-bright);
+  box-shadow: 0 0 8px var(--gold-bright);
+  opacity: 0;
+}
+
+/* LAYER 3: DUNIA JOGLO (ZOOM TARGET) */
+.joglo-world {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.joglo-parallax {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: clamp(0.8dvh, 2dvh, 2.5dvh);
+  will-change: transform;
+}
+
+/* Rasio ketat 4:3 agar kalibrasi 4 pintu 100% presisi di semua rasio layar */
+.joglo-stage {
+  position: relative;
+  height: min(84vh, 56vw);
+  height: min(84dvh, 56vw);
+  width: calc(min(84vh, 56vw) * 4 / 3);
+  width: calc(min(84dvh, 56vw) * 4 / 3);
+  max-height: 88dvh;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* GROUNDING ALAMI DI BAWAH JOGLO (Menghilangkan kesan melayang) */
+.joglo-grounding {
+  position: absolute;
+  bottom: -4dvh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 112vw;
+  height: 80%;          /* Sesuaikan persentase ini agar pas di kaki rumah */
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.ground-ambient-shadow {
+  position: absolute;
+  bottom: 24%;
+  left: 11%;
+  width: 78%;
+  height: 36%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(8, 4, 2, 0.78) 0%,
+    rgba(14, 7, 4, 0.45) 55%,
+    transparent 82%
+  );
+  filter: blur(8px);
+  z-index: 2;
+}
+
+.grounding-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;     /* Menampilkan 100% gambar utuh (kiri-kanan & atas-bawah) tanpa crop */
+  display: block;
+  opacity: 1;           /* Tampil 100% penuh */
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.joglo-img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.52));
+}
+
+/* =========================================================
+   4 PINTU INTERAKTIF & PLAKAT ARSITEKTURAL TRADISIONAL
+   ========================================================= */
+.door-unit {
+  position: absolute;
+  top: var(--door-top);
+  width: var(--door-width);
+  height: var(--door-height);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  z-index: 10;
+}
+
+/* Kalibrasi posisi asli dipertahankan 100% */
+.door-1 { left: 21.3%; }
+.door-2 { left: 37.3%; }
+.door-3 { left: 55.6%; }
+.door-4 { left: 71.8%; }
+
+.door-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50% 50% 0 0 / 28% 28% 0 0;
+  overflow: hidden;
+  display: flex;
+  perspective: 550px;
+  background: #140804;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.85);
+  transition: box-shadow 0.28s ease;
+}
+
+.door-unit:hover .door-frame,
+.door-unit:focus-visible .door-frame,
+.door-unit:active .door-frame {
+  box-shadow:
+    0 0 20px rgba(255, 206, 118, 0.78),
+    inset 0 0 12px rgba(255, 206, 118, 0.45);
+}
+
+.door-interior-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 55%, #FFF7DC 0%, #FFB952 45%, #5C2809 100%);
+  opacity: 0.12;
+  will-change: opacity;
+}
+
+.door-leaf {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  background-image: url('../assets/daun_pintu.png');
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  backface-visibility: hidden;
+  will-change: transform;
+  z-index: 2;
+}
+
+.door-leaf.left {
+  background-position: 0% 50%;
+  transform-origin: left center;
+}
+
+.door-leaf.right {
+  background-position: 100% 50%;
+  transform-origin: right center;
+}
+
+/* Plakat Arsitektural Tradisional Jawa Timur */
+.door-plaque {
+  position: absolute;
+  bottom: 106%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.26rem 0.62rem 0.28rem;
+  min-width: max-content;
+  background:
+    linear-gradient(180deg, rgba(56, 30, 17, 0.96) 0%, rgba(25, 12, 7, 0.96) 100%);
+  border: 1px solid rgba(232, 197, 142, 0.72);
+  border-radius: 5px 5px 3px 3px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.65),
+    inset 0 0 0 2px rgba(18, 9, 5, 0.85),
+    inset 0 0 0 3px rgba(201, 154, 85, 0.35);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Ornamen puncak kecil khas ukiran joglo */
+.plaque-crest {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  background: var(--gold-bright);
+  border: 1px solid #2A140B;
+  transform: translateX(-50%) rotate(45deg);
+  box-shadow: 0 0 6px rgba(255, 225, 168, 0.6);
+}
+
+/* Aksen sudut kanan-kiri */
+.door-plaque::before,
+.door-plaque::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  background: var(--gold-antique);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.door-plaque::before { left: 4px; }
+.door-plaque::after { right: 4px; }
+
+/* Aksen warna halus per ruangan pada garis bawah plakat */
+.door-plaque[data-motif="peran"] { border-bottom: 2px solid #D96B38; }
+.door-plaque[data-motif="tari"] { border-bottom: 2px solid #E8B85A; }
+.door-plaque[data-motif="musik"] { border-bottom: 2px solid #8E73C7; }
+.door-plaque[data-motif="makanan"] { border-bottom: 2px solid #5B9B6B; }
+
+.plaque-title {
+  font-family: var(--font-display);
+  font-size: clamp(0.56rem, 1.5dvh, 0.78rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--gold-bright);
+  padding: 0 0.32rem;
+  line-height: 1.2;
+}
+
+.plaque-sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.46rem, 1.05dvh, 0.6rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(245, 233, 211, 0.78);
+  line-height: 1.15;
+}
+
+.door-unit:hover .door-plaque,
+.door-unit:focus-visible .door-plaque,
+.door-unit:active .door-plaque {
+  transform: translateX(-50%) translateY(-3px);
+  border-color: var(--gold-bright);
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.72),
+    0 0 12px rgba(255, 225, 168, 0.35),
+    inset 0 0 0 2px rgba(18, 9, 5, 0.85),
+    inset 0 0 0 3px rgba(255, 225, 168, 0.55);
+}
+
+/* =========================================================
+   LAYER 4: FOREGROUND OCCLUSION (LENTERA & DEDAUNAN)
+   ========================================================= */
+.layer-foreground {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.fg-slot {
+  position: absolute;
+  will-change: transform, opacity;
+}
+
+.lantern-slot-left {
+  top: -2%;
+  left: 14%;
+  height: clamp(24dvh, 32dvh, 210px);
+}
+
+.lantern-slot-right {
+  top: -2%;
+  right: 14%;
+  height: clamp(24dvh, 32dvh, 210px);
+}
+
+.foliage-slot-left {
+  bottom: -4%;
+  left: -3%;
+  height: clamp(38dvh, 52dvh, 360px);
+}
+
+.foliage-slot-right {
+  bottom: -4%;
+  right: -3%;
+  height: clamp(38dvh, 52dvh, 360px);
+}
+
+.fg-lantern,
+.fg-foliage {
+  height: 100%;
+  width: auto;
+  display: block;
+  will-change: transform;
+}
+
+.fg-lantern {
+  transform-origin: top center;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
+}
+
+.foliage-left {
+  transform-origin: bottom left;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+}
+
+.foliage-right {
+  transform-origin: bottom right;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+}
+
+.landing-hint {
+  position: absolute;
+  bottom: calc(clamp(0.5rem, 1.8dvh, 1.1rem) + var(--safe-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.36rem 1rem;
+  background: rgba(18, 11, 8, 0.82);
+  border: 1px solid rgba(232, 197, 142, 0.32);
+  border-radius: 999px;
+  font-size: clamp(0.64rem, 1.55dvh, 0.78rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 225, 168, 0.9);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 25;
+}
+
+/* =========================================================
+   4 SECTION INTERIOR (MOUNT CONTAINER)
+   ========================================================= */
+.interior-scene {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding:
+    calc(clamp(3.3rem, 9.5dvh, 4.5rem) + var(--safe-top))
+    calc(clamp(0.85rem, 2.5vw, 2rem) + var(--safe-right))
+    calc(clamp(0.75rem, 2dvh, 1.4rem) + var(--safe-bottom))
+    calc(clamp(0.85rem, 2.5vw, 2rem) + var(--safe-left));
+  will-change: transform, opacity;
+}
+
+.interior-scene[data-theme="peran"] { background: radial-gradient(circle at center, #3A1C12 0%, #160A06 100%); }
+.interior-scene[data-theme="tari"] { background: radial-gradient(circle at center, #2D1F14 0%, #120C07 100%); }
+.interior-scene[data-theme="musik"] { background: radial-gradient(circle at center, #1F1824 0%, #0D0A10 100%); }
+.interior-scene[data-theme="makanan"] { background: radial-gradient(circle at center, #352315 0%, #140D07 100%); }
+
+.room-mount {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Shell sementara untuk verifikasi Fase 2 sebelum Fase 3 */
+.interior-placeholder {
+  text-align: center;
+  max-width: 560px;
+  padding: 1.5rem 2rem;
+  background: rgba(18, 10, 7, 0.65);
+  border: 1px solid rgba(232, 197, 142, 0.32);
+  border-radius: 12px;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 0.74rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(232, 197, 142, 0.78);
+  margin-bottom: 0.45rem;
+}
+
+.interior-placeholder h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 4.2dvh, 2.2rem);
+  color: var(--gold-bright);
+  margin-bottom: 0.65rem;
+}
+
+.interior-placeholder p {
+  font-size: clamp(0.84rem, 2.1dvh, 0.98rem);
+  line-height: 1.55;
+  color: rgba(245, 233, 211, 0.85);
+}
+
+/* =========================================================
+   TIRAI PEMBUKA (CURTAIN OVERLAY)
+   ========================================================= */
+#curtain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  cursor: pointer;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+.curtain-panel {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  background-color: #2A0C0C;
+  overflow: hidden;
+  will-change: transform;
+  backface-visibility: hidden;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.85);
+}
+
+.curtain-folds {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(110, 24, 20, 0.35) 6%,
+    rgba(40, 8, 8, 0.6) 12%
+  );
+}
+
+.curtain-trim {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, #9C6F34, #FFE1A8, #9C6F34);
+  box-shadow: 0 0 14px rgba(255, 210, 125, 0.45);
+}
+
+.curtain-panel.left .curtain-trim { right: 0; }
+.curtain-panel.right .curtain-trim { left: 0; }
+
+.curtain-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.curtain-emblem {
+  text-align: center;
+  padding: clamp(1rem, 3dvh, 1.8rem) clamp(1.6rem, 4vw, 2.8rem);
+  background: rgba(18, 8, 6, 0.92);
+  border: 1px solid rgba(232, 197, 142, 0.58);
+  border-radius: 10px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.78);
+}
+
+.curtain-eyebrow {
+  display: block;
+  font-size: clamp(0.62rem, 1.45dvh, 0.76rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(232, 197, 142, 0.85);
+  margin-bottom: 0.35rem;
+}
+
+.curtain-emblem h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 4.2dvh, 2.2rem);
+  color: var(--gold-bright);
+  letter-spacing: 0.08em;
+}
+
+.curtain-divider {
+  width: 68px;
+  height: 1px;
+  margin: 0.75rem auto;
+  background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+}
+
+.curtain-cta {
+  display: block;
+  font-size: clamp(0.7rem, 1.7dvh, 0.85rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+/* =========================================================
+   OPTIMASI PROPORSIONAL MOBILE LANDSCAPE
+   (Memperbaiki Joglo yang sebelumnya terlalu besar di HP)
+   ========================================================= */
+@media screen and (max-height: 540px) and (orientation: landscape) {
+  .joglo-parallax {
+    padding-bottom: 2.2dvh;
+  }
+
+  /* Proporsi seimbang: atap Joglo tidak terpotong HUD, grounding terlihat utuh */
+  .joglo-stage {
+    height: min(84vh, 62vw);
+    height: min(84dvh, 62vw);
+    width: calc(min(84vh, 62vw) * 4 / 3);
+    width: calc(min(84dvh, 62vw) * 4 / 3);
+    max-height: 85dvh;
+  }
+
+  .door-plaque {
+    bottom: 105%;
+    padding: 0.18rem 0.44rem 0.2rem;
+  }
+
+  .plaque-title {
+    font-size: clamp(0.5rem, 2.15dvh, 0.66rem);
+    letter-spacing: 0.03em;
+    padding: 0 0.2rem;
+  }
+
+  .plaque-sub {
+    display: none;
+  }
+
+  .lantern-slot-left { left: 10%; height: 26dvh; }
+  .lantern-slot-right { right: 10%; height: 26dvh; }
+  .foliage-slot-left,
+  .foliage-slot-right { height: 42dvh; }
+
+  .hud-pill {
+    min-height: 34px;
+    padding: 0.3rem 0.72rem;
+    font-size: 0.74rem;
+  }
+
+  .volume-popover {
+    min-height: 34px;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .audio-label {
+    display: none;
+  }
+}
+
+/* Layar ponsel landscape sangat pendek (mis. 667x375 / 740x360) */
+@media screen and (max-height: 400px) and (orientation: landscape) {
+  .joglo-stage {
+    height: min(81dvh, 58vw);
+    width: calc(min(81dvh, 58vw) * 4 / 3);
+  }
+
+  .door-plaque::before,
+  .door-plaque::after {
+    display: none;
+  }
+
+  .landing-hint {
+    font-size: 0.6rem;
+    padding: 0.26rem 0.78rem;
+  }
+}
+
+/* =========================================================
+   PREFERS-REDUCED-MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .rotate-icon {
+    animation: none;
+  }
+
+  .door-plaque,
+  .door-frame,
+  .hud-pill {
+    transition: none;
+  }
+}

@@ -1,0 +1,449 @@
+/* =========================================================
+   RUANG IV — SENI MAKANAN: DAPUR TRADISIONAL JAWA TIMUR
+   ========================================================= */
+.makanan-shell {
+  width: 100%;
+  height: 100%;
+  max-width: 1120px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.45rem, 1.4dvh, 0.85rem);
+}
+
+.makanan-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.makanan-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.makanan-tag {
+  font-size: clamp(0.62rem, 1.45dvh, 0.74rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+.makanan-title-group h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.7dvh, 1.42rem);
+  color: var(--gold-bright);
+}
+
+.makanan-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-kitchen-subtle {
+  min-height: 36px;
+  padding: 0.32rem 0.82rem;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 197, 142, 0.45);
+  background: rgba(34, 19, 10, 0.9);
+  color: var(--gold-bright);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-kitchen-subtle[hidden] {
+  display: none;
+}
+
+/* Layar Pemilihan 3 Hidangan */
+.dish-selector-view {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.dish-selector-intro {
+  text-align: center;
+  font-size: clamp(0.84rem, 2.1dvh, 0.98rem);
+  color: var(--cream-warm);
+}
+
+.dish-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.65rem, 1.8vw, 1.2rem);
+}
+
+.dish-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(0.85rem, 2.5dvh, 1.35rem) clamp(0.75rem, 1.8vw, 1.15rem);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(58, 32, 18, 0.92) 0%, rgba(26, 14, 8, 0.96) 100%);
+  border: 1.5px solid rgba(232, 197, 142, 0.42);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  color: var(--cream-warm);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.dish-card:hover,
+.dish-card:focus-visible {
+  transform: translateY(-4px);
+  border-color: var(--gold-bright);
+  outline: none;
+}
+
+.dish-svg-wrap {
+  width: clamp(72px, 15dvh, 104px);
+  height: clamp(72px, 15dvh, 104px);
+  margin-bottom: 0.55rem;
+}
+
+.dish-card h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.6dvh, 1.28rem);
+  color: var(--gold-bright);
+  margin-bottom: 0.3rem;
+}
+
+.dish-origin {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-bottom: 0.4rem;
+}
+
+.dish-card p {
+  font-size: clamp(0.76rem, 1.8dvh, 0.86rem);
+  line-height: 1.45;
+  color: rgba(245, 233, 211, 0.86);
+  margin-bottom: 0.65rem;
+}
+
+.dish-card-cta {
+  margin-top: auto;
+  padding: 0.35rem 0.95rem;
+  border-radius: 999px;
+  background: rgba(201, 154, 85, 0.22);
+  border: 1px solid var(--gold-bright);
+  color: var(--gold-bright);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* Ruang Memasak Aktif (Dapur Kayu Hangat) */
+.kitchen-work-view {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.kitchen-work-view[hidden],
+.dish-selector-view[hidden],
+.kitchen-complete-view[hidden] {
+  display: none;
+}
+
+/* Panel Panduan Wajib di Atas Meja Dapur */
+.kitchen-guide-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.6rem 0.95rem;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(64, 34, 17, 0.95) 0%, rgba(34, 18, 10, 0.95) 100%);
+  border: 1px solid rgba(255, 225, 168, 0.55);
+}
+
+.guide-step-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin-bottom: 0.12rem;
+}
+
+.guide-instruction-text {
+  font-size: clamp(0.84rem, 2.05dvh, 0.98rem);
+  font-weight: 600;
+  color: #FFF6E5;
+  line-height: 1.35;
+}
+
+.guide-progress-bar {
+  width: clamp(90px, 14vw, 150px);
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.guide-progress-bar span {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--gold-soft);
+  margin-bottom: 0.22rem;
+}
+
+.guide-progress-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 225, 168, 0.16);
+  overflow: hidden;
+}
+
+.guide-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #C99A55, #FFE1A8);
+  transition: width 0.25s ease;
+}
+
+/* Meja Dapur (Kiri: Bahan, Kanan: Wadah / Alat Masak) */
+.kitchen-bench {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 0.85rem;
+  padding: clamp(0.7rem, 2dvh, 1.1rem);
+  border-radius: 14px;
+  border: 1.5px solid rgba(232, 197, 142, 0.4);
+  background:
+    radial-gradient(circle at 75% 25%, rgba(255, 196, 108, 0.16) 0%, transparent 55%),
+    linear-gradient(180deg, #341D11 0%, #23130B 60%, #1A0E08 100%);
+  box-shadow: inset 0 0 36px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+.kitchen-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0.7rem;
+  border-radius: 10px;
+  background: rgba(18, 10, 6, 0.52);
+  border: 1px solid rgba(232, 197, 142, 0.22);
+}
+
+.kitchen-panel-title {
+  font-family: var(--font-display);
+  font-size: clamp(0.8rem, 1.9dvh, 0.94rem);
+  color: var(--gold-bright);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.ingredient-tray {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  overflow-y: auto;
+  padding-right: 0.15rem;
+}
+
+.ingredient-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 46px;
+  padding: 0.45rem 0.65rem;
+  border-radius: 10px;
+  background: rgba(54, 30, 17, 0.92);
+  border: 1.5px solid rgba(232, 197, 142, 0.35);
+  color: var(--cream-warm);
+  font-size: clamp(0.78rem, 1.85dvh, 0.9rem);
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+}
+
+.ingredient-item.is-target {
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 0 2px rgba(255, 225, 168, 0.28);
+  animation: pulseTarget 1.8s ease-in-out infinite;
+}
+
+.ingredient-item.is-done {
+  opacity: 0.45;
+  border-color: rgba(91, 155, 107, 0.6);
+  background: rgba(24, 48, 36, 0.55);
+  animation: none;
+  cursor: default;
+}
+
+.ingredient-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255, 240, 210, 0.65);
+}
+
+/* Area Wadah Masak & Drop Zone */
+.vessel-station {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 10px;
+  border: 2px dashed rgba(232, 197, 142, 0.35);
+  background: rgba(255, 225, 168, 0.04);
+  padding: 0.75rem;
+  text-align: center;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.vessel-station.is-drop-ready {
+  border-color: var(--gold-bright);
+  background: rgba(255, 225, 168, 0.12);
+}
+
+.vessel-svg-box {
+  width: clamp(86px, 19dvh, 132px);
+  height: clamp(86px, 19dvh, 132px);
+}
+
+.vessel-label {
+  font-family: var(--font-display);
+  font-size: clamp(0.88rem, 2.1dvh, 1.05rem);
+  color: var(--gold-bright);
+}
+
+.vessel-status {
+  font-size: clamp(0.76rem, 1.75dvh, 0.86rem);
+  color: rgba(245, 233, 211, 0.86);
+}
+
+.btn-kitchen-action {
+  min-height: 42px;
+  padding: 0.5rem 1.35rem;
+  border-radius: 999px;
+  border: 1px solid var(--gold-bright);
+  background: linear-gradient(180deg, #D9A659 0%, #9E6E2B 100%);
+  color: #1A0D07;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+.btn-kitchen-action[hidden] {
+  display: none;
+}
+
+.kitchen-toast {
+  position: absolute;
+  bottom: 0.65rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.34rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(18, 10, 6, 0.92);
+  border: 1px solid var(--gold-bright);
+  color: var(--gold-bright);
+  font-size: 0.8rem;
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 15;
+}
+
+.kitchen-toast.is-visible {
+  opacity: 1;
+}
+
+/* Ghost elemen saat menyeret bahan */
+.drag-ghost {
+  position: fixed;
+  z-index: 999;
+  pointer-events: none;
+  padding: 0.42rem 0.8rem;
+  border-radius: 999px;
+  background: #3B2012;
+  border: 2px solid var(--gold-bright);
+  color: var(--gold-bright);
+  font-size: 0.84rem;
+  font-weight: 700;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.65);
+  transform: translate(-50%, -50%);
+}
+
+/* Layar Selesai Memasak */
+.kitchen-complete-view {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.complete-card {
+  width: min(620px, 92%);
+  padding: clamp(1.1rem, 3.2dvh, 1.8rem) clamp(1.25rem, 3vw, 2.1rem);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(56, 31, 17, 0.96) 0%, rgba(22, 12, 7, 0.98) 100%);
+  border: 1.5px solid var(--gold-bright);
+  text-align: center;
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.72);
+}
+
+.complete-svg {
+  width: clamp(86px, 18dvh, 120px);
+  height: clamp(86px, 18dvh, 120px);
+  margin: 0 auto 0.55rem;
+}
+
+.complete-card h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3.3dvh, 1.7rem);
+  color: var(--gold-bright);
+  margin-bottom: 0.4rem;
+}
+
+.complete-card p {
+  font-size: clamp(0.82rem, 2dvh, 0.94rem);
+  line-height: 1.55;
+  color: var(--cream-warm);
+  margin-bottom: 0.9rem;
+}
+
+.complete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+@keyframes pulseTarget {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(255, 225, 168, 0.25); }
+  50% { box-shadow: 0 0 0 5px rgba(255, 225, 168, 0.55); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ingredient-item.is-target { animation: none; }
+}
