@@ -1,7 +1,3 @@
-/**
- * js/main.js
- * Titik masuk utama aplikasi modular Pesona Jawa Timur.
- */
 import { appState } from './core/state-manager.js';
 import { loadingManager } from './core/loading-manager.js';
 import { audioManager } from './core/audio-manager.js';
@@ -24,23 +20,25 @@ async function bootstrap() {
   audioManager.init();
   tutorialManager.init();
 
-  // 2. Daftarkan 4 ruangan independen
+  // 2. Jalankan animasi opening kipas batik SEGERA (tidak menunggu loading selesai)
+  transitionManager.init();
+
+  // 3. Daftarkan 4 ruangan independen
   navigation.registerRoom(peranRoom);
   navigation.registerRoom(tariRoom);
   navigation.registerRoom(musikRoom);
   navigation.registerRoom(makananRoom);
   navigation.init();
 
-  // 3. Muat aset esensial halaman utama (Tier 1) secara jujur
+  // 4. Muat aset esensial halaman utama sambil animasi opening berjalan
   await loadingManager.loadLandingAssets();
   appState.set('landingReady', true);
 
-  // 4. Aktifkan sistem gerak & transisi setelah aset utama siap
+  // 5. Aktifkan sistem gerak parallax & gyroscope
   gyroscopeSystem.init();
   parallaxSystem.init();
-  transitionManager.init();
 
-  // 5. Sembunyikan layar pemuatan untuk menampakkan tirai pembuka
+  // 6. Tampilkan tombol "Ketuk Layar untuk Masuk"
   loadingManager.hideLandingLoader();
 }
 

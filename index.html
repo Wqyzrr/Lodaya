@@ -43,52 +43,81 @@
   </div>
 
 <!-- =========================================================
-       ANIMASI OPENING KIPAS BATIK (LOADING + PEMBUKAAN)
+       ANIMASI OPENING KIPAS (TAHAP 1: 4 KIPAS FULL -> TAHAP 2: 4 KIPAS 360°)
        ========================================================= -->
-  <div id="opening-stage" role="button" tabindex="0" aria-label="Pembukaan Pameran Pesona Jawa Timur">
-    <!-- Ornamen Sudut (Hiasan 1 - 4) -->
+  <div id="opening-stage" aria-hidden="true">
+    <!-- Ornamen 4 Sudut -->
     <img src="assets/hiasan1.webp" alt="" class="op-ornament op-tl" draggable="false" />
     <img src="assets/hiasan2.webp" alt="" class="op-ornament op-tr" draggable="false" />
     <img src="assets/hiasan3.webp" alt="" class="op-ornament op-bl" draggable="false" />
     <img src="assets/hiasan4.webp" alt="" class="op-ornament op-br" draggable="false" />
 
-    <!-- Ornamen Sayap Belakang Kipas (Hiasan 5 & 6) -->
-    <div class="op-wings">
-      <img src="assets/hiasan5.webp" alt="" class="op-wing wing-left" draggable="false" />
-      <img src="assets/hiasan6.webp" alt="" class="op-wing wing-right" draggable="false" />
+    <!-- TAHAP 1: 4 Kipas Raksasa Memenuhi 100% Layar -->
+    <div class="op-four-fans" id="op-four-fans">
+      <!-- Kiri: kipas_batik di depan, kipas_batik2 di belakang agak ke kiri -->
+      <img src="assets/kipas_batik2.webp" alt="" class="op-quad-fan fan-left-back" draggable="false" />
+      <img src="assets/kipas_batik.webp" alt="" class="op-quad-fan fan-left-front" draggable="false" />
+
+      <!-- Kanan: kipas_batik2 di depan, kipas_batik di belakang agak ke kanan -->
+      <img src="assets/kipas_batik.webp" alt="" class="op-quad-fan fan-right-back" draggable="false" />
+      <img src="assets/kipas_batik2.webp" alt="" class="op-quad-fan fan-right-front" draggable="false" />
     </div>
 
-    <!-- Kipas Batik Berputar di Tengah -->
+    <!-- TAHAP 2: 4 Kipas Membentuk Lingkaran Penuh 360° (Selang-seling Warna) -->
     <div class="op-fan-rig" id="op-fan-rig">
-      <img src="assets/kipas_batik.webp" alt="" class="op-fan fan-left" draggable="false" />
-      <img src="assets/kipas_batik2.webp" alt="" class="op-fan fan-right" draggable="false" />
-    </div>
-
-    <!-- Judul & Loading Progress (Muncul setelah kipas mekar) -->
-    <div class="op-center-content" id="op-center-content">
-      <span class="op-eyebrow">Pameran Budaya Interaktif</span>
-      <h1 class="op-title">Pesona<br>Jawa Timur</h1>
-
-      <!-- Bar Loading Aset -->
-      <div class="op-loader-wrap" id="op-loader-wrap">
-        <div class="op-bar-track">
-          <div class="op-bar-fill" id="loading-bar-fill"></div>
-        </div>
-        <div class="op-meta">
-          <span id="loading-status">Menyiapkan ruang pameran...</span>
-          <span id="loading-percent">0%</span>
-        </div>
+      <div class="op-petal-arm arm-top">
+        <img src="assets/kipas_batik.webp" alt="" class="op-petal-img" draggable="false" />
       </div>
+      <div class="op-petal-arm arm-right">
+        <img src="assets/kipas_batik2.webp" alt="" class="op-petal-img" draggable="false" />
+      </div>
+      <div class="op-petal-arm arm-bottom">
+        <img src="assets/kipas_batik.webp" alt="" class="op-petal-img" draggable="false" />
+      </div>
+      <div class="op-petal-arm arm-left">
+        <img src="assets/kipas_batik2.webp" alt="" class="op-petal-img" draggable="false" />
+      </div>
+    </div>
+  </div>
 
-      <!-- Tombol Masuk (Muncul otomatis saat loading 100%) -->
-      <span class="op-cta" id="op-cta" hidden>Ketuk Layar untuk Masuk</span>
+  <!-- =========================================================
+       TAHAP 3: TIRAI PEMBUKA (MUNCUL DI BALIK LUBANG KIPAS)
+       ========================================================= -->
+  <div id="curtain-overlay" role="button" tabindex="0" aria-label="Ketuk layar untuk membuka tirai pameran">
+    <div class="curtain-panel left">
+      <div class="curtain-folds"></div>
+      <div class="curtain-trim"></div>
+    </div>
+    <div class="curtain-panel right">
+      <div class="curtain-folds"></div>
+      <div class="curtain-trim"></div>
+    </div>
+    <div class="curtain-center" id="curtain-center">
+      <div class="curtain-emblem">
+        <span class="curtain-eyebrow">Selamat Datang di Pameran Budaya</span>
+        <h2>Pesona Jawa Timur</h2>
+        <div class="curtain-divider"></div>
 
-      <!-- Error fallback jika ada aset gagal dimuat -->
-      <div class="loading-error-box" id="loading-error-box" hidden>
-        <p id="loading-error-text">Sebagian aset gagal dimuat.</p>
-        <div class="loading-error-actions">
-          <button type="button" id="btn-loading-retry" class="btn-gold-outline">Coba Ulang</button>
-          <button type="button" id="btn-loading-continue" class="btn-subtle">Lanjutkan</button>
+        <!-- Bar Loading Aset (Otomatis hilang saat 100%) -->
+        <div class="curtain-loader-wrap" id="op-loader-wrap">
+          <div class="loading-bar-track compact">
+            <div class="loading-bar-fill" id="loading-bar-fill"></div>
+          </div>
+          <div class="loading-meta">
+            <span id="loading-status">Menyiapkan ruang pameran...</span>
+            <span id="loading-percent" class="loading-percent">0%</span>
+          </div>
+        </div>
+
+        <!-- Muncul otomatis setelah loading 100% -->
+        <span class="curtain-cta" id="op-cta" hidden>Ketuk Layar untuk Membuka Tirai</span>
+
+        <div class="loading-error-box" id="loading-error-box" hidden>
+          <p id="loading-error-text">Sebagian aset gagal dimuat.</p>
+          <div class="loading-error-actions">
+            <button type="button" id="btn-loading-retry" class="btn-gold-outline">Coba Ulang</button>
+            <button type="button" id="btn-loading-continue" class="btn-subtle">Lanjutkan</button>
+          </div>
         </div>
       </div>
     </div>
