@@ -50,6 +50,9 @@ class TransitionManager {
 
     this.activeTimeline = null;
     this.openingTimeline = null;
+    this.openingStarted = false;
+    this.openingDelayTimer = null;
+    this.unsubscribeOrientation = null;
     this.ambientTweens = [];
     this.hintPulseTween = null;
     this.ctaPulseTween = null;
@@ -57,7 +60,7 @@ class TransitionManager {
 
   init() {
     this.initAmbientLife();
-    this.playOpeningIntro();
+    this.prepareOpeningIntro();
 
     if (!appState.get('reducedMotion') && this.curtainCta) {
       this.ctaPulseTween = window.gsap.to(this.curtainCta, {
@@ -86,8 +89,58 @@ class TransitionManager {
    * 1. 4 kipas (kiri lawan jarum jam, kanan searah jarum jam) membuka layar
    * 2. 2 kipas membentuk lingkaran penuh -> berputar sedikit -> lubang terbuka di tengah + zoom masuk ke Tirai
    */
-  playOpeningIntro() {
+  prepareOpeningIntro() {
     if (!this.openingStage || !window.gsap) return;
+
+    if (appState.get('reducedMotion')) {
+      this.openingStage.style.display = 'none';
+      return;
+    }
+
+    // Set posisi awal kipas agar layar sudah tertutup rapi saat portrait lock hilang
+    const gsap = window.gsap;
+    gsap.set(this.fanLeftFront,  { rotation: 92,  scale: 1.05, opacity: 1 });
+    gsap.set(this.fanLeftBack,   { rotation: 48,  scale: 1.12, opacity: 1 });
+    gsap.set(this.fanRightFront, { rotation: -92, scale: 1.05, opacity: 1 });
+    gsap.set(this.fanRightBack,  { rotation: -48, scale: 1.12, opacity: 1 });
+    if (this.curtainCenter) {
+      gsap.set(this.curtainCenter, { scale: 0.86, opacity: 0.55 });
+    }
+
+    // Jika sejak awal sudah landscape, langsung jalankan animasi
+    if (!appState.get('isPortrait')) {
+      this.playOpeningIntro();
+      return;
+    }
+
+    // Jika masih portrait, tunggu sampai berubah ke landscape + jeda 1 detik
+    this.unsubscribeOrientation = appState.subscribe('isPortrait', (isPortrait) => {
+      if (this.openingStarted) return;
+
+      if (!isPortrait) {
+        clearTimeout(this.openingDelayTimer);
+        this.openingDelayTimer = setTimeout(() => {
+          if (!appState.get('isPortrait') && !this.openingStarted) {
+            this.playOpeningIntro();
+          }
+        }, 1000);
+      } else {
+        clearTimeout(this.openingDelayTimer);
+        this.openingDelayTimer = null;
+      }
+    });
+  }
+
+  playOpeningIntro() {
+    if (this.openingStarted || !this.openingStage || !window.gsap) return;
+    this.openingStarted = true;
+
+    clearTimeout(this.openingDelayTimer);
+    if (this.unsubscribeOrientation) {
+      this.unsubscribeOrientation();
+      this.unsubscribeOrientation = null;
+    }
+
     const gsap = window.gsap;
 
     if (appState.get('reducedMotion')) {
