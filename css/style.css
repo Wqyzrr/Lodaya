@@ -415,11 +415,11 @@ html, body {
 /* Rasio ketat 4:3 agar kalibrasi 4 pintu 100% presisi di semua rasio layar */
 .joglo-stage {
   position: relative;
-  height: min(84vh, 56vw);
-  height: min(84dvh, 56vw);
-  width: calc(min(84vh, 56vw) * 4 / 3);
-  width: calc(min(84dvh, 56vw) * 4 / 3);
-  max-height: 88dvh;
+  height: min(96.6vh, 64.4vw);
+  height: min(96.6dvh, 64.4vw);
+  width: calc(min(96.6vh, 64.4vw) * 4 / 3);
+  width: calc(min(96.6dvh, 64.4vw) * 4 / 3);
+  max-height: 101.2dvh;
   flex-shrink: 0;
   display: flex;
   align-items: flex-end;
@@ -433,7 +433,7 @@ html, body {
   left: 50%;
   transform: translateX(-50%);
   width: 112vw;
-  height: 80%;          /* Sesuaikan persentase ini agar pas di kaki rumah */
+  height: 75%;          /* Sesuaikan persentase ini agar pas di kaki rumah */
   z-index: 1;
   pointer-events: none;
   display: flex;
@@ -536,7 +536,7 @@ html, body {
   position: relative;
   width: 50%;
   height: 100%;
-  background-image: url('../assets/daun_pintu.png');
+  background-image: url('../assets/daun_pintu.webp');
   background-size: 200% 100%;
   background-repeat: no-repeat;
   backface-visibility: hidden;
@@ -892,11 +892,11 @@ html, body {
 
   /* Proporsi seimbang: atap Joglo tidak terpotong HUD, grounding terlihat utuh */
   .joglo-stage {
-    height: min(84vh, 62vw);
-    height: min(84dvh, 62vw);
-    width: calc(min(84vh, 62vw) * 4 / 3);
-    width: calc(min(84dvh, 62vw) * 4 / 3);
-    max-height: 85dvh;
+    height: min(96.6vh, 71.3vw);
+    height: min(96.6dvh, 71.3vw);
+    width: calc(min(96.6vh, 71.3vw) * 4 / 3);
+    width: calc(min(96.6dvh, 71.3vw) * 4 / 3);
+    max-height: 97.75dvh;
   }
 
   .door-plaque {
@@ -938,8 +938,8 @@ html, body {
 /* Layar ponsel landscape sangat pendek (mis. 667x375 / 740x360) */
 @media screen and (max-height: 400px) and (orientation: landscape) {
   .joglo-stage {
-    height: min(81dvh, 58vw);
-    width: calc(min(81dvh, 58vw) * 4 / 3);
+    height: min(93.15dvh, 66.7vw);
+    width: calc(min(93.15dvh, 66.7vw) * 4 / 3);
   }
 
   .door-plaque::before,

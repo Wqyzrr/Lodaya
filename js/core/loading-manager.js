@@ -6,33 +6,33 @@
 
 export const ASSET_MANIFEST = {
   landing: [
-    { key: 'horizon', src: 'assets/horizon.jpg', opt: 'assets/optimized/horizon.webp', label: 'Menyiapkan langit senja Jawa Timur...' },
-    { key: 'siluet', src: 'assets/siluet.png', opt: 'assets/optimized/siluet.webp', label: 'Menyiapkan siluet pegunungan...' },
-    { key: 'grounding', src: 'assets/grounding.png', opt: 'assets/optimized/grounding.webp', label: 'Menyiapkan halaman rumah adat...' },
-    { key: 'struktur_joglo', src: 'assets/struktur_joglo.png', opt: 'assets/optimized/struktur_joglo.webp', label: 'Membangun struktur Rumah Joglo...' },
-    { key: 'daun_pintu', src: 'assets/daun_pintu.png', opt: 'assets/optimized/daun_pintu.webp', label: 'Menyiapkan empat pintu pameran...' },
-    { key: 'lentera', src: 'assets/lentera.png', opt: 'assets/optimized/lentera.webp', label: 'Menyalakan lentera tradisional...' },
-    { key: 'dedaunan1', src: 'assets/dedaunan1.png', opt: 'assets/optimized/dedaunan1.webp', label: 'Menata dedaunan latar depan...' },
-    { key: 'dedaunan2', src: 'assets/dedaunan2.png', opt: 'assets/optimized/dedaunan2.webp', label: 'Menyempurnakan suasana Joglo...' },
+    { key: 'horizon', src: 'assets/horizon.webp', label: 'Menyiapkan langit senja Jawa Timur...' },
+    { key: 'siluet', src: 'assets/siluet.webp', label: 'Menyiapkan siluet pegunungan...' },
+    { key: 'grounding', src: 'assets/grounding.webp', label: 'Menyiapkan halaman rumah adat...' },
+    { key: 'struktur_joglo', src: 'assets/struktur_joglo.webp', label: 'Membangun struktur Rumah Joglo...' },
+    { key: 'daun_pintu', src: 'assets/daun_pintu.webp', label: 'Menyiapkan empat pintu pameran...' },
+    { key: 'lentera', src: 'assets/lentera.webp', label: 'Menyalakan lentera tradisional...' },
+    { key: 'dedaunan1', src: 'assets/dedaunan1.webp', label: 'Menata dedaunan latar depan...' },
+    { key: 'dedaunan2', src: 'assets/dedaunan2.webp', label: 'Menyempurnakan suasana Joglo...' },
   ],
   peran: [
-    { key: 'reog', src: 'assets/reog.png', opt: 'assets/optimized/reog.webp', label: 'Menyiapkan ilustrasi Reog Ponorogo...' },
-    { key: 'topeng', src: 'assets/topeng.png', opt: 'assets/optimized/topeng.webp', label: 'Menyiapkan ilustrasi Bujang Ganong...' },
-    { key: 'kudalumping', src: 'assets/kudalumping.png', opt: 'assets/optimized/kudalumping.webp', label: 'Menyiapkan ilustrasi Jathilan...' },
-    { key: 'kudalumping2', src: 'assets/kudalumping2.png', opt: 'assets/optimized/kudalumping2.webp', label: 'Menyiapkan ilustrasi tarian pendamping...' },
-    { key: 'wayang1', src: 'assets/wayang1.png', opt: 'assets/optimized/wayang1.webp', label: 'Menyiapkan ornamen cerita...' },
-    { key: 'wayang2', src: 'assets/wayang2.png', opt: 'assets/optimized/wayang2.webp', label: 'Menyiapkan ornamen halaman...' },
-    { key: 'wayang3', src: 'assets/wayang3.png', opt: 'assets/optimized/wayang3.webp', label: 'Menyelesaikan buku cerita...' },
+    { key: 'reog', src: 'assets/reog.webp', label: 'Menyiapkan ilustrasi Reog Ponorogo...' },
+    { key: 'topeng', src: 'assets/topeng.webp', label: 'Menyiapkan ilustrasi Bujang Ganong...' },
+    { key: 'kudalumping', src: 'assets/kudalumping.webp', label: 'Menyiapkan ilustrasi Jathilan...' },
+    { key: 'kudalumping2', src: 'assets/kudalumping2.webp', label: 'Menyiapkan ilustrasi tarian pendamping...' },
+    { key: 'wayang1', src: 'assets/wayang1.webp', label: 'Menyiapkan ornamen cerita...' },
+    { key: 'wayang2', src: 'assets/wayang2.webp', label: 'Menyiapkan ornamen halaman...' },
+    { key: 'wayang3', src: 'assets/wayang3.webp', label: 'Menyelesaikan buku cerita...' },
   ],
   tari: [
-    { key: 'penari', src: 'assets/penari.png', opt: 'assets/optimized/penari.webp', label: 'Menyiapkan penari Gandrung Banyuwangi...' },
-    { key: 'lentera', src: 'assets/lentera.png', opt: 'assets/optimized/lentera.webp', label: 'Menyiapkan tata cahaya panggung...' },
+    { key: 'penari', src: 'assets/penari.webp', label: 'Menyiapkan penari Gandrung Banyuwangi...' },
+    { key: 'lentera', src: 'assets/lentera.webp', label: 'Menyiapkan tata cahaya panggung...' },
   ],
   musik: [
-    { key: 'wayang3', src: 'assets/wayang3.png', opt: 'assets/optimized/wayang3.webp', label: 'Menyiapkan ornamen panggung musik...' },
+    { key: 'wayang3', src: 'assets/wayang3.webp', label: 'Menyiapkan ornamen panggung musik...' },
   ],
   makanan: [
-    { key: 'lentera', src: 'assets/lentera.png', opt: 'assets/optimized/lentera.webp', label: 'Menyiapkan dapur tradisional...' },
+    { key: 'lentera', src: 'assets/lentera.webp', label: 'Menyiapkan dapur tradisional...' },
   ],
 };
 

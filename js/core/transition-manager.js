@@ -181,9 +181,13 @@ class TransitionManager {
       [this.slotLanternLeft, this.slotLanternRight, this.slotFoliageLeft, this.slotFoliageRight],
       { x: 0, y: 0, xPercent: 0, yPercent: 0, scale: 1, opacity: 1, force3D: true }
     );
-    gsap.set([this.landingTitle, this.landingHint, '.door-plaque'], {
+    gsap.set(this.landingTitle, {
       x: 0,
       y: 0,
+      opacity: 1,
+    });
+    gsap.set([this.landingHint, '.door-plaque'], {
+      clearProps: 'transform',
       opacity: 1,
     });
 
@@ -201,6 +205,7 @@ class TransitionManager {
     if (appState.get('curtainOpened') || !appState.get('landingReady')) return;
     appState.set('curtainOpened', true);
     appState.set('isTransitioning', true);
+    
 
     if (this.ctaPulseTween) {
       this.ctaPulseTween.kill();
@@ -299,15 +304,21 @@ class TransitionManager {
       ease: 'power2.out',
     }, 0.65)
     .fromTo('.door-plaque', {
+      xPercent: -50,
+      x: 0,
       y: 6,
       opacity: 0,
     }, {
+      xPercent: -50,
+      x: 0,
       y: 0,
       opacity: 1,
       stagger: 0.06,
       duration: 0.45,
       ease: 'power2.out',
+      clearProps: 'transform',
     }, 0.72)
+    // ------------------------
     .fromTo(this.landingHint, {
       opacity: 0,
     }, {
