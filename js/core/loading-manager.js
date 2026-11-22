@@ -185,8 +185,10 @@ class LoadingManager {
   }
 
   hideLandingLoader() {
-    if (!this.screen) return;
-    this.screen.classList.add('is-hidden');
+    const loaderWrap = document.getElementById('op-loader-wrap');
+    const cta = document.getElementById('op-cta');
+    if (loaderWrap) loaderWrap.hidden = true;
+    if (cta) cta.hidden = false;
   }
 
   async loadRoomAssets(roomKey, displayName = 'Ruangan') {

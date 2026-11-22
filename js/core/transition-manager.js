@@ -34,42 +34,222 @@ class TransitionManager {
     this.particleContainer = document.getElementById('ambient-particles');
     this.doorUnits = Array.from(document.querySelectorAll('.door-unit'));
 
-    // Tirai
-    this.curtainOverlay = document.getElementById('curtain-overlay');
-    this.curtainLeft = document.querySelector('.curtain-panel.left');
-    this.curtainRight = document.querySelector('.curtain-panel.right');
-    this.curtainCenter = document.getElementById('curtain-center');
-    this.curtainCta = document.querySelector('.curtain-cta');
-
-    this.activeTimeline = null;
-    this.ambientTweens = [];
-    this.hintPulseTween = null;
-    this.ctaPulseTween = null;
+    // Opening Kipas Batik (Pengganti Tirai)
+    this.openingStage = document.getElementById('opening-stage');
+    this.opFanRig = document.getElementById('op-fan-rig');
+    this.opFanLeft = document.querySelector('.op-fan.fan-left');
+    this.opFanRight = document.querySelector('.op-fan.fan-right');
+    this.opWingsLeft = document.querySelector('.op-wing.wing-left');
+    this.opWingsRight = document.querySelector('.op-wing.wing-right');
+    this.opOrnaments = document.querySelectorAll('.op-ornament');
+    this.opCenterContent = document.getElementById('op-center-content');
+    this.opCta = document.getElementById('op-cta');
   }
 
   init() {
     this.initAmbientLife();
+    this.playOpeningIntro();
 
-    if (!appState.get('reducedMotion') && this.curtainCta) {
-      this.ctaPulseTween = window.gsap.to(this.curtainCta, {
-        opacity: 0.45,
-        duration: 1.4,
+    const triggerEnter = () => this.openCurtain();
+    if (this.openingStage) {
+      this.openingStage.addEventListener('click', triggerEnter);
+      this.openingStage.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          triggerEnter();
+        }
+      });
+    }
+  }
+
+  /**
+   * Animasi pembuka kipas batik (meniru video referensi) saat loading berjalan.
+   */
+  playOpeningIntro() {
+    if (!this.openingStage || !window.gsap) return;
+    const gsap = window.gsap;
+
+    const tl = gsap.timeline();
+
+    // 1. Kipas masuk berputar cepat dari besar ke tengah
+    tl.fromTo(this.opFanRig, {
+      scale: 2.2,
+      rotation: -90,
+      opacity: 0,
+    }, {
+      scale: 1,
+      rotation: 0,
+      opacity: 1,
+      duration: 1.0,
+      ease: 'power3.out',
+      force3D: true,
+    }, 0)
+    // 2. Ornamen sayap mekar keluar dari belakang kipas
+    .fromTo(this.opWingsLeft, {
+      xPercent: 40,
+      scale: 0.4,
+      opacity: 0,
+    }, {
+      xPercent: -68,
+      scale: 1,
+      opacity: 1,
+      duration: 0.9,
+      ease: 'back.out(1.4)',
+    }, 0.55)
+    .fromTo(this.opWingsRight, {
+      xPercent: -40,
+      scale: 0.4,
+      opacity: 0,
+    }, {
+      xPercent: 68,
+      scale: 1,
+      opacity: 1,
+      duration: 0.9,
+      ease: 'back.out(1.4)',
+    }, 0.55)
+    // 3. Ornamen 4 sudut muncul perlahan
+    .fromTo(this.opOrnaments, {
+      scale: 0.5,
+      opacity: 0,
+    }, {
+      scale: 1,
+      opacity: 1,
+      stagger: 0.08,
+      duration: 0.75,
+      ease: 'power2.out',
+    }, 0.65)
+    // 4. Kipas berputar pelan lalu menyingkir/memudar untuk menampilkan judul
+    .to(this.opFanRig, {
+      rotation: 180,
+      scale: 0.65,
+      opacity: 0,
+      duration: 0.85,
+      ease: 'power2.inOut',
+    }, 1.8)
+    .to([this.opWingsLeft, this.opWingsRight], {
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.55,
+      ease: 'power2.in',
+    }, 1.85)
+    // 5. Judul Pesona Jawa Timur & Progress Loading tampil di tengah
+    .fromTo(this.opCenterContent, {
+      scale: 0.86,
+      y: 14,
+      opacity: 0,
+    }, {
+      scale: 1,
+      y: 0,
+      opacity: 1,
+      duration: 0.7,
+      ease: 'power3.out',
+    }, 2.15);
+
+    // Denyut halus pada tombol CTA saat sudah siap
+    if (!appState.get('reducedMotion') && this.opCta) {
+      this.ctaPulseTween = gsap.to(this.opCta, {
+        scale: 1.05,
+        duration: 1.1,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
       });
     }
+  }
 
-    const triggerCurtain = () => this.openCurtain();
-    if (this.curtainOverlay) {
-      this.curtainOverlay.addEventListener('click', triggerCurtain);
-      this.curtainOverlay.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          triggerCurtain();
-        }
-      });
+  /**
+   * Transisi keluar dari Opening Kipas Batik menuju Rumah Adat Joglo.
+   */
+  openCurtain() {
+    if (appState.get('curtainOpened') || !appState.get('landingReady')) return;
+    appState.set('curtainOpened', true);
+    appState.set('isTransitioning', true);
+
+    if (this.ctaPulseTween) {
+      this.ctaPulseTween.kill();
+      this.ctaPulseTween = null;
     }
+
+    orientationManager.requestFullscreenAndLock();
+    audioManager.playAmbient();
+
+    const gsap = window.gsap;
+    const tl = gsap.timeline({
+      onComplete: () => {
+        this.openingStage.style.display = 'none';
+        appState.set('isTransitioning', false);
+        this.startHintPulse();
+      },
+    });
+    this.activeTimeline = tl;
+
+    // 1. Judul memudar, kipas kembali muncul berputar lalu membesar menembus layar
+    tl.to(this.opCenterContent, {
+      scale: 0.9,
+      opacity: 0,
+      duration: 0.3,
+      ease: 'power2.in',
+    }, 0)
+    .fromTo(this.opFanRig, {
+      scale: 0.5,
+      rotation: 0,
+      opacity: 0,
+    }, {
+      scale: 1.15,
+      rotation: 120,
+      opacity: 1,
+      duration: 0.55,
+      ease: 'power2.out',
+      force3D: true,
+    }, 0.1)
+    // 2. Kipas membelah & membesar penuh sambil seluruh opening stage memudar
+    .to(this.opFanRig, {
+      scale: 3.4,
+      rotation: 240,
+      opacity: 0,
+      duration: 0.75,
+      ease: 'power3.in',
+      force3D: true,
+    }, 0.62)
+    .to(this.opOrnaments, {
+      scale: 1.35,
+      opacity: 0,
+      duration: 0.55,
+      ease: 'power2.in',
+    }, 0.55)
+    .to(this.openingStage, {
+      opacity: 0,
+      duration: 0.55,
+      ease: 'power2.inOut',
+    }, 0.75)
+    // 3. Rumah Joglo masuk dengan halus
+    .fromTo(this.jogloWorld, {
+      scale: 0.94,
+      y: 18,
+      opacity: 0,
+    }, {
+      scale: 1,
+      y: 0,
+      opacity: 1,
+      duration: 0.95,
+      ease: 'power3.out',
+      force3D: true,
+    }, 0.78)
+    .fromTo('.door-plaque', {
+      xPercent: -50,
+      x: 0,
+      y: 6,
+      opacity: 0,
+    }, {
+      xPercent: -50,
+      x: 0,
+      y: 0,
+      opacity: 1,
+      stagger: 0.06,
+      duration: 0.45,
+      ease: 'power2.out',
+      clearProps: 'transform',
+    }, 1.15);
   }
 
   initAmbientLife() {
