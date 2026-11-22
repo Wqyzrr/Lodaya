@@ -913,10 +913,10 @@ html, body {
   will-change: transform, opacity;
 }
 
-/* Ornamen 4 Sudut */
+/* Ornamen 4 Sudut (+10% ukuran & tertanam di sudut) */
 .op-ornament {
   position: absolute;
-  width: clamp(80px, 17vw, 200px);
+  width: clamp(88px, 18.7vw, 220px);
   height: auto;
   opacity: 0;
   pointer-events: none;
@@ -925,9 +925,88 @@ html, body {
   will-change: transform, opacity;
 }
 .op-tl { top: -2%; left: -2%; }
-.op-tr { top: -2%; right: -2%; }
-.op-bl { bottom: -2%; left: -2%; }
-.op-br { bottom: -2%; right: -2%; }
+.op-tr { top: -5%; right: -4%; }
+.op-bl { bottom: -6%; left: -4%; }
+.op-br { bottom: -5%; right: -4%; }
+
+/* Tipografi Melingkar di Sekeliling Kipas 360° */
+.op-orbit-ring {
+  position: absolute;
+  width: clamp(365px, 98dvh, 640px);
+  height: clamp(365px, 98dvh, 640px);
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.op-orbit-text {
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 4.4px;
+  fill: rgba(78, 41, 17, 0.62);
+}
+
+/* Tipografi Pengapit Kiri & Kanan */
+.op-typo-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.2rem, 5.5vw, 5rem);
+  pointer-events: none;
+}
+
+.op-typo-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.op-typo-left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.op-typo-right {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.op-typo-eyebrow {
+  font-family: var(--font-body);
+  font-size: clamp(0.55rem, 1.35dvh, 0.78rem);
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #8A5A28;
+}
+
+.op-typo-main {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 3.4vw, 2.85rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #361C0E;
+  line-height: 1.05;
+  text-shadow: 0 2px 12px rgba(251, 243, 228, 0.9);
+}
+
+.op-typo-line {
+  width: clamp(38px, 6vw, 84px);
+  height: 2px;
+  background: linear-gradient(90deg, #9E6B2E, transparent);
+}
+
+.op-typo-right .op-typo-line {
+  background: linear-gradient(270deg, #9E6B2E, transparent);
+}
 
 /* TAHAP 1: 4 Kipas Raksasa Menutup Penuh Layar */
 .op-four-fans {

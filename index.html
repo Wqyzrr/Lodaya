@@ -46,11 +46,38 @@
        ANIMASI OPENING KIPAS (TAHAP 1: 4 KIPAS FULL -> TAHAP 2: 4 KIPAS 360°)
        ========================================================= -->
   <div id="opening-stage" aria-hidden="true">
-    <!-- Ornamen 4 Sudut -->
+    <!-- Ornamen 4 Sudut (Wayang di kanan atas, Burung di kanan bawah) -->
     <img src="assets/hiasan1.webp" alt="" class="op-ornament op-tl" draggable="false" />
-    <img src="assets/hiasan2.webp" alt="" class="op-ornament op-tr" draggable="false" />
+    <img src="assets/hiasan4.webp" alt="" class="op-ornament op-tr" draggable="false" />
     <img src="assets/hiasan3.webp" alt="" class="op-ornament op-bl" draggable="false" />
-    <img src="assets/hiasan4.webp" alt="" class="op-ornament op-br" draggable="false" />
+    <img src="assets/hiasan2.webp" alt="" class="op-ornament op-br" draggable="false" />
+
+    <!-- Tipografi Melingkar (Berputar berlawanan arah dengan kipas) -->
+    <svg class="op-orbit-ring" id="op-orbit-ring" viewBox="0 0 400 400" aria-hidden="true">
+      <defs>
+        <path id="op-orbit-path" d="M 200, 200 m -176, 0 a 176,176 0 1,1 352,0 a 176,176 0 1,1 -352,0" />
+      </defs>
+      <circle cx="200" cy="200" r="162" fill="none" stroke="rgba(138, 94, 43, 0.32)" stroke-width="1" stroke-dasharray="3 6" />
+      <text class="op-orbit-text">
+        <textPath href="#op-orbit-path" startOffset="0%">
+          PESONA JAWA TIMUR  •  WARISAN BUDAYA  •  PESONA JAWA TIMUR  •  WARISAN BUDAYA  •
+        </textPath>
+      </text>
+    </svg>
+
+    <!-- Tipografi Pengapit Kiri & Kanan -->
+    <div class="op-typo-layer">
+      <div class="op-typo-side op-typo-left" id="op-typo-left">
+        <span class="op-typo-eyebrow">Pameran Budaya</span>
+        <span class="op-typo-main">Pesona</span>
+        <span class="op-typo-line"></span>
+      </div>
+      <div class="op-typo-side op-typo-right" id="op-typo-right">
+        <span class="op-typo-line"></span>
+        <span class="op-typo-main">Jawa Timur</span>
+        <span class="op-typo-eyebrow">Eksplorasi Interaktif</span>
+      </div>
+    </div>
 
     <!-- TAHAP 1: 4 Kipas Raksasa Memenuhi 100% Layar -->
     <div class="op-four-fans" id="op-four-fans">

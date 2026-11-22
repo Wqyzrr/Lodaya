@@ -40,6 +40,9 @@ class TransitionManager {
     this.fanRightBack = document.querySelector('.fan-right-back');
     this.opFanRig = document.getElementById('op-fan-rig');
     this.opOrnaments = document.querySelectorAll('.op-ornament');
+    this.opOrbitRing = document.getElementById('op-orbit-ring');
+    this.opTypoLeft = document.getElementById('op-typo-left');
+    this.opTypoRight = document.getElementById('op-typo-right');
 
     // Elemen Tirai Pembuka
     this.curtainOverlay = document.getElementById('curtain-overlay');
@@ -211,20 +214,28 @@ class TransitionManager {
       duration: 1.3,
       ease: 'power3.inOut',
       force3D: true,
-    }, 0.32)
-    // Ornamen sudut mekar halus
-    .fromTo(ornaments, {
-      scale: 0.6,
+    }, 0.32);
+    
+    // Set rotasi dasar sudut sebelum mekar (flip horizontal wayang dihandle di scaleX)
+    gsap.set('.op-bl', { rotation: 45 });
+    gsap.set('.op-tr', { rotation: -45 }); // ubah ke 45 jika ingin kemiringan searah jarum jam
+    gsap.set('.op-br', { rotation: -45 });
+
+    // Ornamen sudut mekar halus (pertahankan flip horizontal pada .op-tr)
+    tl.fromTo(ornaments, {
+      scaleX: (i, el) => (el.classList.contains('op-tr') ? -0.6 : 0.6),
+      scaleY: 0.6,
       opacity: 0,
     }, {
-      scale: 1,
+      scaleX: (i, el) => (el.classList.contains('op-tr') ? -1 : 1),
+      scaleY: 1,
       opacity: 1,
       stagger: 0.05,
       duration: 0.6,
       ease: 'power2.out',
     }, 0.65)
 
-    // --- TAHAP 2: 4 KIPAS MEMBENTUK LINGKARAN 360° & BERPUTAR SEDIKIT ---
+    // --- TAHAP 2: 4 KIPAS LINGKARAN 360° + ORBITAL RING + TIPOGRAFI KIRI/KANAN ---
     .fromTo(this.opFanRig, {
       scale: 0.5,
       rotation: -45,
@@ -237,8 +248,49 @@ class TransitionManager {
       ease: 'back.out(1.2)',
       force3D: true,
     }, 0.85)
+    // Orbital ring muncul & berputar berlawanan arah jarum jam (kontras dengan kipas)
+    .fromTo(this.opOrbitRing, {
+      scale: 0.72,
+      rotation: 35,
+      opacity: 0,
+    }, {
+      scale: 1,
+      rotation: 0,
+      opacity: 1,
+      duration: 0.85,
+      ease: 'power2.out',
+      force3D: true,
+    }, 0.9)
+    // Tipografi kiri & kanan muncul meluncur keluar dari balik kipas
+    .fromTo(this.opTypoLeft, {
+      x: 42,
+      opacity: 0,
+    }, {
+      x: 0,
+      opacity: 1,
+      duration: 0.75,
+      ease: 'power3.out',
+      force3D: true,
+    }, 0.98)
+    .fromTo(this.opTypoRight, {
+      x: -42,
+      opacity: 0,
+    }, {
+      x: 0,
+      opacity: 1,
+      duration: 0.75,
+      ease: 'power3.out',
+      force3D: true,
+    }, 0.98)
+    // Putaran halus kipas (searah jarum jam) & orbital text (lawan arah jarum jam)
     .to(this.opFanRig, {
       rotation: 55,
+      duration: 0.75,
+      ease: 'power1.inOut',
+      force3D: true,
+    }, 1.7)
+    .to(this.opOrbitRing, {
+      rotation: -38,
       duration: 0.75,
       ease: 'power1.inOut',
       force3D: true,
@@ -258,8 +310,32 @@ class TransitionManager {
       ease: 'power3.in',
       force3D: true,
     }, 2.4)
+    .to(this.opOrbitRing, {
+      scale: 3.4,
+      rotation: -95,
+      opacity: 0,
+      duration: 0.85,
+      ease: 'power3.in',
+      force3D: true,
+    }, 2.4)
+    // Tipografi kiri & kanan membelah ke tepi saat kamera meluncur masuk
+    .to(this.opTypoLeft, {
+      x: -56,
+      opacity: 0,
+      duration: 0.55,
+      ease: 'power2.in',
+      force3D: true,
+    }, 2.4)
+    .to(this.opTypoRight, {
+      x: 56,
+      opacity: 0,
+      duration: 0.55,
+      ease: 'power2.in',
+      force3D: true,
+    }, 2.4)
     .to(ornaments, {
-      scale: 1.4,
+      scaleX: (i, el) => (el.classList.contains('op-tr') ? -1.4 : 1.4),
+      scaleY: 1.4,
       opacity: 0,
       duration: 0.6,
       ease: 'power2.in',
