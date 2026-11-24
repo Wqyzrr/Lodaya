@@ -122,6 +122,7 @@ class TransitionManager {
 
     try {
       orientationManager.requestFullscreenAndLock();
+      audioManager.playSfx('curtainsOpen');
       audioManager.playAmbient();
     } catch {
       // Abaikan jika browser membatasi fullscreen/audio
@@ -528,6 +529,7 @@ class TransitionManager {
       appState.set('isTransitioning', true);
       parallaxSystem.pauseAndCenter();
       if (this.hintPulseTween) this.hintPulseTween.pause();
+      audioManager.playSfx('doorOpen');
 
       const gsap = window.gsap;
       const reduced = appState.get('reducedMotion');

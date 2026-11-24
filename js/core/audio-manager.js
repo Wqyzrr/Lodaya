@@ -13,9 +13,15 @@ export const AUDIO_TRACKS = {
   musik: 'assets/audio/rek-ayo-rek.mp3',
 };
 
+export const AUDIO_SFX = {
+  curtainsOpen: 'assets/audio/curtains-open.mp3',
+  doorOpen: 'assets/audio/door-open.mp3',
+};
+
 class AudioManager {
   constructor() {
     this.tracks = new Map();
+    this.sfx = new Map();
     this.unavailable = new Set();
     this.activeRoomKey = null;
     this.ambientWanted = true;
@@ -27,20 +33,37 @@ class AudioManager {
   }
 
   init() {
-    // Siapkan objek Audio secara malas (preload metadata saja)
     Object.entries(AUDIO_TRACKS).forEach(([key, src]) => {
       const audio = new Audio();
       audio.src = src;
-      audio.preload = 'none';
+      audio.preload = 'auto';
       audio.loop = key === 'ambient' || key === 'peran' || key === 'tari';
       audio.volume = appState.get('audioVolume');
 
       audio.addEventListener('error', () => {
+        console.warn(`[Audio] Gagal memuat track "${key}" dari: ${src}`);
         this.unavailable.add(key);
         this.updateUI();
       });
 
+      audio.load();
       this.tracks.set(key, audio);
+    });
+
+    Object.entries(AUDIO_SFX).forEach(([key, src]) => {
+      const audio = new Audio();
+      audio.src = src;
+      audio.preload = 'auto';
+      audio.loop = false;
+      audio.volume = appState.get('audioVolume');
+
+      audio.addEventListener('error', () => {
+        console.warn(`[Audio] Gagal memuat SFX "${key}" dari: ${src}`);
+        this.unavailable.add(`sfx:${key}`);
+      });
+
+      audio.load();
+      this.sfx.set(key, audio);
     });
 
     this.bindUI();
@@ -135,8 +158,11 @@ class AudioManager {
     if (ambient.paused) {
       ambient.volume = 0;
       ambient.play().then(() => {
+        this.unlocked = true;
         this.fadeVolume(ambient, targetVol, 0.7);
-      }).catch(() => {});
+      }).catch((err) => {
+        console.warn('[Audio] Ambient ditahan browser:', err.message);
+      });
     } else {
       this.fadeVolume(ambient, targetVol, 0.5);
     }
@@ -201,6 +227,16 @@ class AudioManager {
     if (restoreAmbient && !appState.get('audioMuted')) {
       this.playAmbient();
     }
+  }
+
+  playSfx(key, volumeMultiplier = 1) {
+    if (appState.get('audioMuted') || this.unavailable.has(`sfx:${key}`)) return;
+    const sfx = this.sfx.get(key);
+    if (!sfx) return;
+
+    sfx.currentTime = 0;
+    sfx.volume = Math.max(0, Math.min(1, appState.get('audioVolume') * volumeMultiplier));
+    sfx.play().catch(() => {});
   }
 
   toggleMute() {
