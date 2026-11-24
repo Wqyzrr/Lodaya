@@ -10,6 +10,7 @@ import { audioManager } from './audio-manager.js';
 
 class TransitionManager {
   constructor() {
+    this.lastDoorUnit = null;
     this.sceneLanding = document.getElementById('scene-landing');
     this.layerSky = document.getElementById('layer-sky');
     this.layerMountains = document.getElementById('layer-mountains');
@@ -710,29 +711,125 @@ class TransitionManager {
         return;
       }
 
+      // 1. Keluar dari dalam ruangan (tarik mundur halus + cahaya hangat pintu)
       tl.to(this.btnBack, { autoAlpha: 0, y: -8, duration: 0.22, ease: 'power2.in' }, 0)
-      .to(currentSection, { scale: 1.03, opacity: 0.2, duration: 0.34, ease: 'power2.in', force3D: true }, 0)
-      .to(this.transitionVeil, { opacity: 1, duration: 0.28, ease: 'power2.in' }, 0.06)
-      .add(() => {
-        currentSection.classList.remove('is-active');
-        gsap.set(currentSection, { clearProps: 'transform,opacity' });
-        if (onAfterLeaveRoom) onAfterLeaveRoom();
+        .to(currentSection, {
+          scale: 0.94,
+          opacity: 0,
+          duration: 0.38,
+          ease: 'power2.in',
+          force3D: true,
+        }, 0)
+        .to(this.transitionVeil, {
+          opacity: 1,
+          duration: 0.32,
+          ease: 'power2.in',
+        }, 0.08)
 
-        this.resetLandingState();
-        gsap.set(this.jogloWorld, { scale: 1.14, force3D: true });
-        gsap.set([this.layerMountains, this.layerSky], { scale: 1.06, force3D: true });
-        gsap.set([this.slotFoliageLeft, this.slotFoliageRight], { scale: 1.12, opacity: 0 });
-        gsap.set([this.slotLanternLeft, this.slotLanternRight], { yPercent: -25, opacity: 0 });
-        gsap.set([this.landingTitle, this.landingHint, '.door-plaque'], { opacity: 0 });
+        // 2. Siapkan posisi kamera tepat di dalam pintu yang tadi dimasuki
+        .add(() => {
+          currentSection.classList.remove('is-active');
+          gsap.set(currentSection, { clearProps: 'transform,opacity' });
+          if (onAfterLeaveRoom) onAfterLeaveRoom();
 
-        this.sceneLanding.classList.add('is-active');
-      })
-      .to(this.transitionVeil, { opacity: 0, duration: 0.42, ease: 'power2.out' })
-      .to(this.jogloWorld, { scale: 1, duration: 0.72, ease: 'power3.out', force3D: true }, '<')
-      .to([this.layerMountains, this.layerSky], { scale: 1, duration: 0.72, ease: 'power3.out', force3D: true }, '<')
-      .to([this.slotFoliageLeft, this.slotFoliageRight], { scale: 1, opacity: 1, duration: 0.65, ease: 'power3.out', force3D: true }, '<0.08')
-      .to([this.slotLanternLeft, this.slotLanternRight], { yPercent: 0, opacity: 1, duration: 0.65, ease: 'power3.out', force3D: true }, '<0.08')
-      .to([this.landingTitle, this.landingHint, '.door-plaque'], { opacity: 1, duration: 0.38, ease: 'power2.out' }, '-=0.28');
+          this.resetLandingState();
+
+          const doorUnit = this.lastDoorUnit;
+          let startX = 0;
+          let startY = 0;
+          let startScale = 1.25;
+
+          if (doorUnit) {
+            const frame = doorUnit.querySelector('.door-frame');
+            const rect = frame.getBoundingClientRect();
+            const vpX = window.innerWidth / 2;
+            const vpY = window.innerHeight / 2;
+            const doorX = rect.left + rect.width / 2;
+            const doorY = rect.top + rect.height / 2;
+
+            startScale = 4.4;
+            startX = (vpX - doorX) * startScale;
+            startY = (vpY - doorY) * startScale;
+
+            // Posisikan daun pintu dalam keadaan terbuka & bercahaya
+            const leftLeaf = doorUnit.querySelector('.door-leaf.left');
+            const rightLeaf = doorUnit.querySelector('.door-leaf.right');
+            const doorGlow = doorUnit.querySelector('.door-interior-glow');
+            gsap.set(leftLeaf, { rotateY: -108, force3D: true });
+            gsap.set(rightLeaf, { rotateY: 108, force3D: true });
+            gsap.set(doorGlow, { opacity: 1 });
+          }
+
+          gsap.set(this.jogloWorld, { x: startX, y: startY, scale: startScale, force3D: true });
+          gsap.set(this.layerMountains, { scale: 1.2, force3D: true });
+          gsap.set(this.layerSky, { scale: 1.08, force3D: true });
+
+          // Foreground terlempar keluar layar dulu sebelum masuk kembali
+          gsap.set(this.slotFoliageLeft, { xPercent: -45, yPercent: 20, scale: 1.3, opacity: 0, force3D: true });
+          gsap.set(this.slotFoliageRight, { xPercent: 45, yPercent: 20, scale: 1.3, opacity: 0, force3D: true });
+          gsap.set([this.slotLanternLeft, this.slotLanternRight], { yPercent: -55, scale: 1.25, opacity: 0, force3D: true });
+          gsap.set([this.landingTitle, this.landingHint, '.door-plaque'], { opacity: 0 });
+
+          this.sceneLanding.classList.add('is-active');
+        })
+
+        // 3. Kamera mundur keluar dari pintu menuju halaman Joglo
+        .to(this.transitionVeil, { opacity: 0, duration: 0.42, ease: 'power2.out' })
+        .to(this.jogloWorld, {
+          x: 0,
+          y: 0,
+          scale: 1,
+          duration: 1.0,
+          ease: 'power3.out',
+          force3D: true,
+        }, '<')
+        .to(this.layerMountains, { scale: 1, duration: 1.0, ease: 'power3.out', force3D: true }, '<')
+        .to(this.layerSky, { scale: 1, duration: 1.0, ease: 'power3.out', force3D: true }, '<')
+
+        // 4. Dedaunan & lentera kembali masuk membingkai layar
+        .to([this.slotFoliageLeft, this.slotFoliageRight], {
+          xPercent: 0,
+          yPercent: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.85,
+          ease: 'power3.out',
+          force3D: true,
+        }, '<0.12')
+        .to([this.slotLanternLeft, this.slotLanternRight], {
+          yPercent: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          force3D: true,
+        }, '<0.14')
+
+        // 5. Daun pintu kayu menutup perlahan & cahaya dalam meredup
+        .add(() => {
+          if (!this.lastDoorUnit) return;
+          const leftLeaf = this.lastDoorUnit.querySelector('.door-leaf.left');
+          const rightLeaf = this.lastDoorUnit.querySelector('.door-leaf.right');
+          const doorGlow = this.lastDoorUnit.querySelector('.door-interior-glow');
+          gsap.to([leftLeaf, rightLeaf], {
+            rotateY: 0,
+            duration: 0.65,
+            ease: 'power2.inOut',
+            force3D: true,
+          });
+          gsap.to(doorGlow, {
+            opacity: 0.12,
+            duration: 0.55,
+            ease: 'power2.out',
+          });
+        }, '-=0.55')
+
+        // 6. Judul, plakat pintu, dan petunjuk tampil kembali
+        .to([this.landingTitle, this.landingHint, '.door-plaque'], {
+          opacity: 1,
+          duration: 0.4,
+          ease: 'power2.out',
+        }, '-=0.35');
     });
   }
 }
