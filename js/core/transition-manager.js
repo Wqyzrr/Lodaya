@@ -211,44 +211,49 @@ class TransitionManager {
     });
     this.openingTimeline = tl;
 
-    // --- 4 KIPAS RAKSASA BERPUTAR MEMBUKA LAYAR ---
+    // --- TAHAP 1: 4 KIPAS RAKSASA BERPUTAR MEMBUKA LAYAR (Langsung jalan di 0s) ---
     tl.to(this.fanLeftFront, {
       rotation: -75,
       xPercent: -35,
       opacity: 0,
-      duration: 1.2,
+      duration: 0.95,
       ease: 'power3.inOut',
       force3D: true,
-    }, 0.15)
+    }, 0)
     .to(this.fanLeftBack, {
       rotation: -120,
       xPercent: -45,
       opacity: 0,
-      duration: 1.3,
+      duration: 1.05,
       ease: 'power3.inOut',
       force3D: true,
-    }, 0.22)
+    }, 0.06)
     .to(this.fanRightFront, {
       rotation: 75,
       xPercent: 35,
       opacity: 0,
-      duration: 1.2,
+      duration: 0.95,
       ease: 'power3.inOut',
       force3D: true,
-    }, 0.15)
+    }, 0)
     .to(this.fanRightBack, {
       rotation: 120,
       xPercent: 45,
       opacity: 0,
-      duration: 1.3,
+      duration: 1.05,
       ease: 'power3.inOut',
       force3D: true,
-    }, 0.22);
+    }, 0.06);
 
     gsap.set('.op-bl', { rotation: 45 });
     gsap.set('.op-tr', { rotation: -45 });
     gsap.set('.op-br', { rotation: -45 });
 
+    // UBAH 1 ANGKA INI SAJA kalau mau lebih cepat/lambat (misal: 0.75 atau 1.1)
+    const T2 = 0.95;
+    const T3 = T2 + 1.55;
+
+    // --- TAHAP 2: ORNAMEN + 4 KIPAS LINGKARAN 360° + ORBITAL RING + TIPOGRAFI ---
     tl.fromTo(ornaments, {
       scaleX: (i, el) => (el.classList.contains('op-tr') ? -0.6 : 0.6),
       scaleY: 0.6,
@@ -260,9 +265,7 @@ class TransitionManager {
       stagger: 0.05,
       duration: 0.6,
       ease: 'power2.out',
-    }, 0.55)
-
-    // --- 4 KIPAS LINGKARAN 360° + ORBITAL RING + TIPOGRAFI ---
+    }, T2)
     .fromTo(this.opFanRig, {
       scale: 0.5,
       rotation: -45,
@@ -274,7 +277,7 @@ class TransitionManager {
       duration: 0.85,
       ease: 'back.out(1.2)',
       force3D: true,
-    }, 0.75)
+    }, T2)
     .fromTo(this.opOrbitRing, {
       scale: 0.72,
       rotation: 35,
@@ -286,7 +289,7 @@ class TransitionManager {
       duration: 0.85,
       ease: 'power2.out',
       force3D: true,
-    }, 0.8)
+    }, T2 + 0.05)
     .fromTo(this.opTypoLeft, {
       x: 42,
       opacity: 0,
@@ -296,7 +299,7 @@ class TransitionManager {
       duration: 0.75,
       ease: 'power3.out',
       force3D: true,
-    }, 0.88)
+    }, T2 + 0.12)
     .fromTo(this.opTypoRight, {
       x: -42,
       opacity: 0,
@@ -306,34 +309,34 @@ class TransitionManager {
       duration: 0.75,
       ease: 'power3.out',
       force3D: true,
-    }, 0.88)
+    }, T2 + 0.12)
     .to(this.opFanRig, {
       rotation: 55,
       duration: 0.75,
       ease: 'power1.inOut',
       force3D: true,
-    }, 1.6)
+    }, T2 + 0.85)
     .to(this.opOrbitRing, {
       rotation: -38,
       duration: 0.75,
       ease: 'power1.inOut',
       force3D: true,
-    }, 1.6)
+    }, T2 + 0.85)
 
-    // --- LUBANG TERBUKA DI TENGAH + ZOOM MASUK KE RUMAH JOGLO ---
+    // --- TAHAP 3: LUBANG TERBUKA DI TENGAH + ZOOM MASUK KE RUMAH JOGLO ---
     .to(holeState, {
       radius: 118,
       duration: 1.05,
       ease: 'power3.in',
       onUpdate: applyHoleMask,
-    }, 2.3)
+    }, T3)
     .to(this.opFanRig, {
       scale: 5.2,
       rotation: 135,
       duration: 1.05,
       ease: 'power3.in',
       force3D: true,
-    }, 2.3)
+    }, T3)
     .to(this.opOrbitRing, {
       scale: 3.4,
       rotation: -95,
@@ -341,28 +344,28 @@ class TransitionManager {
       duration: 0.85,
       ease: 'power3.in',
       force3D: true,
-    }, 2.3)
+    }, T3)
     .to(this.opTypoLeft, {
       x: -56,
       opacity: 0,
       duration: 0.55,
       ease: 'power2.in',
       force3D: true,
-    }, 2.3)
+    }, T3)
     .to(this.opTypoRight, {
       x: 56,
       opacity: 0,
       duration: 0.55,
       ease: 'power2.in',
       force3D: true,
-    }, 2.3)
+    }, T3)
     .to(ornaments, {
       scaleX: (i, el) => (el.classList.contains('op-tr') ? -1.4 : 1.4),
       scaleY: 1.4,
       opacity: 0,
       duration: 0.6,
       ease: 'power2.in',
-    }, 2.35)
+    }, T3 + 0.05)
 
     // Rumah Joglo maju menyambut kamera
     .to(this.jogloWorld, {
@@ -372,13 +375,13 @@ class TransitionManager {
       duration: 0.95,
       ease: 'power3.out',
       force3D: true,
-    }, 2.45)
+    }, T3 + 0.15)
     .to(this.landingTitle, {
       y: 0,
       opacity: 1,
       duration: 0.55,
       ease: 'power2.out',
-    }, 2.85)
+    }, T3 + 0.55)
     .fromTo('.door-plaque', {
       xPercent: -50,
       x: 0,
@@ -393,11 +396,11 @@ class TransitionManager {
       duration: 0.45,
       ease: 'power2.out',
       clearProps: 'transform',
-    }, 2.95)
+    }, T3 + 0.65)
     .to(this.landingHint, {
       opacity: 1,
       duration: 0.45,
-    }, 3.1);
+    }, T3 + 0.8);
   }
 
   initAmbientLife() {
