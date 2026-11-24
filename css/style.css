@@ -1018,11 +1018,11 @@ html, body {
 
 .op-quad-fan {
   position: absolute;
-  width: 115vmax; /* Sangat besar agar 100% menutupi seluruh layar HP & desktop */
+  width: 105vmax;
   height: auto;
   object-fit: contain;
-  transform-origin: 50% 80%; /* Titik poros tepat di pangkal gagang kipas */
-  filter: drop-shadow(0 18px 34px rgba(35, 14, 5, 0.55));
+  transform-origin: 50% 80%;
+  /* Hapus filter: drop-shadow agar GPU HP tidak berat */
   will-change: transform, opacity;
 }
 
