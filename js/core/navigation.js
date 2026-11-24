@@ -58,33 +58,37 @@ class NavigationController {
     const mountEl = document.getElementById(`room-mount-${roomKey}`);
     if (!room || !targetSection || !mountEl) return;
 
-    // Kunci input sementara selama pemuatan aset ruangan
-    appState.set('isTransitioning', true);
-    await loadingManager.loadRoomAssets(roomKey, room.title || 'Ruangan');
+    try {
+      appState.set('isTransitioning', true);
+      await loadingManager.loadRoomAssets(roomKey, room.title || 'Ruangan');
 
-    if (!this.initializedRooms.has(roomKey)) {
-      if (typeof room.init === 'function') {
-        room.init(mountEl, {
-          audioManager,
-          loadingManager,
-          tutorialManager,
-          returnToLanding: () => this.returnToLanding(),
-        });
+      if (!this.initializedRooms.has(roomKey)) {
+        if (typeof room.init === 'function') {
+          room.init(mountEl, {
+            audioManager,
+            loadingManager,
+            tutorialManager,
+            returnToLanding: () => this.returnToLanding(),
+          });
+        }
+        this.initializedRooms.add(roomKey);
       }
-      this.initializedRooms.add(roomKey);
-    }
 
-    appState.set('currentScene', roomKey);
+      appState.set('currentScene', roomKey);
 
-    await transitionManager.enterRoom(doorUnit, targetSection, () => {
-      if (typeof room.enter === 'function') {
-        room.enter();
+      await transitionManager.enterRoom(doorUnit, targetSection, () => {
+        if (typeof room.enter === 'function') {
+          room.enter();
+        }
+      });
+
+      if (room.tutorial) {
+        tutorialManager.setRoomTutorial(roomKey, room.tutorial, true);
       }
-    });
-
-    // Tampilkan panduan ruangan pertama kali & aktifkan tombol Panduan di HUD
-    if (room.tutorial) {
-      tutorialManager.setRoomTutorial(roomKey, room.tutorial, true);
+    } catch (err) {
+      console.error(`[Navigation] Gagal masuk ke ruangan "${roomKey}":`, err);
+      appState.set('currentScene', 'landing');
+      appState.set('isTransitioning', false);
     }
   }
 

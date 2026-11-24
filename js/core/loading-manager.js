@@ -15,15 +15,7 @@ export const ASSET_MANIFEST = {
     { key: 'dedaunan1', src: 'assets/dedaunan1.webp', label: 'Menata dedaunan latar depan...' },
     { key: 'dedaunan2', src: 'assets/dedaunan2.webp', label: 'Menyempurnakan suasana Joglo...' },
   ],
-  peran: [
-    { key: 'reog', src: 'assets/reog.webp', label: 'Menyiapkan ilustrasi Reog Ponorogo...' },
-    { key: 'topeng', src: 'assets/topeng.webp', label: 'Menyiapkan ilustrasi Bujang Ganong...' },
-    { key: 'kudalumping', src: 'assets/kudalumping.webp', label: 'Menyiapkan ilustrasi Jathilan...' },
-    { key: 'kudalumping2', src: 'assets/kudalumping2.webp', label: 'Menyiapkan ilustrasi tarian pendamping...' },
-    { key: 'wayang1', src: 'assets/wayang1.webp', label: 'Menyiapkan ornamen cerita...' },
-    { key: 'wayang2', src: 'assets/wayang2.webp', label: 'Menyiapkan ornamen halaman...' },
-    { key: 'wayang3', src: 'assets/wayang3.webp', label: 'Menyelesaikan buku cerita...' },
-  ],
+  peran: [],
   tari: [
     { key: 'penari', src: 'assets/penari.webp', label: 'Menyiapkan penari Gandrung Banyuwangi...' },
     { key: 'lentera', src: 'assets/lentera.webp', label: 'Menyiapkan tata cahaya panggung...' },
@@ -191,6 +183,7 @@ class LoadingManager {
     if (cta) cta.hidden = false;
   }
 
+  // Ganti seluruh method loadRoomAssets di js/core/loading-manager.js:
   async loadRoomAssets(roomKey, displayName = 'Ruangan') {
     if (this.loadedGroups.has(roomKey)) return true;
     const items = ASSET_MANIFEST[roomKey] || [];
@@ -199,11 +192,11 @@ class LoadingManager {
       return true;
     }
 
-    this.roomLoader.hidden = false;
-    this.roomError.hidden = true;
-    this.roomLabel.textContent = `Menyiapkan ${displayName}...`;
-    this.roomFill.style.width = '0%';
-    this.roomPercent.textContent = '0%';
+    if (this.roomLoader) this.roomLoader.hidden = false;
+    if (this.roomError) this.roomError.hidden = true;
+    if (this.roomLabel) this.roomLabel.textContent = `Menyiapkan ${displayName}...`;
+    if (this.roomFill) this.roomFill.style.width = '0%';
+    if (this.roomPercent) this.roomPercent.textContent = '0%';
 
     let completed = 0;
     const failed = [];
@@ -215,16 +208,16 @@ class LoadingManager {
           completed += 1;
           if (!res.ok) failed.push(item);
           const pct = Math.round((completed / total) * 100);
-          this.roomFill.style.width = `${pct}%`;
-          this.roomPercent.textContent = `${pct}%`;
+          if (this.roomFill) this.roomFill.style.width = `${pct}%`;
+          if (this.roomPercent) this.roomPercent.textContent = `${pct}%`;
           return res;
         })
       )
     );
 
-    if (failed.length === 0) {
+    if (failed.length === 0 || !this.roomError) {
       this.loadedGroups.add(roomKey);
-      this.roomLoader.hidden = true;
+      if (this.roomLoader) this.roomLoader.hidden = true;
       return true;
     }
 
@@ -237,15 +230,15 @@ class LoadingManager {
       const onContinue = () => {
         cleanup();
         this.loadedGroups.add(roomKey);
-        this.roomLoader.hidden = true;
+        if (this.roomLoader) this.roomLoader.hidden = true;
         resolve(true);
       };
       const cleanup = () => {
-        this.btnRoomRetry.removeEventListener('click', onRetry);
-        this.btnRoomContinue.removeEventListener('click', onContinue);
+        this.btnRoomRetry?.removeEventListener('click', onRetry);
+        this.btnRoomContinue?.removeEventListener('click', onContinue);
       };
-      this.btnRoomRetry.addEventListener('click', onRetry);
-      this.btnRoomContinue.addEventListener('click', onContinue);
+      this.btnRoomRetry?.addEventListener('click', onRetry);
+      this.btnRoomContinue?.addEventListener('click', onContinue);
     });
   }
 }
