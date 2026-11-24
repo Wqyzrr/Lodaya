@@ -486,8 +486,8 @@ class TransitionManager {
     ];
     gsap.killTweensOf(targets);
 
-    gsap.set(this.jogloWorld, { x: 0, y: 0, scale: 1, opacity: 1, force3D: true });
-    gsap.set([this.layerMountains, this.layerSky], { x: 0, y: 0, scale: 1, force3D: true });
+    gsap.set(this.jogloWorld, { clearProps: 'transform', opacity: 1 });
+    gsap.set([this.layerMountains, this.layerSky], { clearProps: 'transform' });
     gsap.set(
       [this.slotLanternLeft, this.slotLanternRight, this.slotFoliageLeft, this.slotFoliageRight],
       { x: 0, y: 0, xPercent: 0, yPercent: 0, scale: 1, opacity: 1, force3D: true }
