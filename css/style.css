@@ -399,7 +399,6 @@ html, body {
   justify-content: center;
   transform-origin: 50% 50%;
   will-change: transform;
-  backface-visibility: hidden;
 }
 
 .joglo-parallax {
