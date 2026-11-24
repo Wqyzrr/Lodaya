@@ -89,9 +89,8 @@ class TransitionManager {
   }
 
   /**
-   * Koreografi GSAP Opening 2 Tahap:
-   * 1. 4 kipas (kiri lawan jarum jam, kanan searah jarum jam) membuka layar
-   * 2. 2 kipas membentuk lingkaran penuh -> berputar sedikit -> lubang terbuka di tengah + zoom masuk ke Tirai
+   * Siapkan posisi awal 4 kipas di balik tirai (TIDAK langsung diputar).
+   * Animasi baru berjalan setelah pengguna mengetuk Tirai Merah.
    */
   prepareOpeningIntro() {
     if (!this.openingStage || !window.gsap) return;
@@ -101,257 +100,15 @@ class TransitionManager {
       return;
     }
 
-    // Set posisi awal kipas agar layar sudah tertutup rapi saat portrait lock hilang
     const gsap = window.gsap;
     gsap.set(this.fanLeftFront,  { rotation: 92,  scale: 1.05, opacity: 1 });
     gsap.set(this.fanLeftBack,   { rotation: 48,  scale: 1.12, opacity: 1 });
     gsap.set(this.fanRightFront, { rotation: -92, scale: 1.05, opacity: 1 });
     gsap.set(this.fanRightBack,  { rotation: -48, scale: 1.12, opacity: 1 });
-    if (this.curtainCenter) {
-      gsap.set(this.curtainCenter, { scale: 0.86, opacity: 0.55 });
-    }
-
-    // Jika sejak awal sudah landscape, langsung jalankan animasi
-    if (!appState.get('isPortrait')) {
-      this.playOpeningIntro();
-      return;
-    }
-
-    // Jika masih portrait, tunggu sampai berubah ke landscape + jeda 1 detik
-    this.unsubscribeOrientation = appState.subscribe('isPortrait', (isPortrait) => {
-      if (this.openingStarted) return;
-
-      if (!isPortrait) {
-        clearTimeout(this.openingDelayTimer);
-        this.openingDelayTimer = setTimeout(() => {
-          if (!appState.get('isPortrait') && !this.openingStarted) {
-            this.playOpeningIntro();
-          }
-        }, 1000);
-      } else {
-        clearTimeout(this.openingDelayTimer);
-        this.openingDelayTimer = null;
-      }
-    });
-  }
-
-  playOpeningIntro() {
-    if (this.openingStarted || !this.openingStage || !window.gsap) return;
-    this.openingStarted = true;
-
-    clearTimeout(this.openingDelayTimer);
-    if (this.unsubscribeOrientation) {
-      this.unsubscribeOrientation();
-      this.unsubscribeOrientation = null;
-    }
-
-    const gsap = window.gsap;
-
-    if (appState.get('reducedMotion')) {
-      this.openingStage.style.display = 'none';
-      return;
-    }
-
-    const holeState = { radius: 0 };
-    const applyHoleMask = () => {
-      const r = holeState.radius;
-      const maskVal = r <= 0.1
-        ? 'none'
-        : `radial-gradient(circle at 50% 50%, transparent ${r}%, #000 ${r + 1.8}%)`;
-      this.openingStage.style.webkitMaskImage = maskVal;
-      this.openingStage.style.maskImage = maskVal;
-    };
-
-    const ornaments = Array.from(this.opOrnaments || []);
-    const tl = gsap.timeline({
-      onComplete: () => {
-        this.openingStage.style.display = 'none';
-      },
-    });
-    this.openingTimeline = tl;
-
-    // Frame 0: Posisikan 4 kipas raksasa menutup 100% layar (kiri menghadap kanan, kanan menghadap kiri)
-    gsap.set(this.fanLeftFront,  { rotation: 92,  scale: 1.05, opacity: 1 });
-    gsap.set(this.fanLeftBack,   { rotation: 48,  scale: 1.12, opacity: 1 });
-    gsap.set(this.fanRightFront, { rotation: -92, scale: 1.05, opacity: 1 });
-    gsap.set(this.fanRightBack,  { rotation: -48, scale: 1.12, opacity: 1 });
-
-    // Siapkan emblem tirai di belakang sedikit lebih kecil agar terasa efek zoom masuk
-    if (this.curtainCenter) {
-      gsap.set(this.curtainCenter, { scale: 0.86, opacity: 0.55 });
-    }
-
-    // --- TAHAP 1: 4 KIPAS RAKSASA BERPUTAR MEMBUKA LAYAR ---
-    // Kiri: berputar berlawanan arah jarum jam (minus) & menyapu keluar ke kiri
-    tl.to(this.fanLeftFront, {
-      rotation: -75,
-      xPercent: -35,
-      opacity: 0,
-      duration: 1.2,
-      ease: 'power3.inOut',
-      force3D: true,
-    }, 0.25)
-    .to(this.fanLeftBack, {
-      rotation: -120,
-      xPercent: -45,
-      opacity: 0,
-      duration: 1.3,
-      ease: 'power3.inOut',
-      force3D: true,
-    }, 0.32)
-    // Kanan: berputar searah jarum jam (positif) & menyapu keluar ke kanan
-    .to(this.fanRightFront, {
-      rotation: 75,
-      xPercent: 35,
-      opacity: 0,
-      duration: 1.2,
-      ease: 'power3.inOut',
-      force3D: true,
-    }, 0.25)
-    .to(this.fanRightBack, {
-      rotation: 120,
-      xPercent: 45,
-      opacity: 0,
-      duration: 1.3,
-      ease: 'power3.inOut',
-      force3D: true,
-    }, 0.32);
-    
-    // Set rotasi dasar sudut sebelum mekar (flip horizontal wayang dihandle di scaleX)
-    gsap.set('.op-bl', { rotation: 45 });
-    gsap.set('.op-tr', { rotation: -45 }); // ubah ke 45 jika ingin kemiringan searah jarum jam
-    gsap.set('.op-br', { rotation: -45 });
-
-    // Ornamen sudut mekar halus (pertahankan flip horizontal pada .op-tr)
-    tl.fromTo(ornaments, {
-      scaleX: (i, el) => (el.classList.contains('op-tr') ? -0.6 : 0.6),
-      scaleY: 0.6,
-      opacity: 0,
-    }, {
-      scaleX: (i, el) => (el.classList.contains('op-tr') ? -1 : 1),
-      scaleY: 1,
-      opacity: 1,
-      stagger: 0.05,
-      duration: 0.6,
-      ease: 'power2.out',
-    }, 0.65)
-
-    // --- TAHAP 2: 4 KIPAS LINGKARAN 360° + ORBITAL RING + TIPOGRAFI KIRI/KANAN ---
-    .fromTo(this.opFanRig, {
-      scale: 0.5,
-      rotation: -45,
-      opacity: 0,
-    }, {
-      scale: 1,
-      rotation: 0,
-      opacity: 1,
-      duration: 0.85,
-      ease: 'back.out(1.2)',
-      force3D: true,
-    }, 0.85)
-    // Orbital ring muncul & berputar berlawanan arah jarum jam (kontras dengan kipas)
-    .fromTo(this.opOrbitRing, {
-      scale: 0.72,
-      rotation: 35,
-      opacity: 0,
-    }, {
-      scale: 1,
-      rotation: 0,
-      opacity: 1,
-      duration: 0.85,
-      ease: 'power2.out',
-      force3D: true,
-    }, 0.9)
-    // Tipografi kiri & kanan muncul meluncur keluar dari balik kipas
-    .fromTo(this.opTypoLeft, {
-      x: 42,
-      opacity: 0,
-    }, {
-      x: 0,
-      opacity: 1,
-      duration: 0.75,
-      ease: 'power3.out',
-      force3D: true,
-    }, 0.98)
-    .fromTo(this.opTypoRight, {
-      x: -42,
-      opacity: 0,
-    }, {
-      x: 0,
-      opacity: 1,
-      duration: 0.75,
-      ease: 'power3.out',
-      force3D: true,
-    }, 0.98)
-    // Putaran halus kipas (searah jarum jam) & orbital text (lawan arah jarum jam)
-    .to(this.opFanRig, {
-      rotation: 55,
-      duration: 0.75,
-      ease: 'power1.inOut',
-      force3D: true,
-    }, 1.7)
-    .to(this.opOrbitRing, {
-      rotation: -38,
-      duration: 0.75,
-      ease: 'power1.inOut',
-      force3D: true,
-    }, 1.7)
-
-    // --- TAHAP 3: LUBANG TERBUKA DI TENGAH + ZOOM MASUK KE TIRAI MERAH ---
-    .to(holeState, {
-      radius: 118,
-      duration: 1.05,
-      ease: 'power3.in',
-      onUpdate: applyHoleMask,
-    }, 2.4)
-    .to(this.opFanRig, {
-      scale: 5.2,
-      rotation: 135,
-      duration: 1.05,
-      ease: 'power3.in',
-      force3D: true,
-    }, 2.4)
-    .to(this.opOrbitRing, {
-      scale: 3.4,
-      rotation: -95,
-      opacity: 0,
-      duration: 0.85,
-      ease: 'power3.in',
-      force3D: true,
-    }, 2.4)
-    // Tipografi kiri & kanan membelah ke tepi saat kamera meluncur masuk
-    .to(this.opTypoLeft, {
-      x: -56,
-      opacity: 0,
-      duration: 0.55,
-      ease: 'power2.in',
-      force3D: true,
-    }, 2.4)
-    .to(this.opTypoRight, {
-      x: 56,
-      opacity: 0,
-      duration: 0.55,
-      ease: 'power2.in',
-      force3D: true,
-    }, 2.4)
-    .to(ornaments, {
-      scaleX: (i, el) => (el.classList.contains('op-tr') ? -1.4 : 1.4),
-      scaleY: 1.4,
-      opacity: 0,
-      duration: 0.6,
-      ease: 'power2.in',
-    }, 2.45)
-    // Tirai di belakang maju menyambut kamera
-    .to(this.curtainCenter, {
-      scale: 1,
-      opacity: 1,
-      duration: 0.85,
-      ease: 'power2.out',
-    }, 2.55);
   }
 
   /**
-   * Membuka Tirai Merah menuju Rumah Adat Joglo.
+   * TAHAP 1: Membuka Tirai Merah -> langsung memicu Animasi Opening Kipas.
    */
   openCurtain() {
     if (appState.get('curtainOpened') || !appState.get('landingReady')) return;
@@ -373,6 +130,7 @@ class TransitionManager {
     const gsap = window.gsap;
     if (!gsap || appState.get('reducedMotion')) {
       if (this.curtainOverlay) this.curtainOverlay.style.display = 'none';
+      if (this.openingStage) this.openingStage.style.display = 'none';
       this.resetLandingState();
       appState.set('isTransitioning', false);
       return;
@@ -381,8 +139,6 @@ class TransitionManager {
     const tl = gsap.timeline({
       onComplete: () => {
         if (this.curtainOverlay) this.curtainOverlay.style.display = 'none';
-        appState.set('isTransitioning', false);
-        this.startHintPulse();
       },
     });
     this.activeTimeline = tl;
@@ -390,66 +146,239 @@ class TransitionManager {
     tl.to(this.curtainCenter, {
       scale: 1.06,
       opacity: 0,
-      duration: 0.4,
+      duration: 0.38,
       ease: 'power2.in',
       force3D: true,
     }, 0)
     .to(this.curtainLeft, {
       xPercent: -102,
       skewX: -2.5,
-      duration: 1.15,
+      duration: 1.05,
       ease: 'power3.inOut',
       force3D: true,
-    }, 0.18)
+    }, 0.15)
     .to(this.curtainRight, {
       xPercent: 102,
       skewX: 2.5,
-      duration: 1.15,
+      duration: 1.05,
       ease: 'power3.inOut',
       force3D: true,
-    }, 0.18)
-    .fromTo(this.jogloWorld, {
-      scale: 0.95,
-      y: 18,
+    }, 0.15)
+    // Begitu tirai mulai terbuka lebar, langsung jalankan animasi kipas
+    .add(() => {
+      this.playOpeningIntro();
+    }, 0.55);
+  }
+
+  /**
+   * TAHAP 2: Animasi Opening Kipas -> Lubang terbuka & zoom masuk ke Rumah Joglo.
+   */
+  playOpeningIntro() {
+    if (this.openingStarted || !this.openingStage || !window.gsap) return;
+    this.openingStarted = true;
+
+    const gsap = window.gsap;
+
+    if (appState.get('reducedMotion')) {
+      this.openingStage.style.display = 'none';
+      this.resetLandingState();
+      appState.set('isTransitioning', false);
+      return;
+    }
+
+    const holeState = { radius: 0 };
+    const applyHoleMask = () => {
+      const r = holeState.radius;
+      const maskVal = r <= 0.1
+        ? 'none'
+        : `radial-gradient(circle at 50% 50%, transparent ${r}%, #000 ${r + 1.8}%)`;
+      this.openingStage.style.webkitMaskImage = maskVal;
+      this.openingStage.style.maskImage = maskVal;
+    };
+
+    const ornaments = Array.from(this.opOrnaments || []);
+
+    // Siapkan Rumah Joglo di belakang sedikit lebih kecil untuk efek zoom masuk
+    gsap.set(this.jogloWorld, { scale: 0.93, y: 14, opacity: 0.85, force3D: true });
+    gsap.set([this.landingTitle, this.landingHint, '.door-plaque'], { opacity: 0 });
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        this.openingStage.style.display = 'none';
+        appState.set('isTransitioning', false);
+        this.startHintPulse();
+      },
+    });
+    this.openingTimeline = tl;
+
+    // --- 4 KIPAS RAKSASA BERPUTAR MEMBUKA LAYAR ---
+    tl.to(this.fanLeftFront, {
+      rotation: -75,
+      xPercent: -35,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power3.inOut',
+      force3D: true,
+    }, 0.15)
+    .to(this.fanLeftBack, {
+      rotation: -120,
+      xPercent: -45,
+      opacity: 0,
+      duration: 1.3,
+      ease: 'power3.inOut',
+      force3D: true,
+    }, 0.22)
+    .to(this.fanRightFront, {
+      rotation: 75,
+      xPercent: 35,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power3.inOut',
+      force3D: true,
+    }, 0.15)
+    .to(this.fanRightBack, {
+      rotation: 120,
+      xPercent: 45,
+      opacity: 0,
+      duration: 1.3,
+      ease: 'power3.inOut',
+      force3D: true,
+    }, 0.22);
+
+    gsap.set('.op-bl', { rotation: 45 });
+    gsap.set('.op-tr', { rotation: -45 });
+    gsap.set('.op-br', { rotation: -45 });
+
+    tl.fromTo(ornaments, {
+      scaleX: (i, el) => (el.classList.contains('op-tr') ? -0.6 : 0.6),
+      scaleY: 0.6,
+      opacity: 0,
+    }, {
+      scaleX: (i, el) => (el.classList.contains('op-tr') ? -1 : 1),
+      scaleY: 1,
+      opacity: 1,
+      stagger: 0.05,
+      duration: 0.6,
+      ease: 'power2.out',
+    }, 0.55)
+
+    // --- 4 KIPAS LINGKARAN 360° + ORBITAL RING + TIPOGRAFI ---
+    .fromTo(this.opFanRig, {
+      scale: 0.5,
+      rotation: -45,
       opacity: 0,
     }, {
       scale: 1,
-      y: 0,
+      rotation: 0,
       opacity: 1,
-      duration: 1.0,
+      duration: 0.85,
+      ease: 'back.out(1.2)',
+      force3D: true,
+    }, 0.75)
+    .fromTo(this.opOrbitRing, {
+      scale: 0.72,
+      rotation: 35,
+      opacity: 0,
+    }, {
+      scale: 1,
+      rotation: 0,
+      opacity: 1,
+      duration: 0.85,
+      ease: 'power2.out',
+      force3D: true,
+    }, 0.8)
+    .fromTo(this.opTypoLeft, {
+      x: 42,
+      opacity: 0,
+    }, {
+      x: 0,
+      opacity: 1,
+      duration: 0.75,
       ease: 'power3.out',
       force3D: true,
-    }, 0.32)
-    .fromTo([this.slotFoliageLeft, this.slotFoliageRight], {
-      scale: 1.1,
+    }, 0.88)
+    .fromTo(this.opTypoRight, {
+      x: -42,
       opacity: 0,
     }, {
+      x: 0,
+      opacity: 1,
+      duration: 0.75,
+      ease: 'power3.out',
+      force3D: true,
+    }, 0.88)
+    .to(this.opFanRig, {
+      rotation: 55,
+      duration: 0.75,
+      ease: 'power1.inOut',
+      force3D: true,
+    }, 1.6)
+    .to(this.opOrbitRing, {
+      rotation: -38,
+      duration: 0.75,
+      ease: 'power1.inOut',
+      force3D: true,
+    }, 1.6)
+
+    // --- LUBANG TERBUKA DI TENGAH + ZOOM MASUK KE RUMAH JOGLO ---
+    .to(holeState, {
+      radius: 118,
+      duration: 1.05,
+      ease: 'power3.in',
+      onUpdate: applyHoleMask,
+    }, 2.3)
+    .to(this.opFanRig, {
+      scale: 5.2,
+      rotation: 135,
+      duration: 1.05,
+      ease: 'power3.in',
+      force3D: true,
+    }, 2.3)
+    .to(this.opOrbitRing, {
+      scale: 3.4,
+      rotation: -95,
+      opacity: 0,
+      duration: 0.85,
+      ease: 'power3.in',
+      force3D: true,
+    }, 2.3)
+    .to(this.opTypoLeft, {
+      x: -56,
+      opacity: 0,
+      duration: 0.55,
+      ease: 'power2.in',
+      force3D: true,
+    }, 2.3)
+    .to(this.opTypoRight, {
+      x: 56,
+      opacity: 0,
+      duration: 0.55,
+      ease: 'power2.in',
+      force3D: true,
+    }, 2.3)
+    .to(ornaments, {
+      scaleX: (i, el) => (el.classList.contains('op-tr') ? -1.4 : 1.4),
+      scaleY: 1.4,
+      opacity: 0,
+      duration: 0.6,
+      ease: 'power2.in',
+    }, 2.35)
+
+    // Rumah Joglo maju menyambut kamera
+    .to(this.jogloWorld, {
       scale: 1,
+      y: 0,
       opacity: 1,
       duration: 0.95,
       ease: 'power3.out',
       force3D: true,
-    }, 0.38)
-    .fromTo([this.slotLanternLeft, this.slotLanternRight], {
-      y: -28,
-      opacity: 0,
-    }, {
+    }, 2.45)
+    .to(this.landingTitle, {
       y: 0,
       opacity: 1,
-      stagger: 0.1,
-      duration: 0.85,
+      duration: 0.55,
       ease: 'power2.out',
-      force3D: true,
-    }, 0.44)
-    .fromTo(this.landingTitle, {
-      y: -12,
-      opacity: 0,
-    }, {
-      y: 0,
-      opacity: 1,
-      duration: 0.65,
-      ease: 'power2.out',
-    }, 0.65)
+    }, 2.85)
     .fromTo('.door-plaque', {
       xPercent: -50,
       x: 0,
@@ -464,13 +393,11 @@ class TransitionManager {
       duration: 0.45,
       ease: 'power2.out',
       clearProps: 'transform',
-    }, 0.72)
-    .fromTo(this.landingHint, {
-      opacity: 0,
-    }, {
+    }, 2.95)
+    .to(this.landingHint, {
       opacity: 1,
-      duration: 0.55,
-    }, 0.85);
+      duration: 0.45,
+    }, 3.1);
   }
 
   initAmbientLife() {

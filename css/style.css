@@ -790,7 +790,7 @@ html, body {
 #curtain-overlay {
   position: fixed;
   inset: 0;
-  z-index: 900;
+  z-index: 950;
   display: flex;
   cursor: pointer;
   overflow: hidden;
@@ -897,7 +897,7 @@ html, body {
 #opening-stage {
   position: fixed;
   inset: 0;
-  z-index: 950;
+  z-index: 900;
   display: flex;
   align-items: center;
   justify-content: center;
