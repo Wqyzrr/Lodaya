@@ -10,7 +10,6 @@ import { audioManager } from './audio-manager.js';
 
 class TransitionManager {
   constructor() {
-    this.lastDoorUnit = null;
     this.sceneLanding = document.getElementById('scene-landing');
     this.layerSky = document.getElementById('layer-sky');
     this.layerMountains = document.getElementById('layer-mountains');
@@ -53,6 +52,7 @@ class TransitionManager {
     this.curtainCta = document.getElementById('op-cta');
 
     this.activeTimeline = null;
+    this.lastDoorUnit = null;
     this.openingTimeline = null;
     this.openingStarted = false;
     this.openingDelayTimer = null;
@@ -588,6 +588,8 @@ class TransitionManager {
 
   enterRoom(doorUnit, targetSection, onBeforeReveal) {
     return new Promise((resolve) => {
+      this.lastDoorUnit = doorUnit;
+      
       if (this.activeTimeline) {
         this.activeTimeline.kill();
         this.activeTimeline = null;

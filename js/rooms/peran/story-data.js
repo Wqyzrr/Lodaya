@@ -6,216 +6,177 @@
 
 const ASSET_BASE = 'assets/seniperan/';
 
-export const STORY_META = {
-  title: 'Rahasia di Balik Topeng Reog',
-  subtitle: 'Dongeng Budaya Reog Ponorogo',
-  eyebrow: 'Ruang I • Seni Peran Jawa Timur',
-  openCta: 'Buka Buku',
-  audioTrackKey: 'peran',
-};
-
-/**
- * Registri aset di assets/seniperan/.
- * Menggunakan nama dasar tanpa ekstensi agar pemuat aset dapat mencoba
- * .webp terlebih dahulu lalu fallback otomatis ke .png / .jpg.
- */
-export const STORY_ASSETS = {
-  bookCover: `${ASSET_BASE}book_cover`,
-  paperTexture: `${ASSET_BASE}paper_texture`,
-  paperCorner: `${ASSET_BASE}paper_corner`,
-  batikDecorations: `${ASSET_BASE}batik_decorations`,
-  flowerDecorations: `${ASSET_BASE}flower_decorations`,
-  magicalParticles: `${ASSET_BASE}magical_particles`,
-  characters: {
-    boy: {
-      basePath: `${ASSET_BASE}boy`,
-      alt: 'Bima, anak desa yang penuh rasa ingin tahu',
-    },
-    singo_barong: {
-      basePath: `${ASSET_BASE}singo_barong`,
-      alt: 'Singo Barong dengan mahkota Dadak Merak',
-    },
-    bujang_ganong: {
-      basePath: `${ASSET_BASE}bujang_ganong`,
-      alt: 'Bujang Ganong yang lincah dan cerdik',
-    },
-    jathil: {
-      basePath: `${ASSET_BASE}jathil`,
-      alt: 'Penari Jathil berkuda kepang',
-    },
-    warok: {
-      basePath: `${ASSET_BASE}warok`,
-      alt: 'Warok Ponorogo yang berwibawa',
-    },
-  },
-};
-
-/**
- * 9 halaman cerita berurutan menggunakan storybook1 s.d. storybook9.
- * contextType: 'fact' (fakta budaya terdokumentasi) | 'legend' (cerita rakyat / tradisi lisan)
- */
 export const STORY_PAGES = [
   {
     id: 'page-1',
     pageNumber: 1,
-    title: 'Tabuhan Gamelan di Alun-Alun',
+    title: 'Persiapan di Halaman Pendopo',
     sceneBasePath: `${ASSET_BASE}storybook1`,
-    sceneAlt: 'Bima berlari menuju alun-alun desa yang ramai oleh pertunjukan Reog Ponorogo',
-    sceneCaption: 'Sore hangat di alun-alun Ponorogo',
+    sceneAlt:
+      'Warga dan seniman Reog Ponorogo bersiap di halaman pendopo desa, menata gamelan dan menyiapkan topeng Dadak Merak sambil disaksikan Bima dan Sari',
+    sceneCaption: 'Kesibukan hangat sebelum pertunjukan dimulai',
     characterKey: 'boy',
     characterPos: 'left',
     contextType: 'fact',
     contextLabel: 'Fakta Budaya',
     paragraphs: [
-      'Sore itu, dentuman kendang dan lengkingan terompet slompret menggema hingga ke beranda rumah Bima. Rasa ingin tahunya langsung membuncah.',
-      'Ia berlari menuju alun-alun desa. Warga telah berkumpul melingkar, menanti dimulainya pertunjukan Reog Ponorogo yang megah.',
+      'Sore itu, halaman pendopo desa tampak jauh lebih ramai dari biasanya. Bima dan Sari berdiri terpaku menyaksikan para seniman menyiapkan topeng harimau raksasa berhias bulu merak.',
+      'Di sudut lain, para pengrawit mulai menyetel gong dan kendang, sementara beberapa penari berlatih gerakan kuda kepang dengan penuh semangat.',
     ],
     culturalFact:
-      'Reog Ponorogo adalah seni pertunjukan tradisional khas Kabupaten Ponorogo, Jawa Timur, yang memadukan tari, topeng, dan musik gamelan tradisional.',
+      'Reog Ponorogo adalah seni pertunjukan tradisional khas Kabupaten Ponorogo, Jawa Timur, yang melibatkan kerja sama erat antara penari, pemusik, dan warga desa.',
   },
   {
     id: 'page-2',
     pageNumber: 2,
-    title: 'Derap Tangkas Pasukan Jathil',
+    title: 'Megahnya Topeng Dadak Merak',
     sceneBasePath: `${ASSET_BASE}storybook2`,
-    sceneAlt: 'Para penari Jathil menunggangi kuda kepang dengan gerakan serempak',
-    sceneCaption: 'Pasukan berkuda kepang membuka arena',
-    characterKey: 'jathil',
+    sceneAlt:
+      'Seorang sesepuh Warok memperkenalkan topeng Dadak Merak dari dekat kepada Bima dan Sari di lapangan desa berlatar pegunungan',
+    sceneCaption: 'Bima dan Sari mengagumi Dadak Merak dari dekat',
+    characterKey: 'elder',
     characterPos: 'right',
     contextType: 'fact',
     contextLabel: 'Fakta Budaya',
     paragraphs: [
-      'Arena dibuka oleh barisan penari yang menunggangi kuda anyaman bambu. Langkah kaki mereka serempak mengikuti irama kenong dan kempul.',
-      'Bima bertepuk tangan kagum. Gerakan mereka tampak begitu ringan, kompak, dan penuh semangat.',
+      'Melihat rasa penasaran di mata Bima dan Sari, Mbah Karto mengajak mereka mendekat. Dari jarak sedekat itu, topeng Singo Barong tampak begitu tinggi, gagah, dan penuh warna.',
+      'Mbah Karto tersenyum sambil menjelaskan bahwa setiap helai bulu merak dan ukiran pada topeng itu melambangkan keberanian serta kebanggaan masyarakat Ponorogo.',
     ],
     culturalFact:
-      'Tari Jathil menggambarkan ketangkasan prajurit berkuda. Gerakannya yang serempak mencerminkan kedisiplinan dan kekompakan tim.',
+      'Dadak Merak memiliki berat sekitar 50 hingga 60 kilogram dan diangkat oleh penari (pembarong) hanya dengan menggigit bagian kayu di dalamnya menggunakan kekuatan gigi serta leher.',
   },
   {
     id: 'page-3',
     pageNumber: 3,
-    title: 'Kelincahan Bujang Ganong',
+    title: 'Menuju Kemeriahan Alun-Alun',
     sceneBasePath: `${ASSET_BASE}storybook3`,
-    sceneAlt: 'Bujang Ganong bertopeng merah melompat lincah menghibur penonton',
-    sceneCaption: 'Aksi akrobatik Bujang Ganong yang jenaka',
-    characterKey: 'bujang_ganong',
-    characterPos: 'right',
+    sceneAlt:
+      'Jalan desa yang asri dikelilingi rumah kayu, pagar bambu, dan sawah terasering menuju area pertunjukan yang dihiasi janur kuning',
+    sceneCaption: 'Jalan desa menuju arena pertunjukan rakyat',
+    characterKey: 'boy',
+    characterPos: 'left',
     contextType: 'fact',
-    contextLabel: 'Tokoh Pertunjukan',
+    contextLabel: 'Fakta Budaya',
     paragraphs: [
-      'Tiba-tiba, sesosok penari bertopeng merah dengan mata besar melompat jungkir balik ke tengah arena! Penonton bersorak riuh.',
-      'Bima tertawa senang melihat tingkahnya yang jenaka sekaligus sangat lincah menyapa anak-anak di tepi panggung.',
+      'Dari kejauhan, janur kuning yang melengkung di dekat balai desa mulai terlihat jelas. Rombongan Reog mulai berarak menyusuri jalan setapak di tepi sawah yang menghijau.',
+      'Langkah Bima semakin cepat. Udara desa yang sejuk kini dipenuhi suara tabuhan yang memanggil seluruh warga untuk berkumpul.',
     ],
     culturalFact:
-      'Bujang Ganong (Patih Pujangga Anom) dikenal sebagai tokoh yang cerdik, berani, dan enerjik. Gerakan akrobatiknya selalu mencairkan suasana.',
+      'Pemasangan janur kuning dan arak-arakan keliling desa merupakan tradisi untuk mengundang warga sekaligus membawa suasana suka cita sebelum pementasan utama.',
   },
   {
     id: 'page-4',
     pageNumber: 4,
-    title: 'Wibawa Sang Warok',
+    title: 'Senja di Arena Pertunjukan',
     sceneBasePath: `${ASSET_BASE}storybook4`,
-    sceneAlt: 'Warok berpakaian serba hitam berdiri tenang dengan penuh wibawa',
-    sceneCaption: 'Langkah tenang penuh kebijaksanaan',
-    characterKey: 'warok',
+    sceneAlt:
+      'Warga berkumpul melingkar di depan pendopo saat senja dengan nyala api unggun kecil, sementara penari Warok, Jathil, dan penabuh gamelan bersiap tampil',
+    sceneCaption: 'Warga berkumpul melingkar menyambut senja',
+    characterKey: 'girl',
     characterPos: 'left',
     contextType: 'fact',
     contextLabel: 'Fakta Budaya',
     paragraphs: [
-      'Di sisi arena, Bima memperhatikan sosok berpakaian serba hitam dengan tali kolor putih besar. Gerakannya tenang, mantap, dan berwibawa.',
-      'Seorang kakek di sebelah Bima berbisik bahwa tokoh itu adalah Warok, penjaga ketenangan dan teladan bagi para penari.',
+      'Langit perlahan berubah jingga. Api unggun kecil dinyalakan di tengah halaman pendopo yang telah dihiasi umbul-umbul dan janur.',
+      'Warga dari anak-anak hingga orang tua duduk dan berdiri melingkar. Para penari Warok dan Jathil mulai mengambil posisi, menandakan pertunjukan segera dimulai.',
     ],
     culturalFact:
-      'Dalam tradisi masyarakat Ponorogo, Warok dihormati sebagai sosok yang menjunjung tinggi budi pekerti, keteguhan hati, dan kebijaksanaan.',
+      'Pertunjukan Reog Ponorogo tradisional biasanya digelar di ruang terbuka atau alun-alun agar penonton dapat menikmati tarian dari segala arah secara langsung.',
   },
   {
     id: 'page-5',
     pageNumber: 5,
-    title: 'Megahnya Singo Barong',
+    title: 'Tarian Gagah Singo Barong',
     sceneBasePath: `${ASSET_BASE}storybook5`,
-    sceneAlt: 'Topeng raksasa Singo Barong bermahkota bulu merak menari di tengah arena',
-    sceneCaption: 'Dadak Merak berkilau diterpa cahaya senja',
-    characterKey: 'singo_barong',
+    sceneAlt:
+      'Pembarong menari dengan gagah mengenakan Dadak Merak raksasa di tengah arena yang diterangi api unggun dan lentera, disambut tepuk tangan warga',
+    sceneCaption: 'Singo Barong menari penuh tenaga di tengah arena',
+    characterKey: 'boy',
     characterPos: 'right',
     contextType: 'fact',
     contextLabel: 'Fakta Budaya',
     paragraphs: [
-      'Suara slompret meninggi dan semua mata tertuju ke tengah lapangan. Muncullah topeng raksasa berkepala harimau dengan mahkota bulu merak yang menjulang!',
-      'Bima tertegun. Bagaimana mungkin satu orang mampu menari sambil menopang topeng sebesar dan semegah itu?',
+      'Begitu irama gamelan menghentak, Singo Barong melompat masuk ke tengah arena! Bulu meraknya yang lebar bergoyang megah mengikuti setiap ayunan langkah sang pembarong.',
+      'Sorak-sorai dan tepuk tangan warga langsung pecah. Percikan cahaya dari api unggun membuat tarian itu tampak semakin hidup dan memukau.',
     ],
     culturalFact:
-      'Topeng ini disebut Dadak Merak. Bobotnya dapat mencapai puluhan kilogram dan ditopang oleh kekuatan leher serta gigitan penari Pembarong pada bagian kayu di dalam topeng.',
+      'Singo Barong melambangkan sosok raja yang kuat dan berwibawa. Gerakannya yang lincah meski membawa beban berat membutuhkan latihan fisik dan konsentrasi tinggi.',
   },
   {
     id: 'page-6',
     pageNumber: 6,
-    title: 'Kisah Prabu Klono Sewandono',
+    title: 'Empat Tokoh Utama Reog',
     sceneBasePath: `${ASSET_BASE}storybook6`,
-    sceneAlt: 'Ilustrasi kisah rakyat Prabu Klono Sewandono dan Putri Dewi Songgolangit',
-    sceneCaption: 'Cerita rakyat yang dituturkan turun-temurun',
-    characterKey: null,
+    sceneAlt:
+      'Empat tokoh utama Reog Ponorogo yaitu Jathil, Bujang Ganong, Warok, dan Singo Barong berpose bersama di depan pendopo disaksikan warga',
+    sceneCaption: 'Jathil, Bujang Ganong, Warok, dan Singo Barong',
+    characterKey: 'elder',
     characterPos: 'left',
-    contextType: 'legend',
-    contextLabel: 'Cerita Rakyat',
+    contextType: 'fact',
+    contextLabel: 'Fakta Budaya',
     paragraphs: [
-      'Sambil beristirahat, sang kakek menceritakan salah satu legenda populer tentang Prabu Klono Sewandono dari Kerajaan Bantarangin.',
-      'Sang Prabu hendak meminang Putri Dewi Songgolangit dari Kediri, yang meminta syarat berupa pertunjukan seni unik yang belum pernah ada sebelumnya.',
+      'Di arena itu, Bima akhirnya mengenal seluruh tokoh penting dalam cerita Reog. Ada Jathil yang menari anggun bersama kuda kepangnya, serta Bujang Ganong bertopeng merah yang lincah dan jenaka.',
+      'Di samping mereka berdiri Warok berpakaian serba hitam yang berwibawa, mendampingi Singo Barong sebagai pusat kemegahan pertunjukan.',
     ],
     culturalFact:
-      'Kisah Prabu Klono Sewandono merupakan tradisi lisan (legenda rakyat) yang berkembang dalam berbagai versi di tengah masyarakat Ponorogo.',
+      'Setiap tokoh Reog memiliki peran khas: Jathil sebagai prajurit berkuda, Bujang Ganong sebagai patih yang cerdik dan akrobatik, serta Warok sebagai sosok pelindung yang bijaksana.',
   },
   {
     id: 'page-7',
     pageNumber: 7,
-    title: 'Makna di Balik Topeng',
+    title: 'Harmoni Gamelan dan Slompret',
     sceneBasePath: `${ASSET_BASE}storybook7`,
-    sceneAlt: 'Detail wajah Singo Barong dan keindahan bulu merak di atasnya',
-    sceneCaption: 'Perpaduan keberanian dan keindahan',
-    characterKey: 'singo_barong',
+    sceneAlt:
+      'Para pengrawit memainkan kendang, saron, gong, dan terompet slompret dengan penuh penghayatan di bawah cahaya lampion malam',
+    sceneCaption: 'Irama gamelan yang menghidupkan suasana malam',
+    characterKey: 'boy',
     characterPos: 'left',
-    contextType: 'legend',
-    contextLabel: 'Makna Tradisi',
+    contextType: 'fact',
+    contextLabel: 'Fakta Budaya',
     paragraphs: [
-      'Bima menatap kembali Singo Barong yang menari gagah. Kini ia mengerti bahwa setiap bentuk pada topeng menyimpan pesan luhur.',
-      'Keberanian yang kuat selalu lebih indah ketika didampingi oleh hati yang tenang dan bijaksana.',
+      'Di bawah temaram lampion gantung, para pengrawit memainkan alat musik mereka dengan penuh penghayatan. Dentuman kendang dan gong berpadu apik dengan dentingan saron.',
+      'Lengkingan khas terompet slompret mengalun menembus malam, menjadi penanda perubahan gerakan bagi para penari di tengah arena.',
     ],
     culturalFact:
-      'Dalam penafsiran tradisi setempat, kepala harimau melambangkan keberanian dan keteguhan, sedangkan burung merak di atasnya menggambarkan keindahan serta pengendalian diri.',
+      'Musik pengiring Reog Ponorogo memiliki ciri khas pada suara terompet slompret yang melengking, dipadukan dengan kendang, ketipung, gong, kempul, dan angklung reog.',
   },
   {
     id: 'page-8',
     pageNumber: 8,
-    title: 'Rahasia di Balik Panggung',
+    title: 'Puncak Kemeriahan di Bawah Bintang',
     sceneBasePath: `${ASSET_BASE}storybook8`,
-    sceneAlt: 'Para penari, penabuh gamelan, dan perajin saling membantu di belakang panggung',
-    sceneCaption: 'Gotong royong adalah rahasia sejati Reog',
-    characterKey: 'boy',
+    sceneAlt:
+      'Seluruh tokoh Reog Ponorogo menari bersama secara energik pada puncak pertunjukan malam hari di bawah langit berbintang dan cahaya obor',
+    sceneCaption: 'Semua penari bersatu dalam puncak pertunjukan',
+    characterKey: 'girl',
     characterPos: 'right',
     contextType: 'fact',
     contextLabel: 'Fakta Budaya',
     paragraphs: [
-      'Usai pementasan, Bima mengintip ke belakang panggung. Di sanalah ia menemukan rahasia terbesar di balik topeng Reog!',
-      'Para penari, penabuh gamelan, dan perajin saling bahu-membahu mengangkat serta merawat Dadak Merak bersama-sama.',
+      'Langit malam bertabur bintang, namun semangat warga sama sekali tidak surut. Pada babak puncak, Singo Barong, Bujang Ganong, Warok, dan Jathil menari bersama dalam satu harmoni yang memukau.',
+      'Cahaya obor yang diangkat warga menerangi senyum lebar di setiap wajah. Malam itu menjadi perayaan kebersamaan yang tak akan pernah dilupakan Bima.',
     ],
     culturalFact:
-      'Pementasan Reog Ponorogo melibatkan kerja sama puluhan orang—penari, pengrawit gamelan, hingga perajin topeng. Kekuatan utamanya lahir dari gotong royong.',
+      'Reog Ponorogo telah diakui oleh UNESCO sebagai Warisan Budaya Takbenda yang Memerlukan Perlindungan Mendesak pada Desember 2024, menjadi kebanggaan Indonesia di mata dunia.',
   },
   {
     id: 'page-9',
     pageNumber: 9,
-    title: 'Janji Bima untuk Masa Depan',
+    title: 'Janji Menjaga Warisan Budaya',
     sceneBasePath: `${ASSET_BASE}storybook9`,
-    sceneAlt: 'Bima tersenyum bangga memandang langit senja Ponorogo setelah pertunjukan',
-    sceneCaption: 'Menjaga nyala warisan budaya Jawa Timur',
+    sceneAlt:
+      'Bima duduk di tepi jalan bukit desa memandangi rombongan Reog Ponorogo berjalan pulang menyusuri jalan setapak di tepi sawah saat senja',
+    sceneCaption: 'Rombongan Reog pulang menyusuri jalan desa',
     characterKey: 'boy',
     characterPos: 'left',
     contextType: 'fact',
-    contextLabel: 'Warisan Budaya',
+    contextLabel: 'Pesan Budaya',
     paragraphs: [
-      'Langit Ponorogo berubah keemasan. Bima pulang dengan hati hangat dan penuh rasa bangga terhadap budaya daerahnya.',
-      'Ia berjanji akan membagikan kisah Reog Ponorogo kepada teman-temannya agar tradisi indah ini terus hidup dari generasi ke generasi.',
+      'Dari tepi bukit kecil, Bima duduk tenang memandangi rombongan Reog yang berjalan pulang menyusuri jalan desa di samping petak-petak sawah.',
+      'Di dalam hatinya tumbuh rasa bangga yang besar. Bima berjanji suatu hari nanti ia akan ikut belajar menari dan menjaga warisan Reog Ponorogo agar terus hidup selamanya.',
     ],
     culturalFact:
-      'Reog Ponorogo telah diakui UNESCO sebagai Warisan Budaya Takbenda pada Desember 2024 dan terus dilestarikan melalui sanggar seni serta Festival Grebeg Suro.',
+      'Melestarikan budaya daerah dapat dimulai dari generasi muda dengan cara mengenal sejarahnya, menonton pertunjukannya, hingga ikut berlatih di sanggar seni lokal.',
   },
 ];
 
