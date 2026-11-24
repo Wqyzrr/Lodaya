@@ -632,68 +632,122 @@ export const peranRoom = {
       return;
     }
 
+    // Siapkan buku terbuka di lapisan bawah tanpa menggeser layout sampul
+    this.dom.bookShell.hidden = false;
+    this.dom.controls.hidden = false;
+    this.dom.pagePill.hidden = false;
+
+    gsap.set(this.dom.bookShell, { opacity: 0, scale: 0.96, force3D: true });
+    gsap.set([this.dom.controls, this.dom.pagePill], { opacity: 0, y: 10 });
+    gsap.set(this.dom.coverBook, { xPercent: 0, scale: 1, opacity: 1, force3D: true });
+    gsap.set(this.dom.coverFront, { rotateY: 0, transformOrigin: 'left center', force3D: true });
+
     const tl = gsap.timeline({
       onComplete: () => {
         this.dom.coverScene.hidden = true;
+        gsap.set(this.dom.coverBook, { xPercent: 0, opacity: 1 });
+        gsap.set(this.dom.coverFront, { rotateY: 0 });
         this.viewState = 'reading';
         this.isAnimating = false;
         this.animateSpreadEntrance();
       },
     });
 
-    // 1. Sampul depan terbuka 3D dari kanan ke kiri
-    tl.to(this.dom.coverBoy, { opacity: 0, x: -20, duration: 0.3, ease: 'power2.in' }, 0)
-      .to(this.dom.closedBanner, { opacity: 0, duration: 0.25 }, 0)
-      .to(
-        this.dom.coverFront,
-        {
-          rotateY: -135,
-          duration: 0.72,
-          ease: 'power2.inOut',
-          transformOrigin: 'left center',
-          force3D: true,
-        },
-        0.05
-      )
-      .to(
-        this.dom.coverBook,
-        {
-          scale: 1.06,
-          opacity: 0,
-          duration: 0.42,
-          ease: 'power2.in',
-        },
-        0.48
-      )
-      .add(() => {
-        this.dom.bookShell.hidden = false;
-        this.dom.controls.hidden = false;
-        this.dom.pagePill.hidden = false;
-        gsap.set(this.dom.bookShell, { scale: 0.92, opacity: 0, rotateX: 6 });
-        gsap.set([this.dom.controls, this.dom.pagePill], { opacity: 0, y: 10 });
-      }, 0.52)
-      .to(
-        this.dom.bookShell,
-        {
-          scale: 1,
-          opacity: 1,
-          rotateX: 0,
-          duration: 0.58,
-          ease: 'power3.out',
-          force3D: true,
-        },
-        0.54
-      )
-      .to(
-        [this.dom.controls, this.dom.pagePill],
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          ease: 'power2.out',
-        },
-        0.72
-      );
+    // 1. Karakter & banner penutup menghilang halus
+    tl.to([this.dom.coverBoy, this.dom.closedBanner], {
+      opacity: 0,
+      duration: 0.24,
+      ease: 'power2.out',
+    }, 0)
+
+    // 2. Buku bergeser ke kanan agar tulang buku tepat di tengah layar
+    .to(this.dom.coverBook, {
+      xPercent: 48,
+      duration: 0.45,
+      ease: 'power2.inOut',
+      force3D: true,
+    }, 0.05)
+
+    // 3. Sampul depan terbuka 3D dari kanan ke kiri
+    .to(this.dom.coverFront, {
+      rotateY: -172,
+      duration: 0.72,
+      ease: 'power2.inOut',
+      force3D: true,
+    }, 0.34)
+
+    // 4. Halaman pertama muncul mulus tepat saat sampul melewati sudut 90°
+    .to(this.dom.bookShell, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.48,
+      ease: 'power2.out',
+      force3D: true,
+    }, 0.56)
+    .to(this.dom.coverBook, {
+      opacity: 0,
+      duration: 0.32,
+      ease: 'power2.out',
+    }, 0.74)
+
+    // 5. Kontrol navigasi muncul di akhir
+    .to([this.dom.controls, this.dom.pagePill], {
+      opacity: 1,
+      y: 0,
+      duration: 0.35,
+      ease: 'power2.out',
+    }, 0.78);
+  },
+
+  closeBook() {
+    if (this.isAnimating || this.viewState !== 'reading') return;
+    this.isAnimating = true;
+    this.killPageTweens();
+
+    const gsap = window.gsap;
+    const reduced = appState.get('reducedMotion');
+
+    if (!gsap || reduced) {
+      this.dom.bookShell.hidden = true;
+      this.dom.controls.hidden = true;
+      this.dom.pagePill.hidden = true;
+      this.dom.coverScene.hidden = false;
+      this.dom.btnOpen.hidden = true;
+      this.dom.closedBanner.hidden = false;
+      this.viewState = 'closed-end';
+      this.isAnimating = false;
+      return;
+    }
+
+    // Siapkan sampul dalam posisi terbuka di sisi kanan sebelum menutup kembali ke tengah
+    this.dom.coverScene.hidden = false;
+    this.dom.btnOpen.hidden = true;
+    this.dom.closedBanner.hidden = false;
+
+    gsap.set(this.dom.coverBook, { xPercent: 48, scale: 1, opacity: 1, force3D: true });
+    gsap.set(this.dom.coverFront, { rotateY: -172, transformOrigin: 'left center', force3D: true });
+    gsap.set([this.dom.coverBoy, this.dom.closedBanner], { opacity: 0, y: 10 });
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        this.dom.bookShell.hidden = true;
+        this.dom.controls.hidden = true;
+        this.dom.pagePill.hidden = true;
+        this.viewState = 'closed-end';
+        this.isAnimating = false;
+      },
+    });
+
+    tl.to([this.dom.controls, this.dom.pagePill], { opacity: 0, y: 8, duration: 0.2 }, 0)
+      .to(this.dom.bookShell, { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 0.05)
+      .to(this.dom.coverFront, { rotateY: 0, duration: 0.62, ease: 'power2.inOut', force3D: true }, 0.08)
+      .to(this.dom.coverBook, { xPercent: 0, duration: 0.45, ease: 'power2.out', force3D: true }, 0.48)
+      .to([this.dom.coverBoy, this.dom.closedBanner], {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: 'power2.out',
+      }, 0.72);
   },
 
   closeBook() {
