@@ -6,6 +6,54 @@
 
 const ASSET_BASE = 'assets/seniperan/';
 
+export const STORY_META = {
+  title: 'Rahasia di Balik<br>Topeng Reog',
+  subtitle: 'Dongeng Budaya<br>Reog Ponorogo',
+  eyebrow: 'Ruang I • Seni Peran Jawa Timur',
+  openCta: 'Buka Buku',
+  audioTrackKey: 'peran',
+};
+
+/**
+ * Registri aset di assets/seniperan/.
+ * Menggunakan nama dasar tanpa ekstensi agar pemuat aset dapat mencoba
+ * .webp terlebih dahulu lalu fallback otomatis ke .png / .jpg.
+ */
+export const STORY_ASSETS = {
+  bookCover: `${ASSET_BASE}book_cover`,
+  paperTexture: `${ASSET_BASE}paper_texture`,
+  paperCorner: `${ASSET_BASE}paper_corner`,
+  batikDecorations: `${ASSET_BASE}batik_decorations`,
+  flowerDecorations: `${ASSET_BASE}flower_decorations`,
+  magicalParticles: `${ASSET_BASE}magical_particles`,
+  characters: {
+    boy: {
+      basePath: `${ASSET_BASE}boy`,
+      alt: 'Bima, anak desa yang penuh rasa ingin tahu',
+    },
+    singo_barong: {
+      basePath: `${ASSET_BASE}singo_barong`,
+      alt: 'Singo Barong dengan mahkota Dadak Merak',
+    },
+    bujang_ganong: {
+      basePath: `${ASSET_BASE}bujang_ganong`,
+      alt: 'Bujang Ganong yang lincah dan cerdik',
+    },
+    jathil: {
+      basePath: `${ASSET_BASE}jathil`,
+      alt: 'Penari Jathil berkuda kepang',
+    },
+    warok: {
+      basePath: `${ASSET_BASE}warok`,
+      alt: 'Warok Ponorogo yang berwibawa',
+    },
+  },
+};
+
+/**
+ * 9 halaman cerita berurutan menggunakan storybook1 s.d. storybook9.
+ * contextType: 'fact' (fakta budaya terdokumentasi) | 'legend' (cerita rakyat / tradisi lisan)
+ */
 export const STORY_PAGES = [
   {
     id: 'page-1',
