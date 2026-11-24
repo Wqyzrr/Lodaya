@@ -1,4 +1,4 @@
-# Pesona Jawa Timur — Pameran Budaya Interaktif
+# Pesona Jawa Timur - XII-INTERNATIONAL 4
 
 Website pameran budaya Jawa Timur berbasis **HTML5, CSS3, Vanilla JavaScript (ES6 Modules), dan GSAP 3.12.5**, dirancang khusus untuk **mobile landscape** (dengan dukungan desktop) dan aksesibel bagi seluruh pengunjung termasuk guru, tamu undangan, serta pengunjung usia 40–50+.
 
@@ -6,14 +6,14 @@ Website pameran budaya Jawa Timur berbasis **HTML5, CSS3, Vanilla JavaScript (ES
 
 ## Cara Menjalankan Proyek
 
-Karena proyek menggunakan ES6 Modules (`<script type="module">`), jalankan melalui server lokal (jangan membuka `index.html` langsung dengan `file://`):
+Proyek menggunakan ES6 Modules (`<script type="module">`), jalankan melalui server lokal (jangan membuka `index.html` langsung dengan `file://`):
 
 ```bash
 # Opsi 1: Python
 python -m http.server 8080
 
 # Opsi 2: Node.js
-npx serve .
+melalui Live Server Extension VS Code
 ```
 
 Lalu buka `http://localhost:8080` di browser.
@@ -67,7 +67,7 @@ pesona-jawa-timur-landing/
 
 ---
 
-## 1. Tempat Memasang Berkas Audio MP3
+## 1. Lokasi Assets Audio MP3
 
 Letakkan berkas MP3 Anda di folder `assets/audio/` dengan nama berikut:
 
