@@ -264,7 +264,7 @@
   align-items: center;
   justify-content: flex-end;
   text-align: center;
-  padding: clamp(0.72rem, 2.16dvh, 1.3rem) clamp(0.72rem, 1.8vw, 1.08rem) clamp(3.89rem, 19.44dvh, 7.3rem);
+  padding: clamp(1rem, 3.2dvh, 1.8rem) clamp(1rem, 2.5vw, 1.5rem);
 }
 
 .sb-cover-subtitle {
