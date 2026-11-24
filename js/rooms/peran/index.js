@@ -113,52 +113,11 @@ export const peranRoom = {
           </div>
         </div>
 
-        <!-- Panggung Utama Buku 3D -->
+        <!-- Panggung Utama Buku 3D (Satu Objek Utuh: Tertutup & Terbuka) -->
         <div class="sb-stage" id="sb-stage">
-          <!-- TAMPILAN 1: SAMPUL BUKU TERTUTUP -->
-          <div class="sb-cover-scene" id="sb-cover-scene">
-            <div class="sb-cover-book" id="sb-cover-book">
-              <div class="sb-cover-spine" aria-hidden="true"></div>
-              <div class="sb-cover-pages-edge" aria-hidden="true"></div>
-              <div class="sb-cover-front" id="sb-cover-front">
-                <img class="sb-cover-art" id="sb-cover-art" alt="Sampul Buku ${STORY_META.title}" draggable="false" />
-                <div class="sb-cover-vignette" aria-hidden="true"></div>
-                <div class="sb-cover-corners" aria-hidden="true">
-                  <img class="sb-corner-img tl" data-asset-corner alt="" draggable="false" />
-                  <img class="sb-corner-img tr" data-asset-corner alt="" draggable="false" />
-                  <img class="sb-corner-img bl" data-asset-corner alt="" draggable="false" />
-                  <img class="sb-corner-img br" data-asset-corner alt="" draggable="false" />
-                </div>
-                <div class="sb-cover-overlay">
-                  <span class="sb-cover-subtitle">${STORY_META.subtitle}</span>
-                  <h3 class="sb-cover-title">${STORY_META.title}</h3>
-                  <div class="sb-cover-divider" aria-hidden="true"></div>
-                  <button type="button" class="sb-btn-open" id="sb-btn-open">
-                    <span>${STORY_META.openCta}</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <!-- Aksen karakter Bima menyapa di samping sampul -->
-              <img class="sb-cover-boy" id="sb-cover-boy" alt="" draggable="false" aria-hidden="true" />
-            </div>
-
-            <!-- Pesan setelah buku ditutup kembali di akhir cerita -->
-            <div class="sb-closed-banner" id="sb-closed-banner" hidden>
-              <p>Kisah <strong>${STORY_META.title}</strong> selesai dibaca.</p>
-              <div class="sb-closed-actions">
-                <button type="button" class="sb-btn-secondary" id="sb-btn-reread">Baca Lagi</button>
-                <button type="button" class="sb-btn-primary" id="sb-btn-return-joglo">Kembali ke Joglo</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- TAMPILAN 2: BUKU TERBUKA DUA HALAMAN (SPREAD) -->
-          <div class="sb-book-shell" id="sb-book-shell" hidden>
-            <div class="sb-hardcover-back" aria-hidden="true"></div>
-            <div class="sb-page-stack left" aria-hidden="true"></div>
+          <div class="sb-book-shell is-closed" id="sb-book-shell">
+            <div class="sb-hardcover-back" id="sb-hardcover-back" aria-hidden="true"></div>
+            <div class="sb-page-stack left" id="sb-stack-left" aria-hidden="true"></div>
             <div class="sb-page-stack right" aria-hidden="true"></div>
 
             <div class="sb-spread-surface" id="sb-spread-surface">
@@ -168,12 +127,12 @@ export const peranRoom = {
               <div class="sb-page sb-page-right" id="sb-page-right"></div>
 
               <!-- Bayangan Tulang Tengah Buku -->
-              <div class="sb-spine-crease" aria-hidden="true"></div>
+              <div class="sb-spine-crease" id="sb-spine-crease" aria-hidden="true"></div>
 
               <!-- Bayangan Lempar saat Halaman Dibalik -->
               <div class="sb-cast-shadow" id="sb-cast-shadow" aria-hidden="true"></div>
 
-              <!-- Lembaran 3D Aktif saat Flip / Drag -->
+              <!-- Lembaran 3D Aktif saat Flip / Drag Halaman -->
               <div class="sb-flip-leaf" id="sb-flip-leaf" aria-hidden="true">
                 <div class="sb-flip-face sb-flip-front" id="sb-flip-front">
                   <div class="sb-flip-content" id="sb-flip-front-content"></div>
@@ -185,13 +144,56 @@ export const peranRoom = {
                 </div>
               </div>
 
-              <!-- Sudut Interaktif untuk Membalik Halaman (Hover Curl & Click) -->
+              <!-- LEMBARAN SAMPUL HARDCOVER 3D (Menyatu dengan Buku) -->
+              <div class="sb-cover-leaf" id="sb-cover-leaf">
+                <!-- Sisi Depan: Sampul Buku -->
+                <div class="sb-cover-face sb-cover-front" id="sb-cover-front">
+                  <img class="sb-cover-art" id="sb-cover-art" alt="Sampul Buku ${STORY_META.title}" draggable="false" />
+                  <div class="sb-cover-vignette" aria-hidden="true"></div>
+                  <div class="sb-cover-corners" aria-hidden="true">
+                    <img class="sb-corner-img tl" data-asset-corner alt="" draggable="false" />
+                    <img class="sb-corner-img tr" data-asset-corner alt="" draggable="false" />
+                    <img class="sb-corner-img bl" data-asset-corner alt="" draggable="false" />
+                    <img class="sb-corner-img br" data-asset-corner alt="" draggable="false" />
+                  </div>
+                  <div class="sb-cover-overlay">
+                    <span class="sb-cover-subtitle">${STORY_META.subtitle}</span>
+                    <h3 class="sb-cover-title">${STORY_META.title}</h3>
+                    <div class="sb-cover-divider" aria-hidden="true"></div>
+                    <button type="button" class="sb-btn-open" id="sb-btn-open">
+                      <span>${STORY_META.openCta}</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Sisi Belakang: Langsung menampilkan Halaman Kiri Pertama -->
+                <div class="sb-cover-face sb-cover-back" id="sb-cover-back">
+                  <div class="sb-flip-content" id="sb-cover-back-content"></div>
+                </div>
+              </div>
+
+              <!-- Aksen Karakter Bima di Samping Sampul -->
+              <img class="sb-cover-boy" id="sb-cover-boy" alt="" draggable="false" aria-hidden="true" />
+
+              <!-- Sudut Interaktif untuk Membalik Halaman -->
               <button type="button" class="sb-corner-hotspot prev" id="sb-corner-prev" aria-label="Balik ke halaman sebelumnya">
                 <span class="sb-corner-peel"></span>
               </button>
               <button type="button" class="sb-corner-hotspot next" id="sb-corner-next" aria-label="Balik ke halaman berikutnya">
                 <span class="sb-corner-peel"></span>
               </button>
+            </div>
+          </div>
+
+          <!-- Pesan setelah buku ditutup kembali di akhir cerita -->
+          <div class="sb-closed-banner" id="sb-closed-banner" hidden>
+            <p>Kisah <strong>${STORY_META.title}</strong> selesai dibaca.</p>
+            <div class="sb-closed-actions">
+              <button type="button" class="sb-btn-secondary" id="sb-btn-reread">Baca Lagi</button>
+              <button type="button" class="sb-btn-primary" id="sb-btn-return-joglo">Kembali ke Joglo</button>
             </div>
           </div>
         </div>
@@ -229,10 +231,16 @@ export const peranRoom = {
       pagePill: q('#sb-page-pill'),
       stage: q('#sb-stage'),
 
-      // Cover
-      coverScene: q('#sb-cover-scene'),
-      coverBook: q('#sb-cover-book'),
+      // Buku & Sampul Terpadu
+      bookShell: q('#sb-book-shell'),
+      hardcoverBack: q('#sb-hardcover-back'),
+      stackLeft: q('#sb-stack-left'),
+      spineCrease: q('#sb-spine-crease'),
+      spreadSurface: q('#sb-spread-surface'),
+      coverLeaf: q('#sb-cover-leaf'),
       coverFront: q('#sb-cover-front'),
+      coverBack: q('#sb-cover-back'),
+      coverBackContent: q('#sb-cover-back-content'),
       coverArt: q('#sb-cover-art'),
       coverBoy: q('#sb-cover-boy'),
       btnOpen: q('#sb-btn-open'),
@@ -240,9 +248,7 @@ export const peranRoom = {
       btnReread: q('#sb-btn-reread'),
       btnReturnJoglo: q('#sb-btn-return-joglo'),
 
-      // Spread & Flip Leaf
-      bookShell: q('#sb-book-shell'),
-      spreadSurface: q('#sb-spread-surface'),
+      // Halaman & Flip Leaf
       pageLeft: q('#sb-page-left'),
       pageRight: q('#sb-page-right'),
       castShadow: q('#sb-cast-shadow'),
@@ -323,7 +329,6 @@ export const peranRoom = {
     this.currentSpread = 0;
     this.isAnimating = false;
 
-    // Putar musik latar khusus Seni Peran (tanpa restart saat balik halaman)
     if (this.ctx && this.ctx.audioManager) {
       this.ctx.audioManager.playRoomTrack(STORY_META.audioTrackKey, {
         loop: true,
@@ -331,29 +336,34 @@ export const peranRoom = {
       });
     }
 
-    // Siapkan tampilan sampul awal
-    this.dom.coverScene.hidden = false;
-    this.dom.bookShell.hidden = true;
+    this.dom.bookShell.classList.add('is-closed');
+    this.dom.coverLeaf.hidden = false;
     this.dom.controls.hidden = true;
     this.dom.pagePill.hidden = true;
     this.dom.closedBanner.hidden = true;
     this.dom.btnOpen.hidden = false;
 
-    if (window.gsap) {
-      window.gsap.set([this.dom.coverBook, this.dom.coverFront, this.dom.bookShell], {
-        clearProps: 'transform,opacity',
-      });
-    }
-
-    // Muat aset inti sampul + tekstur + halaman 1 secara bertahap (hemat memori)
-    await this.loadCoreAssets();
+    // Muat aset inti + halaman 1 sebelum sampul tampil agar tidak ada jeda saat dibuka
+    await Promise.all([this.loadCoreAssets(), this.preloadSpreadAssets(0)]);
     if (!this.isActive) return;
 
     this.applyCoreAssetsToDOM();
-    this.preloadSpreadAssets(0);
+    this.renderStaticSpread(0);
+    this.dom.coverBackContent.innerHTML = this.buildLeftPageHTML(0);
     this.preloadSpreadAssets(1);
 
-    // Pasang listener aktif (akan dibersihkan di exit())
+    if (window.gsap) {
+      window.gsap.set(this.dom.bookShell, {
+        xPercent: -25,
+        scale: 0.84,
+        opacity: 1,
+        force3D: true,
+      });
+      window.gsap.set(this.dom.coverLeaf, { rotateY: 0, force3D: true });
+      this.dom.coverFront.style.visibility = 'visible';
+      this.dom.coverBack.style.visibility = 'hidden';
+    }
+
     window.addEventListener('keydown', this.onKeyDown);
     this.dom.stage.addEventListener('pointerdown', this.onPointerDown);
     window.addEventListener('pointermove', this.onPointerMove, { passive: false });
@@ -616,87 +626,82 @@ export const peranRoom = {
     if (!this.isActive) return;
 
     this.renderStaticSpread(startSpread);
+    this.dom.coverBackContent.innerHTML = this.buildLeftPageHTML(startSpread);
     this.preloadSpreadAssets(startSpread + 1);
 
     const gsap = window.gsap;
     const reduced = appState.get('reducedMotion');
 
     if (!gsap || reduced) {
-      this.dom.coverScene.hidden = true;
-      this.dom.bookShell.hidden = false;
+      this.dom.bookShell.classList.remove('is-closed');
+      this.dom.coverLeaf.hidden = true;
+      this.dom.closedBanner.hidden = true;
       this.dom.controls.hidden = false;
       this.dom.pagePill.hidden = false;
+      if (gsap) gsap.set(this.dom.bookShell, { xPercent: 0, scale: 1 });
       this.viewState = 'reading';
       this.isAnimating = false;
       this.startCharacterIdle();
       return;
     }
 
-    // Siapkan buku terbuka di lapisan bawah tanpa menggeser layout sampul
-    this.dom.bookShell.hidden = false;
     this.dom.controls.hidden = false;
     this.dom.pagePill.hidden = false;
-
-    gsap.set(this.dom.bookShell, { opacity: 0, scale: 0.96, force3D: true });
     gsap.set([this.dom.controls, this.dom.pagePill], { opacity: 0, y: 10 });
-    gsap.set(this.dom.coverBook, { xPercent: 0, scale: 1, opacity: 1, force3D: true });
-    gsap.set(this.dom.coverFront, { rotateY: 0, transformOrigin: 'left center', force3D: true });
 
+    const flipState = { angle: 0 };
     const tl = gsap.timeline({
       onComplete: () => {
-        this.dom.coverScene.hidden = true;
-        gsap.set(this.dom.coverBook, { xPercent: 0, opacity: 1 });
-        gsap.set(this.dom.coverFront, { rotateY: 0 });
+        this.dom.bookShell.classList.remove('is-closed');
+        this.dom.coverLeaf.hidden = true;
+        this.dom.closedBanner.hidden = true;
         this.viewState = 'reading';
         this.isAnimating = false;
-        this.animateSpreadEntrance();
+        // Tanpa animasi pop teks — langsung aktifkan gerak idle karakter yang lembut
+        this.startCharacterIdle();
       },
     });
 
-    // 1. Karakter & banner penutup menghilang halus
+    // 1. Bima & banner penutup menghilang halus
     tl.to([this.dom.coverBoy, this.dom.closedBanner], {
       opacity: 0,
-      duration: 0.24,
+      duration: 0.25,
       ease: 'power2.out',
     }, 0)
 
-    // 2. Buku bergeser ke kanan agar tulang buku tepat di tengah layar
-    .to(this.dom.coverBook, {
-      xPercent: 48,
-      duration: 0.45,
-      ease: 'power2.inOut',
+    // 2. Buku bergeser mulus ke kanan (xPercent: -25 -> 0) + zoom halus (0.84 -> 1)
+    .to(this.dom.bookShell, {
+      xPercent: 0,
+      scale: 1,
+      duration: 0.95,
+      ease: 'power3.inOut',
       force3D: true,
     }, 0.05)
 
-    // 3. Sampul depan terbuka 3D dari kanan ke kiri
-    .to(this.dom.coverFront, {
-      rotateY: -172,
-      duration: 0.72,
+    // 3. Sampul terbuka 3D (0 -> -180deg) menyatu dengan gerakan geser & zoom
+    .to(flipState, {
+      angle: -180,
+      duration: 0.95,
       ease: 'power2.inOut',
-      force3D: true,
-    }, 0.34)
+      onUpdate: () => {
+        const a = flipState.angle;
+        const pastHalf = a < -90;
+        this.dom.coverLeaf.style.transform = `rotateY(${a.toFixed(2)}deg)`;
+        this.dom.coverFront.style.visibility = pastHalf ? 'hidden' : 'visible';
+        this.dom.coverBack.style.visibility = pastHalf ? 'visible' : 'hidden';
+        if (pastHalf) {
+          this.dom.bookShell.classList.remove('is-closed');
+        }
+      },
+    }, 0.12)
 
-    // 4. Halaman pertama muncul mulus tepat saat sampul melewati sudut 90°
-    .to(this.dom.bookShell, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.48,
-      ease: 'power2.out',
-      force3D: true,
-    }, 0.56)
-    .to(this.dom.coverBook, {
-      opacity: 0,
-      duration: 0.32,
-      ease: 'power2.out',
-    }, 0.74)
-
-    // 5. Kontrol navigasi muncul di akhir
+    // 4. Navigasi bawah muncul tenang di akhir
     .to([this.dom.controls, this.dom.pagePill], {
       opacity: 1,
       y: 0,
       duration: 0.35,
       ease: 'power2.out',
-    }, 0.78);
+    }, 0.85);
   },
 
   closeBook() {
@@ -707,30 +712,33 @@ export const peranRoom = {
     const gsap = window.gsap;
     const reduced = appState.get('reducedMotion');
 
+    this.dom.coverBackContent.innerHTML = this.buildLeftPageHTML(this.currentSpread);
+    this.dom.coverLeaf.hidden = false;
+    this.dom.btnOpen.hidden = true;
+    this.dom.closedBanner.hidden = false;
+
     if (!gsap || reduced) {
-      this.dom.bookShell.hidden = true;
+      this.dom.bookShell.classList.add('is-closed');
       this.dom.controls.hidden = true;
       this.dom.pagePill.hidden = true;
-      this.dom.coverScene.hidden = false;
-      this.dom.btnOpen.hidden = true;
-      this.dom.closedBanner.hidden = false;
+      if (gsap) {
+        gsap.set(this.dom.bookShell, { xPercent: -25, scale: 0.84 });
+        gsap.set(this.dom.coverLeaf, { rotateY: 0 });
+      }
+      this.dom.coverFront.style.visibility = 'visible';
+      this.dom.coverBack.style.visibility = 'hidden';
       this.viewState = 'closed-end';
       this.isAnimating = false;
       return;
     }
 
-    // Siapkan sampul dalam posisi terbuka di sisi kanan sebelum menutup kembali ke tengah
-    this.dom.coverScene.hidden = false;
-    this.dom.btnOpen.hidden = true;
-    this.dom.closedBanner.hidden = false;
-
-    gsap.set(this.dom.coverBook, { xPercent: 48, scale: 1, opacity: 1, force3D: true });
-    gsap.set(this.dom.coverFront, { rotateY: -172, transformOrigin: 'left center', force3D: true });
     gsap.set([this.dom.coverBoy, this.dom.closedBanner], { opacity: 0, y: 10 });
+    this.dom.coverFront.style.visibility = 'hidden';
+    this.dom.coverBack.style.visibility = 'visible';
 
+    const flipState = { angle: -180 };
     const tl = gsap.timeline({
       onComplete: () => {
-        this.dom.bookShell.hidden = true;
         this.dom.controls.hidden = true;
         this.dom.pagePill.hidden = true;
         this.viewState = 'closed-end';
@@ -738,84 +746,35 @@ export const peranRoom = {
       },
     });
 
-    tl.to([this.dom.controls, this.dom.pagePill], { opacity: 0, y: 8, duration: 0.2 }, 0)
-      .to(this.dom.bookShell, { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 0.05)
-      .to(this.dom.coverFront, { rotateY: 0, duration: 0.62, ease: 'power2.inOut', force3D: true }, 0.08)
-      .to(this.dom.coverBook, { xPercent: 0, duration: 0.45, ease: 'power2.out', force3D: true }, 0.48)
+    tl.to([this.dom.controls, this.dom.pagePill], { opacity: 0, y: 8, duration: 0.22 }, 0)
+      .to(flipState, {
+        angle: 0,
+        duration: 0.88,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          const a = flipState.angle;
+          const pastHalf = a < -90;
+          this.dom.coverLeaf.style.transform = `rotateY(${a.toFixed(2)}deg)`;
+          this.dom.coverFront.style.visibility = pastHalf ? 'hidden' : 'visible';
+          this.dom.coverBack.style.visibility = pastHalf ? 'visible' : 'hidden';
+          if (!pastHalf) {
+            this.dom.bookShell.classList.add('is-closed');
+          }
+        },
+      }, 0.05)
+      .to(this.dom.bookShell, {
+        xPercent: -25,
+        scale: 0.84,
+        duration: 0.88,
+        ease: 'power3.inOut',
+        force3D: true,
+      }, 0.1)
       .to([this.dom.coverBoy, this.dom.closedBanner], {
         opacity: 1,
         y: 0,
         duration: 0.4,
         ease: 'power2.out',
-      }, 0.72);
-  },
-
-  closeBook() {
-    if (this.isAnimating || this.viewState !== 'reading') return;
-    this.isAnimating = true;
-    this.killPageTweens();
-
-    const gsap = window.gsap;
-    const reduced = appState.get('reducedMotion');
-
-    const finishClose = () => {
-      this.dom.bookShell.hidden = true;
-      this.dom.controls.hidden = true;
-      this.dom.pagePill.hidden = true;
-      this.dom.coverScene.hidden = false;
-      this.dom.btnOpen.hidden = true;
-      this.dom.closedBanner.hidden = false;
-      this.viewState = 'closed-end';
-      this.isAnimating = false;
-    };
-
-    if (!gsap || reduced) {
-      finishClose();
-      return;
-    }
-
-    const tl = gsap.timeline({
-      onComplete: () => {
-        this.viewState = 'closed-end';
-        this.isAnimating = false;
-      },
-    });
-
-    tl.to([this.dom.controls, this.dom.pagePill], { opacity: 0, y: 8, duration: 0.25 }, 0)
-      .to(
-        this.dom.bookShell,
-        {
-          scale: 0.9,
-          opacity: 0,
-          rotateY: 16,
-          duration: 0.45,
-          ease: 'power2.in',
-          force3D: true,
-        },
-        0.05
-      )
-      .add(() => {
-        this.dom.bookShell.hidden = true;
-        this.dom.controls.hidden = true;
-        this.dom.pagePill.hidden = true;
-        this.dom.coverScene.hidden = false;
-        this.dom.btnOpen.hidden = true;
-        this.dom.closedBanner.hidden = false;
-
-        gsap.set(this.dom.coverBook, { scale: 1.04, opacity: 1 });
-        gsap.set(this.dom.coverFront, { rotateY: -130, transformOrigin: 'left center' });
-        gsap.set(this.dom.closedBanner, { opacity: 0, y: 14 });
-        gsap.set(this.dom.coverBoy, { opacity: 0, x: -16 });
-      })
-      .to(this.dom.coverFront, {
-        rotateY: 0,
-        duration: 0.68,
-        ease: 'power3.out',
-        force3D: true,
-      })
-      .to(this.dom.coverBook, { scale: 1, duration: 0.55, ease: 'power2.out' }, '<')
-      .to(this.dom.coverBoy, { opacity: 1, x: 0, duration: 0.45, ease: 'power2.out' }, '-=0.25')
-      .to(this.dom.closedBanner, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.25');
+      }, 0.78);
   },
 
   /* =========================================================
@@ -1154,16 +1113,16 @@ export const peranRoom = {
     if (!gsap || appState.get('reducedMotion')) return;
 
     gsap.fromTo(
-      this.dom.coverBook,
-      { y: 18, scale: 0.94, opacity: 0 },
-      { y: 0, scale: 1, opacity: 1, duration: 0.75, ease: 'power3.out', force3D: true }
+      this.dom.bookShell,
+      { y: 18, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', force3D: true }
     );
 
     if (!this.dom.coverBoy.hidden) {
       gsap.fromTo(
         this.dom.coverBoy,
-        { x: -16, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.7, delay: 0.25, ease: 'power2.out' }
+        { x: -14, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.65, delay: 0.2, ease: 'power2.out' }
       );
       this.ambientTweens.push(
         gsap.to(this.dom.coverBoy, {

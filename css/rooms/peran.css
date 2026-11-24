@@ -376,6 +376,89 @@
   pointer-events: none;
 }
 
+/* =========================================================
+   SAMPUL 3D TERPADU DI DALAM BUKU (TANPA CUT)
+   ========================================================= */
+.sb-book-shell.is-closed .sb-hardcover-back {
+  clip-path: inset(0 0 0 50%);
+}
+
+.sb-book-shell.is-closed .sb-page-left,
+.sb-book-shell.is-closed .sb-page-stack.left,
+.sb-book-shell.is-closed .sb-spine-crease,
+.sb-book-shell.is-closed .sb-corner-hotspot {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sb-cover-leaf {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: 50%;
+  width: calc(50% + 4px);
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  z-index: 25;
+  will-change: transform;
+}
+
+.sb-cover-leaf[hidden] {
+  display: none;
+}
+
+.sb-cover-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: flat;
+  overflow: hidden;
+}
+
+.sb-cover-face.sb-cover-front {
+  transform: rotateY(0deg) translateZ(2px);
+  border-radius: 4px 12px 12px 4px;
+  background: radial-gradient(circle at 50% 35%, #5C2F18 0%, #2E150A 72%, #1B0C06 100%);
+  border: 2px solid #B6843C;
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.65),
+    inset 0 0 0 5px rgba(24, 11, 5, 0.7),
+    inset 0 0 0 7px rgba(232, 197, 142, 0.45);
+}
+
+.sb-cover-face.sb-cover-back {
+  transform: rotateY(180deg) translateZ(2px);
+  border-radius: 8px 0 0 8px;
+  background-color: var(--sb-parchment-light);
+  background-image:
+    var(--sb-paper-bg),
+    linear-gradient(180deg, rgba(255, 249, 236, 0.92) 0%, rgba(235, 212, 170, 0.92) 100%);
+  background-size: cover, cover;
+  box-shadow: inset -18px 0 28px rgba(72, 39, 16, 0.16);
+}
+
+/* Posisi Bima di sebelah kiri sampul tertutup */
+.sb-cover-boy {
+  position: absolute;
+  bottom: -2%;
+  left: 28%;
+  height: 54%;
+  width: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.65));
+  z-index: 26;
+}
+
+/* Banner penutup mengambang rapi di bawah sampul tertutup */
+.sb-closed-banner {
+  position: absolute;
+  bottom: 0.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+}
+
 /* Tumpukan tepi kertas kiri & kanan */
 .sb-page-stack {
   position: absolute;
