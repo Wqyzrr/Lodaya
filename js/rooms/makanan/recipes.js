@@ -1,66 +1,52 @@
 /**
  * js/rooms/makanan/recipes.js
- * Konfigurasi resep independen untuk Ruang IV — Seni Makanan.
- * Untuk menambah atau mengubah resep, cukup edit objek di array RECIPES
- * tanpa mengubah cooking-engine.js.
+ * Registri 31 aset WebP dan konfigurasi resep step-by-step untuk Ruang IV — Kuliner.
+ * Dirancang modular: setiap bahan memiliki reaksi visual, pesan rasa, dan jenis SFX tersendiri.
  */
 
-export const VESSEL_SVGS = {
-  cobek: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="60" cy="76" rx="46" ry="20" fill="#5A4A42" stroke="#E8C58E" stroke-width="2.5"/>
-    <ellipse cx="60" cy="72" rx="36" ry="12" fill="#3B2F29"/>
-    <path d="M74 36L92 50C96 53 96 59 92 62L74 72C70 74 64 72 62 67L58 55C56 49 67 32 74 36Z" fill="#786459" stroke="#E8C58E" stroke-width="2"/>
-  </svg>`,
-  panci: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="24" y="48" width="72" height="44" rx="14" fill="#6F3C22" stroke="#E8C58E" stroke-width="2.5"/>
-    <ellipse cx="60" cy="48" rx="36" ry="11" fill="#2A1810" stroke="#E8C58E" stroke-width="2.5"/>
-    <path d="M14 58H24M96 58H106" stroke="#E8C58E" stroke-width="4" stroke-linecap="round"/>
-    <path d="M44 26C44 20 50 18 48 12M60 24C60 18 66 16 64 10M76 26C76 20 82 18 80 12" stroke="#FFE1A8" stroke-width="2" stroke-linecap="round" opacity="0.75"/>
-  </svg>`,
-  mangkuk: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 54C20 82 38 96 60 96C82 96 100 82 100 54H20Z" fill="#8C4E2B" stroke="#E8C58E" stroke-width="2.5"/>
-    <ellipse cx="60" cy="54" rx="40" ry="12" fill="#462514" stroke="#E8C58E" stroke-width="2.5"/>
-  </svg>`,
-  loyang: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="20" y="46" width="80" height="42" rx="8" fill="#7D5631" stroke="#E8C58E" stroke-width="2.5"/>
-    <rect x="28" y="54" width="64" height="26" rx="4" fill="#D8A95A"/>
-    <path d="M36 32C36 26 42 24 40 18M60 30C60 24 66 22 64 16M84 32C84 26 90 24 88 18" stroke="#FFE1A8" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
-  </svg>`,
-  teko: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="58" cy="68" r="28" fill="#8D4C26" stroke="#E8C58E" stroke-width="2.5"/>
-    <path d="M84 58C96 54 100 66 94 76C90 82 82 82 80 80" stroke="#E8C58E" stroke-width="3" stroke-linecap="round"/>
-    <path d="M30 66L16 54" stroke="#E8C58E" stroke-width="4" stroke-linecap="round"/>
-    <ellipse cx="58" cy="40" rx="16" ry="5" fill="#C99A55" stroke="#FFE1A8" stroke-width="2"/>
-  </svg>`,
-};
+const KULINER_BASE = 'assets/kuliner/';
 
-export const DISH_SVGS = {
-  rawon: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M18 58C18 84 36 98 60 98C84 98 102 84 102 58H18Z" fill="#5A2D18" stroke="#E8C58E" stroke-width="2.5"/>
-    <ellipse cx="60" cy="58" rx="42" ry="14" fill="#22140D" stroke="#E8C58E" stroke-width="2.5"/>
-    <circle cx="48" cy="58" r="7" fill="#6E3B23"/>
-    <circle cx="68" cy="60" r="8" fill="#5E2E1A"/>
-    <path d="M44 52L54 55M64 53L76 55" stroke="#F5E9D3" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="58" cy="54" r="3" fill="#6AA86D"/>
-  </svg>`,
-  proll_tape: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="60" cy="88" rx="46" ry="12" fill="#3D2415" stroke="#E8C58E" stroke-width="2"/>
-    <rect x="26" y="44" width="68" height="38" rx="8" fill="#E3B159" stroke="#FFE1A8" stroke-width="2.5"/>
-    <path d="M26 56H94" stroke="#B67926" stroke-width="2"/>
-    <rect x="38" y="49" width="12" height="4" rx="2" fill="#FFF3CE"/>
-    <rect x="56" y="49" width="12" height="4" rx="2" fill="#FFF3CE"/>
-    <rect x="74" y="49" width="10" height="4" rx="2" fill="#FFF3CE"/>
-    <circle cx="46" cy="66" r="3.5" fill="#6A3318"/>
-    <circle cx="72" cy="68" r="3.5" fill="#6A3318"/>
-  </svg>`,
-  wedang_angsle: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M22 58C22 84 39 98 60 98C81 98 98 84 98 58H22Z" fill="#2A4A38" stroke="#E8C58E" stroke-width="2.5"/>
-    <ellipse cx="60" cy="58" rx="38" ry="12" fill="#EFE0BE" stroke="#E8C58E" stroke-width="2.5"/>
-    <rect x="38" y="52" width="14" height="10" rx="2" fill="#FFF8E8" stroke="#C99A55"/>
-    <circle cx="64" cy="56" r="5" fill="#D95D67"/>
-    <circle cx="75" cy="59" r="4" fill="#6FA868"/>
-    <path d="M46 34C46 28 52 26 50 20M62 32C62 26 68 24 66 18M76 34C76 28 82 26 80 20" stroke="#FFE1A8" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
-  </svg>`,
+export const KULINER_ASSETS = {
+  // Environment & UI
+  bgWarung: `${KULINER_BASE}bg-meja-warung.webp`,
+  bgMasak: `${KULINER_BASE}bg-meja-masak.webp`,
+  uiTray: `${KULINER_BASE}ui-tray-bahan.webp`,
+  uiKartuResep: `${KULINER_BASE}ui-kartu-resep.webp`,
+
+  // VFX
+  vfxUap: `${KULINER_BASE}vfx-uap-panas.webp`,
+  vfxApi: `${KULINER_BASE}vfx-api-kompor.webp`,
+  vfxSparkle: `${KULINER_BASE}vfx-sparkle.webp`,
+
+  // Menu 1: Rawon
+  rawonPanciKosong: `${KULINER_BASE}rawon-panci-kosong.webp`,
+  rawonPanciMatang: `${KULINER_BASE}rawon-panci-matang.webp`,
+  rawonSendokKayu: `${KULINER_BASE}rawon-sendok-kayu.webp`,
+  rawonDaging: `${KULINER_BASE}rawon-bahan-daging.webp`,
+  rawonKluwek: `${KULINER_BASE}rawon-bahan-kluwek.webp`,
+  rawonRempah: `${KULINER_BASE}rawon-bahan-rempah.webp`,
+  rawonTopping: `${KULINER_BASE}rawon-topping-telur.webp`,
+  rawonJadi: `${KULINER_BASE}rawon-hasil-jadi.webp`,
+
+  // Menu 2: Prol Tape
+  prolMangkukKosong: `${KULINER_BASE}prol-mangkuk-kosong.webp`,
+  prolMangkukAdonan: `${KULINER_BASE}prol-mangkuk-adonan.webp`,
+  prolTape: `${KULINER_BASE}prol-bahan-tape.webp`,
+  prolTepungTelur: `${KULINER_BASE}prol-bahan-tepung-telur.webp`,
+  prolTopping: `${KULINER_BASE}prol-topping-keju-kismis.webp`,
+  prolLoyangKosong: `${KULINER_BASE}prol-loyang-kosong.webp`,
+  prolOven: `${KULINER_BASE}prol-oven-tangkring.webp`,
+  prolJadi: `${KULINER_BASE}prol-hasil-jadi.webp`,
+
+  // Menu 3: Wedang Angsle
+  angsleMangkukKosong: `${KULINER_BASE}angsle-mangkuk-kosong.webp`,
+  angsleKetan: `${KULINER_BASE}angsle-bahan-ketan.webp`,
+  angsleMutiara: `${KULINER_BASE}angsle-bahan-mutiara.webp`,
+  angsleKacangHijau: `${KULINER_BASE}angsle-bahan-kacang-hijau.webp`,
+  angsleRoti: `${KULINER_BASE}angsle-bahan-roti.webp`,
+  angsleKuahSantan: `${KULINER_BASE}angsle-kuah-santan.webp`,
+  angsleToppingKacang: `${KULINER_BASE}angsle-topping-kacang.webp`,
+  angsleJadi: `${KULINER_BASE}angsle-hasil-jadi.webp`,
 };
 
 export const RECIPES = [
@@ -68,182 +54,302 @@ export const RECIPES = [
     id: 'rawon',
     name: 'Rawon',
     origin: 'Khas Jawa Timur',
-    shortDesc: 'Sup daging sapi berkuah hitam pekat dari kluwek yang kaya rempah dan harum.',
-    culturalDesc: 'Rawon merupakan salah satu hidangan berkuah tertua di Jawa Timur. Warna hitam khas dan cita rasa gurih mendalamnya berasal dari buah kluwek (keluak), disajikan bersama nasi hangat, tauge pendek, dan sambal.',
-    svg: DISH_SVGS.rawon,
+    tagline: 'Sup Daging Kuah Hitam Kluwek',
+    techniqueLabel: 'Tumis & Rebus',
+    finishedImg: KULINER_ASSETS.rawonJadi,
+    culturalFact:
+      'Rawon merupakan salah satu hidangan berkuah tertua di Jawa Timur. Warna hitam pekat dan cita rasa gurih mendalamnya berasal dari buah kluwek (keluak), biasa dinikmati bersama nasi hangat, tauge pendek, dan telur asin.',
     steps: [
       {
-        type: 'tap-select',
-        title: 'Langkah 1 — Siapkan Bumbu Rawon',
-        instruction: 'Ketuk bahan-bahan bumbu utama (termasuk Kluwek) untuk menyiapkannya.',
-        vessel: 'cobek',
-        vesselLabel: 'Meja Persiapan Bumbu',
-        items: [
-          { id: 'kluwek', label: 'Kluwek (Keluak)', color: '#2B1B14' },
-          { id: 'bawang', label: 'Bawang Merah & Putih', color: '#D4A59A' },
-          { id: 'kunyit', label: 'Kunyit & Kemiri', color: '#D99B26' },
-          { id: 'daun_jeruk', label: 'Daun Jeruk & Serai', color: '#4E8248' },
-        ],
-      },
-      {
         type: 'drag-drop',
-        title: 'Langkah 2 — Masukkan Bumbu ke Cobek',
-        instruction: 'Seret (atau ketuk) seluruh bumbu ke dalam Cobek untuk dihaluskan.',
-        vessel: 'cobek',
-        vesselLabel: 'Cobek Batu',
+        title: 'Langkah 1 • Racik Bahan ke Kendil',
+        instruction:
+          'Seret Daging Sapi, Bumbu & Kluwek, serta Daun Jeruk & Serai ke dalam panci tanah liat.',
+        vesselImg: KULINER_ASSETS.rawonPanciKosong,
+        vesselAfterImg: KULINER_ASSETS.rawonPanciMatang,
+        vesselLabel: 'Panci Kendil Rawon',
+        showFire: true,
+        showSteam: false,
         items: [
-          { id: 'kluwek', label: 'Isi Kluwek', color: '#2B1B14' },
-          { id: 'bawang', label: 'Bawang & Rempah', color: '#D4A59A' },
-          { id: 'kunyit', label: 'Kunyit & Kemiri', color: '#D99B26' },
+          {
+            id: 'daging',
+            label: 'Daging Sapi',
+            img: KULINER_ASSETS.rawonDaging,
+            sfxType: 'sizzle',
+            dropMessage: 'Potongan daging sapi mulai dimasak!',
+          },
+          {
+            id: 'kluwek',
+            label: 'Bumbu & Kluwek',
+            img: KULINER_ASSETS.rawonKluwek,
+            sfxType: 'plop',
+            triggersTransform: true,
+            dropMessage: 'Kuah langsung menghitam pekat oleh kluwek!',
+          },
+          {
+            id: 'rempah',
+            label: 'Daun Jeruk & Serai',
+            img: KULINER_ASSETS.rawonRempah,
+            sfxType: 'sprinkle',
+            dropMessage: 'Aroma segar daun jeruk dan serai menguar!',
+          },
         ],
       },
       {
         type: 'action',
-        title: 'Langkah 3 — Haluskan Bumbu',
-        instruction: 'Ketuk tombol "Haluskan Bumbu" hingga bumbu kluwek lembut merata.',
-        vessel: 'cobek',
-        vesselLabel: 'Cobek & Ulekan',
-        actionLabel: 'Haluskan Bumbu',
-        requiredTaps: 2,
+        title: 'Langkah 2 • Aduk & Didihkan Kuah',
+        instruction:
+          'Ketuk panci atau tombol di bawah untuk mengaduk kuah Rawon hingga bumbu meresap.',
+        vesselImg: KULINER_ASSETS.rawonPanciMatang,
+        vesselLabel: 'Kuah Rawon Mendidih',
+        toolImg: KULINER_ASSETS.rawonSendokKayu,
+        toolAnim: 'stir',
+        actionLabel: 'Aduk Kuah Rawon',
+        requiredTaps: 3,
+        tapFeedback: [
+          'Bumbu kluwek mulai menyatu dengan daging...',
+          'Aroma rempah harum memenuhi dapur...',
+          'Kuah Rawon mendidih sempurna!',
+        ],
+        showFire: true,
+        showSteam: true,
       },
       {
         type: 'drag-drop',
-        title: 'Langkah 4 — Masukkan ke Panci Rebusan',
-        instruction: 'Seret (atau ketuk) Bumbu Halus, Daging Sapi, dan Daun Jeruk ke dalam Panci.',
-        vessel: 'panci',
-        vesselLabel: 'Panci Kuah Rawon',
+        title: 'Langkah 3 • Sajikan dengan Pelengkap',
+        instruction:
+          'Tambahkan Tauge Pendek & Telur Asin untuk menyempurnakan semangkuk Rawon hangat.',
+        vesselImg: KULINER_ASSETS.rawonPanciMatang,
+        vesselAfterImg: KULINER_ASSETS.rawonJadi,
+        vesselLabel: 'Mangkuk Saji Rawon',
+        showFire: false,
+        showSteam: true,
         items: [
-          { id: 'bumbu_halus', label: 'Bumbu Kluwek Halus', color: '#24150E' },
-          { id: 'daging', label: 'Potongan Daging Sapi', color: '#8F352A' },
-          { id: 'daun_jeruk', label: 'Daun Jeruk & Serai', color: '#4E8248' },
+          {
+            id: 'topping',
+            label: 'Tauge & Telur Asin',
+            img: KULINER_ASSETS.rawonTopping,
+            sfxType: 'sprinkle',
+            triggersTransform: true,
+            dropMessage: 'Rawon siap disajikan hangat!',
+          },
         ],
-      },
-      {
-        type: 'action',
-        title: 'Langkah 5 — Masak Kuah Hingga Harum',
-        instruction: 'Ketuk tombol "Didihkan Kuah" untuk memasak Rawon hingga bumbu meresap.',
-        vessel: 'panci',
-        vesselLabel: 'Panci Rawon di Atas Api',
-        actionLabel: 'Didihkan Kuah Rawon',
-        requiredTaps: 2,
       },
     ],
   },
+
   {
-    id: 'proll_tape',
-    name: 'Proll Tape',
-    origin: 'Khas Jember, Jawa Timur',
-    shortDesc: 'Kue lembut berbahan tape singkong manis dengan taburan keju dan kismis.',
-    culturalDesc: 'Proll Tape adalah kudapan khas Jember yang mengolah tape singkong (peuyeum) menjadi kue panggang bertekstur lembut, manis, sedikit asam segar, dan harum mentega.',
-    svg: DISH_SVGS.proll_tape,
+    id: 'prol_tape',
+    name: 'Prol Tape',
+    origin: 'Khas Jember',
+    tagline: 'Kue Panggang Tape Lembut',
+    techniqueLabel: 'Aduk & Panggang',
+    finishedImg: KULINER_ASSETS.prolJadi,
+    culturalFact:
+      'Prol Tape adalah kudapan ikonik dari Jember berbahan dasar tape singkong manis. Teksturnya padat namun lembut lumer saat digigit, dipadukan wangi mentega, parutan keju, dan kismis.',
     steps: [
       {
-        type: 'tap-select',
-        title: 'Langkah 1 — Pilih Bahan Proll Tape',
-        instruction: 'Ketuk bahan utama Proll Tape untuk memulai persiapan adonan.',
-        vessel: 'mangkuk',
-        vesselLabel: 'Meja Bahan Kue',
+        type: 'drag-drop',
+        title: 'Langkah 1 • Campur Bahan Adonan',
+        instruction:
+          'Seret Tape Singkong serta Tepung, Gula & Telur ke dalam mangkuk keramik.',
+        vesselImg: KULINER_ASSETS.prolMangkukKosong,
+        vesselAfterImg: KULINER_ASSETS.prolMangkukAdonan,
+        vesselLabel: 'Mangkuk Adonan',
+        showFire: false,
+        showSteam: false,
         items: [
-          { id: 'tape', label: 'Tape Singkong Matang', color: '#F0DF9B' },
-          { id: 'tepung', label: 'Tepung Terigu & Gula', color: '#F5EFE2' },
-          { id: 'telur', label: 'Telur & Mentega Cair', color: '#E5AD3C' },
-          { id: 'keju', label: 'Keju Parut & Kismis', color: '#D49A45' },
+          {
+            id: 'tape',
+            label: 'Tape Singkong',
+            img: KULINER_ASSETS.prolTape,
+            sfxType: 'plop',
+            dropMessage: 'Tape singkong manis masuk ke mangkuk!',
+          },
+          {
+            id: 'tepung_telur',
+            label: 'Tepung, Gula & Telur',
+            img: KULINER_ASSETS.prolTepungTelur,
+            sfxType: 'pour',
+            triggersTransform: true,
+            dropMessage: 'Adonan mulai mengental berwarna kuning lembut!',
+          },
         ],
       },
       {
         type: 'action',
-        title: 'Langkah 2 — Haluskan Tape Singkong',
-        instruction: 'Ketuk tombol "Haluskan Tape" untuk melumatkan tape singkong tanpa serat.',
-        vessel: 'mangkuk',
-        vesselLabel: 'Mangkuk Adonan',
-        actionLabel: 'Haluskan Tape',
-        requiredTaps: 2,
-      },
-      {
-        type: 'drag-drop',
-        title: 'Langkah 3 — Campurkan Bahan Adonan',
-        instruction: 'Seret (atau ketuk) Tepung, Telur & Mentega, serta Susu ke dalam Mangkuk.',
-        vessel: 'mangkuk',
-        vesselLabel: 'Mangkuk Adonan',
-        items: [
-          { id: 'tepung', label: 'Tepung & Gula', color: '#F5EFE2' },
-          { id: 'telur', label: 'Telur & Mentega', color: '#E5AD3C' },
-          { id: 'susu', label: 'Susu Cair', color: '#FFFDF5' },
+        title: 'Langkah 2 • Aduk Adonan Hingga Halus',
+        instruction:
+          'Ketuk mangkuk atau tombol untuk mengaduk adonan Prol Tape hingga tercampur rata.',
+        vesselImg: KULINER_ASSETS.prolMangkukAdonan,
+        vesselLabel: 'Adonan Prol Tape',
+        toolAnim: 'mix',
+        actionLabel: 'Aduk Adonan',
+        requiredTaps: 3,
+        tapFeedback: [
+          'Tape mulai lumat menyatu dengan telur...',
+          'Adonan makin halus dan harum mentega...',
+          'Adonan siap dituang ke loyang!',
         ],
+        showFire: false,
+        showSteam: false,
       },
       {
         type: 'drag-drop',
-        title: 'Langkah 4 — Tuang ke Loyang & Beri Topping',
-        instruction: 'Seret (atau ketuk) Adonan dan Taburan Keju Kismis ke dalam Loyang Panggang.',
-        vessel: 'loyang',
+        title: 'Langkah 3 • Tuang ke Loyang & Beri Topping',
+        instruction:
+          'Masukkan Adonan Tape ke loyang panggang, lalu taburi Parutan Keju & Kismis.',
+        vesselImg: KULINER_ASSETS.prolLoyangKosong,
         vesselLabel: 'Loyang Panggang',
+        showFire: false,
+        showSteam: false,
         items: [
-          { id: 'adonan', label: 'Adonan Proll Tape', color: '#EED68C' },
-          { id: 'keju', label: 'Keju Parut & Kismis', color: '#C98A2E' },
+          {
+            id: 'adonan',
+            label: 'Adonan Tape',
+            img: KULINER_ASSETS.prolMangkukAdonan,
+            sfxType: 'pour',
+            dropMessage: 'Adonan tertuang rapi ke dalam loyang!',
+          },
+          {
+            id: 'keju_kismis',
+            label: 'Keju & Kismis',
+            img: KULINER_ASSETS.prolTopping,
+            sfxType: 'sprinkle',
+            dropMessage: 'Taburan keju dan kismis mempercantik permukaan!',
+          },
         ],
       },
       {
         type: 'action',
-        title: 'Langkah 5 — Panggang Hingga Keemasan',
-        instruction: 'Ketuk tombol "Panggang Kue" sampai permukaan Proll Tape matang keemasan.',
-        vessel: 'loyang',
-        vesselLabel: 'Oven Tradisional',
-        actionLabel: 'Panggang Proll Tape',
-        requiredTaps: 2,
+        title: 'Langkah 4 • Panggang di Oven Tangkring',
+        instruction:
+          'Ketuk oven atau tombol untuk memanggang Prol Tape hingga permukaan cokelat keemasan.',
+        vesselImg: KULINER_ASSETS.prolOven,
+        vesselLabel: 'Oven Tangkring',
+        toolAnim: 'bake',
+        actionLabel: 'Panggang Kue',
+        requiredTaps: 3,
+        tapFeedback: [
+          'Oven memanas, aroma manis mulai tercium...',
+          'Permukaan kue mulai berubah keemasan...',
+          'Ting! Prol Tape matang sempurna!',
+        ],
+        showFire: true,
+        showSteam: true,
       },
     ],
   },
+
   {
     id: 'wedang_angsle',
     name: 'Wedang Angsle',
-    origin: 'Khas Malang & Jawa Timur',
-    shortDesc: 'Minuman hangat berkuah santan jahe dengan isian ketan, roti, dan kacang hijau.',
-    culturalDesc: 'Wedang Angsle adalah sajian hangat khas Jawa Timur, sangat populer di Malang saat malam hari. Perpaduan kuah santan jahe beraroma pandan dan aneka isian lembut menghadirkan rasa hangat yang menenangkan.',
-    svg: DISH_SVGS.wedang_angsle,
+    origin: 'Khas Malang',
+    tagline: 'Sajian Hangat Santan Jahe',
+    techniqueLabel: 'Racik & Siram',
+    finishedImg: KULINER_ASSETS.angsleJadi,
+    culturalFact:
+      'Wedang Angsle adalah minuman hangat legendaris dari Malang yang biasa dinikmati saat malam hari. Kuah santan jahe beraroma pandan berpadu hangat dengan ketan, mutiara sagu, kacang hijau, dan potongan roti.',
     steps: [
       {
-        type: 'tap-select',
-        title: 'Langkah 1 — Siapkan Isian & Kuah Jahe',
-        instruction: 'Ketuk bahan-bahan tradisional Wedang Angsle berikut ini.',
-        vessel: 'mangkuk',
-        vesselLabel: 'Meja Persiapan Angsle',
+        type: 'drag-drop',
+        title: 'Langkah 1 • Tata Isian di Mangkuk',
+        instruction:
+          'Seret Ketan Putih, Mutiara Sagu, Kacang Hijau, dan Roti Tawar ke dalam mangkuk saji.',
+        vesselImg: KULINER_ASSETS.angsleMangkukKosong,
+        vesselLabel: 'Mangkuk Racikan Angsle',
+        showFire: false,
+        showSteam: false,
         items: [
-          { id: 'jahe', label: 'Jahe Bakar & Daun Pandan', color: '#B8894A' },
-          { id: 'ketan', label: 'Ketan Putih Kukus', color: '#F5F0E4' },
-          { id: 'kacang_hijau', label: 'Kacang Hijau Rebus', color: '#6E8F55' },
-          { id: 'roti', label: 'Potongan Roti & Mutiara', color: '#D96B73' },
+          {
+            id: 'ketan',
+            label: 'Ketan Putih',
+            img: KULINER_ASSETS.angsleKetan,
+            sfxType: 'plop',
+            dropMessage: 'Ketan putih pulen masuk ke mangkuk!',
+          },
+          {
+            id: 'mutiara',
+            label: 'Mutiara Sagu',
+            img: KULINER_ASSETS.angsleMutiara,
+            sfxType: 'sprinkle',
+            dropMessage: 'Mutiara sagu merah muda mempercantik warna!',
+          },
+          {
+            id: 'kacang_hijau',
+            label: 'Kacang Hijau',
+            img: KULINER_ASSETS.angsleKacangHijau,
+            sfxType: 'sprinkle',
+            dropMessage: 'Kacang hijau rebus lembut ditambahkan!',
+          },
+          {
+            id: 'roti',
+            label: 'Roti Tawar',
+            img: KULINER_ASSETS.angsleRoti,
+            sfxType: 'plop',
+            dropMessage: 'Potongan roti tawar siap menyerap kuah hangat!',
+          },
         ],
-      },
-      {
-        type: 'action',
-        title: 'Langkah 2 — Masak Kuah Santan Jahe',
-        instruction: 'Ketuk tombol "Rebus Kuah Jahe" agar aroma jahe dan daun pandan keluar harum.',
-        vessel: 'teko',
-        vesselLabel: 'Teko Kuah Santan Jahe',
-        actionLabel: 'Rebus Kuah Jahe',
-        requiredTaps: 2,
       },
       {
         type: 'drag-drop',
-        title: 'Langkah 3 — Tata Isian di Mangkuk Saji',
-        instruction: 'Seret (atau ketuk) Ketan Putih, Kacang Hijau, dan Roti Mutiara ke Mangkuk Saji.',
-        vessel: 'mangkuk',
-        vesselLabel: 'Mangkuk Saji Angsle',
+        title: 'Langkah 2 • Siram Kuah Santan Jahe',
+        instruction:
+          'Seret Panci Kuah Santan Jahe hangat ke mangkuk untuk menyiram seluruh isian.',
+        vesselImg: KULINER_ASSETS.angsleMangkukKosong,
+        vesselAfterImg: KULINER_ASSETS.angsleJadi,
+        vesselLabel: 'Siram Kuah Hangat',
+        showFire: false,
+        showSteam: true,
         items: [
-          { id: 'ketan', label: 'Ketan Putih', color: '#F5F0E4' },
-          { id: 'kacang_hijau', label: 'Kacang Hijau', color: '#6E8F55' },
-          { id: 'roti', label: 'Roti & Mutiara', color: '#D96B73' },
+          {
+            id: 'kuah',
+            label: 'Kuah Santan Jahe',
+            img: KULINER_ASSETS.angsleKuahSantan,
+            sfxType: 'pour',
+            triggersTransform: true,
+            dropMessage: 'Kuah santan jahe hangat harum menyiram isian!',
+          },
         ],
       },
       {
-        type: 'action',
-        title: 'Langkah 4 — Tuangkan Kuah Hangat',
-        instruction: 'Ketuk tombol "Tuang Kuah Santan Jahe" untuk menyempurnakan Wedang Angsle.',
-        vessel: 'mangkuk',
-        vesselLabel: 'Mangkuk Wedang Angsle',
-        actionLabel: 'Tuang Kuah Hangat',
-        requiredTaps: 1,
+        type: 'drag-drop',
+        title: 'Langkah 3 • Taburi Kacang Sangrai',
+        instruction:
+          'Tambahkan taburan Kacang Tanah Sangrai renyah sebagai sentuhan akhir Wedang Angsle.',
+        vesselImg: KULINER_ASSETS.angsleJadi,
+        vesselLabel: 'Wedang Angsle Hangat',
+        showFire: false,
+        showSteam: true,
+        items: [
+          {
+            id: 'kacang_sangrai',
+            label: 'Kacang Sangrai',
+            img: KULINER_ASSETS.angsleToppingKacang,
+            sfxType: 'sprinkle',
+            dropMessage: 'Wedang Angsle hangat siap dinikmati!',
+          },
+        ],
       },
     ],
   },
 ];
+
+export const KULINER_TUTORIAL = {
+  eyebrow: 'Panduan Ruang Kuliner',
+  title: 'Cara Memasak di Warung Jawa Timur',
+  steps: [
+    {
+      heading: 'Pilih Hidangan di Meja Warung',
+      text: 'Ketuk salah satu dari tiga sajian khas Jawa Timur di atas meja: Rawon, Prol Tape, atau Wedang Angsle.',
+    },
+    {
+      heading: 'Seret atau Ketuk Bahan',
+      text: 'Ikuti kartu resep di atas meja. Seret gambar bahan dari nampan bawah ke wadah masak di tengah, atau cukup ketuk bahan untuk memasukkannya otomatis.',
+    },
+    {
+      heading: 'Aduk & Panggang Hingga Matang',
+      text: 'Pada tahap pengolahan, ketuk wadah masak atau tombol aksi untuk mengaduk kuah, mencampur adonan, atau memanggang hingga sajian siap dinikmati.',
+    },
+  ],
+};
