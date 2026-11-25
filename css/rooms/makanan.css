@@ -356,7 +356,7 @@
 .kl-stage-center.is-on-stove {
   justify-content: flex-end;
   padding-right: clamp(2.5rem, 7vw, 9rem);
-  transform: translateY(5px); /* positif = turun, negatif = naik */
+  transform: translateY(-15px); /* positif = turun, negatif = naik */
 }
 
 .kl-vessel-zone {
