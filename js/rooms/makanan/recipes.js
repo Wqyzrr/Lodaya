@@ -1,7 +1,7 @@
 /**
  * js/rooms/makanan/recipes.js
- * Registri 31 aset WebP dan konfigurasi resep step-by-step untuk Ruang IV — Kuliner.
- * Dirancang modular: setiap bahan memiliki reaksi visual, pesan rasa, dan jenis SFX tersendiri.
+ * Registri 43 aset WebP dan konfigurasi resep step-by-step untuk Ruang IV — Kuliner.
+ * Mendukung perubahan visual wadah per 1x drag-and-drop (stageImgs) dan posisi kompor kanan.
  */
 
 const KULINER_BASE = 'assets/kuliner/';
@@ -20,7 +20,9 @@ export const KULINER_ASSETS = {
 
   // Menu 1: Rawon
   rawonPanciKosong: `${KULINER_BASE}rawon-panci-kosong.webp`,
+  rawonPanciDaging: `${KULINER_BASE}rawon-panci-daging.webp`,
   rawonPanciMatang: `${KULINER_BASE}rawon-panci-matang.webp`,
+  rawonPanciRempah: `${KULINER_BASE}rawon-panci-rempah.webp`,
   rawonSendokKayu: `${KULINER_BASE}rawon-sendok-kayu.webp`,
   rawonDaging: `${KULINER_BASE}rawon-bahan-daging.webp`,
   rawonKluwek: `${KULINER_BASE}rawon-bahan-kluwek.webp`,
@@ -30,16 +32,26 @@ export const KULINER_ASSETS = {
 
   // Menu 2: Prol Tape
   prolMangkukKosong: `${KULINER_BASE}prol-mangkuk-kosong.webp`,
+  prolMangkukTape: `${KULINER_BASE}prol-mangkuk-tape.webp`,
+  prolMangkukCampur: `${KULINER_BASE}prol-mangkuk-campur.webp`,
   prolMangkukAdonan: `${KULINER_BASE}prol-mangkuk-adonan.webp`,
+  prolPengaduk: `${KULINER_BASE}prol-pengaduk-whisk.webp`,
   prolTape: `${KULINER_BASE}prol-bahan-tape.webp`,
   prolTepungTelur: `${KULINER_BASE}prol-bahan-tepung-telur.webp`,
   prolTopping: `${KULINER_BASE}prol-topping-keju-kismis.webp`,
   prolLoyangKosong: `${KULINER_BASE}prol-loyang-kosong.webp`,
+  prolLoyangAdonan: `${KULINER_BASE}prol-loyang-adonan.webp`,
+  prolLoyangTopping: `${KULINER_BASE}prol-loyang-topping.webp`,
   prolOven: `${KULINER_BASE}prol-oven-tangkring.webp`,
   prolJadi: `${KULINER_BASE}prol-hasil-jadi.webp`,
 
   // Menu 3: Wedang Angsle
   angsleMangkukKosong: `${KULINER_BASE}angsle-mangkuk-kosong.webp`,
+  angsleMangkuk1: `${KULINER_BASE}angsle-mangkuk-1-ketan.webp`,
+  angsleMangkuk2: `${KULINER_BASE}angsle-mangkuk-2-mutiara.webp`,
+  angsleMangkuk3: `${KULINER_BASE}angsle-mangkuk-3-kacang.webp`,
+  angsleMangkuk4: `${KULINER_BASE}angsle-mangkuk-4-roti.webp`,
+  angsleMangkukKuah: `${KULINER_BASE}angsle-mangkuk-kuah.webp`,
   angsleKetan: `${KULINER_BASE}angsle-bahan-ketan.webp`,
   angsleMutiara: `${KULINER_BASE}angsle-bahan-mutiara.webp`,
   angsleKacangHijau: `${KULINER_BASE}angsle-bahan-kacang-hijau.webp`,
@@ -62,11 +74,16 @@ export const RECIPES = [
     steps: [
       {
         type: 'drag-drop',
+        stationPos: 'stove',
         title: 'Langkah 1 • Racik Bahan ke Kendil',
         instruction:
-          'Seret Daging Sapi, Bumbu & Kluwek, serta Daun Jeruk & Serai ke dalam panci tanah liat.',
+          'Seret Daging Sapi, Bumbu & Kluwek, serta Daun Jeruk & Serai ke panci tanah liat di atas kompor.',
         vesselImg: KULINER_ASSETS.rawonPanciKosong,
-        vesselAfterImg: KULINER_ASSETS.rawonPanciMatang,
+        stageImgs: [
+          KULINER_ASSETS.rawonPanciDaging,
+          KULINER_ASSETS.rawonPanciMatang,
+          KULINER_ASSETS.rawonPanciRempah,
+        ],
         vesselLabel: 'Panci Kendil Rawon',
         showFire: true,
         showSteam: false,
@@ -83,8 +100,7 @@ export const RECIPES = [
             label: 'Bumbu & Kluwek',
             img: KULINER_ASSETS.rawonKluwek,
             sfxType: 'plop',
-            triggersTransform: true,
-            dropMessage: 'Kuah langsung menghitam pekat oleh kluwek!',
+            dropMessage: 'Kuah menghitam pekat oleh kluwek!',
           },
           {
             id: 'rempah',
@@ -97,10 +113,11 @@ export const RECIPES = [
       },
       {
         type: 'action',
+        stationPos: 'stove',
         title: 'Langkah 2 • Aduk & Didihkan Kuah',
         instruction:
           'Ketuk panci atau tombol di bawah untuk mengaduk kuah Rawon hingga bumbu meresap.',
-        vesselImg: KULINER_ASSETS.rawonPanciMatang,
+        vesselImg: KULINER_ASSETS.rawonPanciRempah,
         vesselLabel: 'Kuah Rawon Mendidih',
         toolImg: KULINER_ASSETS.rawonSendokKayu,
         toolAnim: 'stir',
@@ -116,11 +133,12 @@ export const RECIPES = [
       },
       {
         type: 'drag-drop',
+        stationPos: 'center',
         title: 'Langkah 3 • Sajikan dengan Pelengkap',
         instruction:
           'Tambahkan Tauge Pendek & Telur Asin untuk menyempurnakan semangkuk Rawon hangat.',
-        vesselImg: KULINER_ASSETS.rawonPanciMatang,
-        vesselAfterImg: KULINER_ASSETS.rawonJadi,
+        vesselImg: KULINER_ASSETS.rawonPanciRempah,
+        stageImgs: [KULINER_ASSETS.rawonJadi],
         vesselLabel: 'Mangkuk Saji Rawon',
         showFire: false,
         showSteam: true,
@@ -130,7 +148,6 @@ export const RECIPES = [
             label: 'Tauge & Telur Asin',
             img: KULINER_ASSETS.rawonTopping,
             sfxType: 'sprinkle',
-            triggersTransform: true,
             dropMessage: 'Rawon siap disajikan hangat!',
           },
         ],
@@ -150,11 +167,15 @@ export const RECIPES = [
     steps: [
       {
         type: 'drag-drop',
+        stationPos: 'center',
         title: 'Langkah 1 • Campur Bahan Adonan',
         instruction:
           'Seret Tape Singkong serta Tepung, Gula & Telur ke dalam mangkuk keramik.',
         vesselImg: KULINER_ASSETS.prolMangkukKosong,
-        vesselAfterImg: KULINER_ASSETS.prolMangkukAdonan,
+        stageImgs: [
+          KULINER_ASSETS.prolMangkukTape,
+          KULINER_ASSETS.prolMangkukCampur,
+        ],
         vesselLabel: 'Mangkuk Adonan',
         showFire: false,
         showSteam: false,
@@ -171,35 +192,42 @@ export const RECIPES = [
             label: 'Tepung, Gula & Telur',
             img: KULINER_ASSETS.prolTepungTelur,
             sfxType: 'pour',
-            triggersTransform: true,
-            dropMessage: 'Adonan mulai mengental berwarna kuning lembut!',
+            dropMessage: 'Tepung dan telur siap diaduk bersama tape!',
           },
         ],
       },
       {
         type: 'action',
+        stationPos: 'center',
         title: 'Langkah 2 • Aduk Adonan Hingga Halus',
         instruction:
           'Ketuk mangkuk atau tombol untuk mengaduk adonan Prol Tape hingga tercampur rata.',
-        vesselImg: KULINER_ASSETS.prolMangkukAdonan,
+        vesselImg: KULINER_ASSETS.prolMangkukCampur,
+        vesselAfterImg: KULINER_ASSETS.prolMangkukAdonan,
         vesselLabel: 'Adonan Prol Tape',
+        toolImg: KULINER_ASSETS.prolPengaduk,
         toolAnim: 'mix',
         actionLabel: 'Aduk Adonan',
         requiredTaps: 3,
         tapFeedback: [
           'Tape mulai lumat menyatu dengan telur...',
           'Adonan makin halus dan harum mentega...',
-          'Adonan siap dituang ke loyang!',
+          'Adonan tercampur rata dan siap dituang!',
         ],
         showFire: false,
         showSteam: false,
       },
       {
         type: 'drag-drop',
+        stationPos: 'center',
         title: 'Langkah 3 • Tuang ke Loyang & Beri Topping',
         instruction:
           'Masukkan Adonan Tape ke loyang panggang, lalu taburi Parutan Keju & Kismis.',
         vesselImg: KULINER_ASSETS.prolLoyangKosong,
+        stageImgs: [
+          KULINER_ASSETS.prolLoyangAdonan,
+          KULINER_ASSETS.prolLoyangTopping,
+        ],
         vesselLabel: 'Loyang Panggang',
         showFire: false,
         showSteam: false,
@@ -222,9 +250,10 @@ export const RECIPES = [
       },
       {
         type: 'action',
+        stationPos: 'stove',
         title: 'Langkah 4 • Panggang di Oven Tangkring',
         instruction:
-          'Ketuk oven atau tombol untuk memanggang Prol Tape hingga permukaan cokelat keemasan.',
+          'Ketuk oven di atas kompor atau tombol untuk memanggang Prol Tape hingga matang keemasan.',
         vesselImg: KULINER_ASSETS.prolOven,
         vesselLabel: 'Oven Tangkring',
         toolAnim: 'bake',
@@ -253,10 +282,17 @@ export const RECIPES = [
     steps: [
       {
         type: 'drag-drop',
+        stationPos: 'center',
         title: 'Langkah 1 • Tata Isian di Mangkuk',
         instruction:
           'Seret Ketan Putih, Mutiara Sagu, Kacang Hijau, dan Roti Tawar ke dalam mangkuk saji.',
         vesselImg: KULINER_ASSETS.angsleMangkukKosong,
+        stageImgs: [
+          KULINER_ASSETS.angsleMangkuk1,
+          KULINER_ASSETS.angsleMangkuk2,
+          KULINER_ASSETS.angsleMangkuk3,
+          KULINER_ASSETS.angsleMangkuk4,
+        ],
         vesselLabel: 'Mangkuk Racikan Angsle',
         showFire: false,
         showSteam: false,
@@ -293,11 +329,12 @@ export const RECIPES = [
       },
       {
         type: 'drag-drop',
+        stationPos: 'center',
         title: 'Langkah 2 • Siram Kuah Santan Jahe',
         instruction:
           'Seret Panci Kuah Santan Jahe hangat ke mangkuk untuk menyiram seluruh isian.',
-        vesselImg: KULINER_ASSETS.angsleMangkukKosong,
-        vesselAfterImg: KULINER_ASSETS.angsleJadi,
+        vesselImg: KULINER_ASSETS.angsleMangkuk4,
+        stageImgs: [KULINER_ASSETS.angsleMangkukKuah],
         vesselLabel: 'Siram Kuah Hangat',
         showFire: false,
         showSteam: true,
@@ -307,17 +344,18 @@ export const RECIPES = [
             label: 'Kuah Santan Jahe',
             img: KULINER_ASSETS.angsleKuahSantan,
             sfxType: 'pour',
-            triggersTransform: true,
             dropMessage: 'Kuah santan jahe hangat harum menyiram isian!',
           },
         ],
       },
       {
         type: 'drag-drop',
+        stationPos: 'center',
         title: 'Langkah 3 • Taburi Kacang Sangrai',
         instruction:
           'Tambahkan taburan Kacang Tanah Sangrai renyah sebagai sentuhan akhir Wedang Angsle.',
-        vesselImg: KULINER_ASSETS.angsleJadi,
+        vesselImg: KULINER_ASSETS.angsleMangkukKuah,
+        stageImgs: [KULINER_ASSETS.angsleJadi],
         vesselLabel: 'Wedang Angsle Hangat',
         showFire: false,
         showSteam: true,
@@ -345,7 +383,7 @@ export const KULINER_TUTORIAL = {
     },
     {
       heading: 'Seret atau Ketuk Bahan',
-      text: 'Ikuti kartu resep di atas meja. Seret gambar bahan dari nampan bawah ke wadah masak di tengah, atau cukup ketuk bahan untuk memasukkannya otomatis.',
+      text: 'Ikuti kartu resep di atas meja. Seret gambar bahan dari nampan bawah ke wadah masak, atau cukup ketuk bahan untuk memasukkannya otomatis.',
     },
     {
       heading: 'Aduk & Panggang Hingga Matang',

@@ -1,8 +1,6 @@
 /**
  * js/rooms/makanan/index.js
  * Ruang IV — Kuliner: Warung & Minigame Masak Khas Jawa Timur
- * Mengelola siklus hidup ruangan (init, enter, exit, resize), transisi antar-tampilan
- * (Meja Warung -> Meja Masak -> Sajian Selesai), dan animasi atmosfer GSAP.
  */
 import { appState } from '../../core/state-manager.js';
 import { KULINER_ASSETS, RECIPES, KULINER_TUTORIAL } from './recipes.js';
@@ -18,7 +16,7 @@ export const makananRoom = {
     this.ctx = ctx;
 
     this.isActive = false;
-    this.view = 'warung'; // 'warung' | 'cooking' | 'complete'
+    this.view = 'warung';
     this.currentRecipe = null;
     this.cookedIds = new Set();
     this.ambientTweens = [];
@@ -30,6 +28,7 @@ export const makananRoom = {
 
     this.engine = new CookingEngine(
       {
+        stageCenter: this.dom.stageCenter,
         recipeBadge: this.dom.recipeBadge,
         recipeInstruction: this.dom.recipeInstruction,
         recipeDots: this.dom.recipeDots,
@@ -37,6 +36,7 @@ export const makananRoom = {
         vesselImg: this.dom.vesselImg,
         vesselLabel: this.dom.vesselLabel,
         vesselHint: this.dom.vesselHint,
+        toolClip: this.dom.toolClip,
         toolImg: this.dom.toolImg,
         vfxFire: this.dom.vfxFire,
         vfxSteam: this.dom.vfxSteam,
@@ -126,7 +126,7 @@ export const makananRoom = {
           </div>
         </div>
 
-        <!-- TAMPILAN 1: MEJA WARUNG (PILIH 3 HIDANGAN) -->
+        <!-- TAMPILAN 1: MEJA WARUNG -->
         <div class="kl-warung-view" id="kl-warung-view">
           <p class="kl-warung-prompt">
             Ketuk salah satu hidangan khas di atas meja untuk mulai memasak
@@ -136,7 +136,7 @@ export const makananRoom = {
           </div>
         </div>
 
-        <!-- TAMPILAN 2: MEJA MASAK (MINIGAME DRAG & DROP) -->
+        <!-- TAMPILAN 2: MEJA MASAK -->
         <div class="kl-cooking-view" id="kl-cooking-view" hidden>
           <!-- Kartu Resep Perkamen -->
           <div class="kl-recipe-card">
@@ -156,8 +156,8 @@ export const makananRoom = {
             </div>
           </div>
 
-          <!-- Area Tengah: Wadah Masak + VFX -->
-          <div class="kl-stage-center">
+          <!-- Area Tengah/Kanan: Wadah Masak + VFX -->
+          <div class="kl-stage-center" id="kl-stage-center">
             <div class="kl-vessel-zone" id="kl-vessel-zone">
               <img
                 class="kl-vfx-steam"
@@ -183,14 +183,15 @@ export const makananRoom = {
                 alt="Wadah Masak"
                 draggable="false"
               />
-              <img
-                class="kl-tool-img"
-                id="kl-tool-img"
-                alt=""
-                draggable="false"
-                hidden
-                aria-hidden="true"
-              />
+              <!-- Wrapper clipping agar ujung sendok/whisk terlihat tercelup di dalam wadah -->
+              <div class="kl-tool-clip" id="kl-tool-clip" hidden aria-hidden="true">
+                <img
+                  class="kl-tool-img"
+                  id="kl-tool-img"
+                  alt=""
+                  draggable="false"
+                />
+              </div>
               <img
                 class="kl-vfx-sparkle"
                 id="kl-vfx-sparkle"
@@ -249,14 +250,12 @@ export const makananRoom = {
                 draggable="false"
                 aria-hidden="true"
               />
-              <img
-                class="kl-complete-steam"
-                id="kl-complete-steam"
-                src="${KULINER_ASSETS.vfxUap}"
-                alt=""
-                draggable="false"
-                aria-hidden="true"
-              />
+              <!-- 3 kepulan uap kecil di atas permukaan makanan -->
+              <div class="kl-complete-steam-group" aria-hidden="true">
+                <img class="kl-complete-steam-wisp wisp-1" src="${KULINER_ASSETS.vfxUap}" alt="" draggable="false" />
+                <img class="kl-complete-steam-wisp wisp-2" src="${KULINER_ASSETS.vfxUap}" alt="" draggable="false" />
+                <img class="kl-complete-steam-wisp wisp-3" src="${KULINER_ASSETS.vfxUap}" alt="" draggable="false" />
+              </div>
               <img
                 class="kl-complete-img"
                 id="kl-complete-img"
@@ -303,6 +302,7 @@ export const makananRoom = {
       dishSteams: qa('.kl-dish-steam'),
 
       cookingView: q('#kl-cooking-view'),
+      stageCenter: q('#kl-stage-center'),
       recipeBadge: q('#kl-recipe-badge'),
       recipeInstruction: q('#kl-recipe-instruction'),
       recipeDots: q('#kl-step-dots'),
@@ -311,6 +311,7 @@ export const makananRoom = {
       vesselImg: q('#kl-vessel-img'),
       vesselLabel: q('#kl-vessel-label'),
       vesselHint: q('#kl-vessel-hint'),
+      toolClip: q('#kl-tool-clip'),
       toolImg: q('#kl-tool-img'),
       vfxFire: q('#kl-vfx-fire'),
       vfxSteam: q('#kl-vfx-steam'),
@@ -327,7 +328,7 @@ export const makananRoom = {
       completeCard: q('#kl-complete-card'),
       completeImg: q('#kl-complete-img'),
       completeSparkle: q('#kl-complete-sparkle'),
-      completeSteam: q('#kl-complete-steam'),
+      completeWisps: qa('.kl-complete-steam-wisp'),
       completeOrigin: q('#kl-complete-origin'),
       completeTitle: q('#kl-complete-title'),
       completeFact: q('#kl-complete-fact'),
@@ -367,9 +368,6 @@ export const makananRoom = {
     });
   },
 
-  /* =========================================================
-     SIKLUS HIDUP RUANGAN (ENTER / EXIT / RESIZE)
-     ========================================================= */
   enter() {
     this.isActive = true;
     this.preloadAllAssets();
@@ -392,9 +390,6 @@ export const makananRoom = {
     }
   },
 
-  /* =========================================================
-     NAVIGASI ANTAR-TAMPILAN (WARUNG <-> MASAK <-> SELESAI)
-     ========================================================= */
   openWarungView() {
     this.view = 'warung';
     this.engine.stop();
@@ -479,9 +474,6 @@ export const makananRoom = {
     });
   },
 
-  /* =========================================================
-     ANIMASI ATMOSFER WARUNG & PERAYAAN SELESAI
-     ========================================================= */
   startWarungAmbient() {
     this.killAmbientTweens();
     if (!window.gsap || appState.get('reducedMotion')) return;
@@ -524,13 +516,23 @@ export const makananRoom = {
       })
     );
 
-    this.completeTweens.push(
-      window.gsap.fromTo(
-        this.dom.completeSteam,
-        { y: 8, opacity: 0.25 },
-        { y: -12, opacity: 0.75, duration: 2.1, repeat: -1, yoyo: true, ease: 'sine.inOut' }
-      )
-    );
+    // 3 kepulan uap kecil naik bergantian secara natural di atas hidangan
+    this.dom.completeWisps.forEach((wisp, i) => {
+      const tl = window.gsap.timeline({ repeat: -1, delay: i * 0.75 });
+      tl.fromTo(
+        wisp,
+        { y: 12, x: 0, scale: 0.72, opacity: 0 },
+        { y: -10, x: i % 2 === 0 ? -5 : 5, scale: 1, opacity: 0.78, duration: 1.1, ease: 'sine.out' }
+      ).to(wisp, {
+        y: -30,
+        x: i % 2 === 0 ? 4 : -4,
+        scale: 1.22,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'sine.in',
+      });
+      this.completeTweens.push(tl);
+    });
   },
 
   killAmbientTweens() {

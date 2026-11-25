@@ -2,10 +2,10 @@
  * js/rooms/makanan/cooking-engine.js
  * Mesin memasak imersif untuk Ruang IV — Kuliner.
  * Fitur:
- * - Drag-and-drop berbasis Pointer Events dengan efek kemiringan (tilt) natural
- * - Tap-to-fly fallback (bahan terbang melengkung masuk ke wadah saat diketuk)
- * - Perubahan visual wadah (state transform), VFX GSAP (uap, api, sparkle, sendok aduk)
- * - Sintesis SFX dapur via Web Audio API (otomatis mengikuti volume/senyap global)
+ * - Perubahan visual wadah di setiap 1x drag-and-drop (stageImgs)
+ * - Penempatan otomatis di meja tengah vs kompor kanan (stationPos)
+ * - Animasi sendok/pengaduk tercelup ke dalam wadah (clip-path masking)
+ * - Sintesis SFX dapur via Web Audio API
  */
 import { appState } from '../../core/state-manager.js';
 import { KULINER_ASSETS } from './recipes.js';
@@ -87,7 +87,6 @@ class KitchenSfx {
       return;
     }
 
-    // Default: 'plop' lembut masuk ke panci/mangkuk
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sine';
@@ -110,11 +109,10 @@ class KitchenSfx {
     const now = ctx.currentTime;
 
     if (mode === 'bake' && isFinalTap) {
-      // Bunyi "ting!" bel oven saat matang
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(1318.5, now); // E6
+      osc.frequency.setValueAtTime(1318.5, now);
       gain.gain.setValueAtTime(vol * 0.24, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
       osc.connect(gain);
@@ -200,6 +198,9 @@ export class CookingEngine {
     if (this.dom.vesselZone) {
       this.dom.vesselZone.removeEventListener('click', this.boundVesselClick);
     }
+    if (this.dom.stageCenter) {
+      this.dom.stageCenter.classList.remove('is-on-stove');
+    }
     if (this.dom.toast) {
       this.dom.toast.classList.remove('is-visible');
     }
@@ -221,7 +222,13 @@ export class CookingEngine {
     this.actionTaps = 0;
     this.isStepTransitioning = false;
 
-    // 1. Perbarui Kartu Resep
+    // 1. Posisi Meja Tengah vs Kompor Kanan
+    const onStove = step.stationPos === 'stove';
+    if (this.dom.stageCenter) {
+      this.dom.stageCenter.classList.toggle('is-on-stove', onStove);
+    }
+
+    // 2. Perbarui Kartu Resep
     this.dom.recipeBadge.textContent = step.title;
     this.dom.recipeInstruction.textContent = step.instruction;
     this.dom.recipeDots.innerHTML = steps
@@ -231,7 +238,7 @@ export class CookingEngine {
       })
       .join('');
 
-    // 2. Perbarui Wadah Masak & VFX
+    // 3. Perbarui Wadah Masak & VFX
     this.setVesselImage(step.vesselImg, true);
     this.dom.vesselLabel.textContent = step.vesselLabel;
     this.dom.vesselZone.classList.toggle('is-drop-step', step.type === 'drag-drop');
@@ -240,21 +247,22 @@ export class CookingEngine {
     this.toggleFire(Boolean(step.showFire));
     this.toggleSteam(Boolean(step.showSteam));
 
-    if (step.toolImg) {
+    // Alat pengaduk tercelup (Sendok Kayu Rawon / Whisk Prol Tape)
+    if (step.toolImg && this.dom.toolClip && this.dom.toolImg) {
       this.dom.toolImg.src = step.toolImg;
-      this.dom.toolImg.hidden = false;
+      this.dom.toolClip.hidden = false;
       if (window.gsap && !appState.get('reducedMotion')) {
         window.gsap.fromTo(
           this.dom.toolImg,
-          { y: -16, opacity: 0, rotation: -12 },
-          { y: 0, opacity: 1, rotation: 0, duration: 0.35, ease: 'power2.out' }
+          { y: -24, opacity: 0, rotation: -12 },
+          { y: 0, opacity: 1, rotation: -6, duration: 0.38, ease: 'power2.out' }
         );
       }
-    } else {
-      this.dom.toolImg.hidden = true;
+    } else if (this.dom.toolClip) {
+      this.dom.toolClip.hidden = true;
     }
 
-    // 3. Render Nampan Bahan atau Panel Aksi
+    // 4. Render Nampan Bahan atau Panel Aksi
     this.dom.trayItems.innerHTML = '';
 
     if (step.type === 'drag-drop') {
@@ -306,8 +314,8 @@ export class CookingEngine {
     if (animate && window.gsap && !appState.get('reducedMotion')) {
       window.gsap.fromTo(
         this.dom.vesselImg,
-        { scale: 0.9, opacity: 0.72 },
-        { scale: 1, opacity: 1, duration: 0.4, ease: 'back.out(1.4)' }
+        { scale: 0.93, opacity: 0.8 },
+        { scale: 1, opacity: 1, duration: 0.34, ease: 'back.out(1.3)' }
       );
     }
   }
@@ -379,12 +387,10 @@ export class CookingEngine {
       ghost.remove();
       this.commitIngredient(item, cardEl, step);
     } else if (!moved) {
-      // Tap cepat: terbangkan gambar bahan masuk ke wadah
       this.flyGhostToVessel(ghost, () => {
         this.commitIngredient(item, cardEl, step);
       });
     } else {
-      // Dilepas di luar wadah -> kembalikan halus ke nampan
       if (window.gsap && !appState.get('reducedMotion')) {
         const rect = cardEl.getBoundingClientRect();
         window.gsap.to(ghost, {
@@ -399,13 +405,13 @@ export class CookingEngine {
       } else {
         ghost.remove();
       }
-      this.showToast(`Seret ${item.label} ke ${step.vesselLabel} di tengah meja.`);
+      this.showToast(`Seret ${item.label} ke ${step.vesselLabel}.`);
     }
   }
 
   isOverVessel(clientX, clientY) {
     const rect = this.dom.vesselZone.getBoundingClientRect();
-    const pad = 30;
+    const pad = 32;
     return (
       clientX >= rect.left - pad &&
       clientX <= rect.right + pad &&
@@ -465,20 +471,20 @@ export class CookingEngine {
     this.playSparkleBurst();
     this.bounceVessel();
 
-    if (item.triggersTransform && step.vesselAfterImg) {
-      this.setVesselImage(step.vesselAfterImg, true);
-    }
-
     const doneCount = this.completedItems.size;
     const total = step.items.length;
+
+    // Ubah visual wadah di SETIAP 1x bahan masuk menggunakan stageImgs
+    if (Array.isArray(step.stageImgs) && step.stageImgs.length > 0) {
+      const nextImg = step.stageImgs[Math.min(doneCount - 1, step.stageImgs.length - 1)];
+      if (nextImg) this.setVesselImage(nextImg, true);
+    }
+
     this.dom.vesselHint.textContent = `Bahan masuk (${doneCount}/${total})`;
     this.showToast(item.dropMessage || `${item.label} dimasukkan!`);
 
     if (doneCount >= total) {
       this.isStepTransitioning = true;
-      if (step.vesselAfterImg) {
-        this.setVesselImage(step.vesselAfterImg, true);
-      }
       this.schedule(() => {
         this.stepIndex += 1;
         this.renderStep();
@@ -520,10 +526,16 @@ export class CookingEngine {
     if (isFinal) {
       this.isStepTransitioning = true;
       this.dom.actionBtn.disabled = true;
+
+      // Jika tahap aduk punya hasil visual baru (mis. adonan Prol Tape jadi halus)
+      if (step.vesselAfterImg) {
+        this.setVesselImage(step.vesselAfterImg, true);
+      }
+
       this.schedule(() => {
         this.stepIndex += 1;
         this.renderStep();
-      }, 760);
+      }, 820);
     }
   }
 
@@ -531,20 +543,31 @@ export class CookingEngine {
     const gsap = window.gsap;
     if (!gsap || appState.get('reducedMotion')) return;
 
-    if (mode === 'stir' && !this.dom.toolImg.hidden) {
-      gsap.fromTo(
-        this.dom.toolImg,
-        { rotation: -22, x: -16, y: -4 },
-        {
-          rotation: 22,
-          x: 16,
-          y: 4,
-          duration: 0.22,
-          yoyo: true,
-          repeat: 1,
+    if ((mode === 'stir' || mode === 'mix') && this.dom.toolClip && !this.dom.toolClip.hidden) {
+      // Gerakan mengaduk melingkar di dalam mulut wadah (ujung tercelup terpotong clip)
+      gsap.killTweensOf(this.dom.toolImg);
+      const tl = gsap.timeline();
+      tl.to(this.dom.toolImg, {
+        x: -22,
+        y: 6,
+        rotation: -18,
+        duration: 0.16,
+        ease: 'sine.inOut',
+      })
+        .to(this.dom.toolImg, {
+          x: 20,
+          y: 2,
+          rotation: 16,
+          duration: 0.2,
           ease: 'sine.inOut',
-        }
-      );
+        })
+        .to(this.dom.toolImg, {
+          x: 0,
+          y: 0,
+          rotation: -6,
+          duration: 0.16,
+          ease: 'sine.out',
+        });
       this.bounceVessel();
     } else if (mode === 'bake') {
       gsap.fromTo(
@@ -560,11 +583,7 @@ export class CookingEngine {
         }
       );
     } else {
-      gsap.fromTo(
-        this.dom.vesselImg,
-        { rotation: -7, scale: 0.95 },
-        { rotation: 0, scale: 1, duration: 0.36, ease: 'elastic.out(1, 0.5)' }
-      );
+      this.bounceVessel();
     }
   }
 
@@ -575,8 +594,8 @@ export class CookingEngine {
     if (!window.gsap || appState.get('reducedMotion')) return;
     window.gsap.fromTo(
       this.dom.vesselImg,
-      { scaleX: 1.07, scaleY: 0.93 },
-      { scaleX: 1, scaleY: 1, duration: 0.36, ease: 'elastic.out(1, 0.45)' }
+      { scaleX: 1.06, scaleY: 0.94 },
+      { scaleX: 1, scaleY: 1, duration: 0.34, ease: 'elastic.out(1, 0.45)' }
     );
   }
 
