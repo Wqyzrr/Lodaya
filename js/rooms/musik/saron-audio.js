@@ -104,7 +104,7 @@ class SaronAudioEngine {
   playSynthesizedSaron(ctx, freq, vol) {
     const now = ctx.currentTime;
     const master = ctx.createGain();
-    master.gain.setValueAtTime(vol * 0.42, now);
+    master.gain.setValueAtTime(vol * 0.85, now);
     master.connect(ctx.destination);
 
     // 1. Resonansi nada dasar (perunggu utama)
