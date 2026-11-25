@@ -1,64 +1,81 @@
 /**
  * js/rooms/musik/song-config.js
- * Konfigurasi lagu & peta ketukan (beat-map) untuk Piano Tiles: Rek Ayo Rek.
- *
- * CATATAN PENTING SINKRONISASI AUDIO:
- * - Letakkan berkas MP3 asli Anda di: assets/audio/rek-ayo-rek.mp3
- * - Setelah MP3 tersedia, sesuaikan `bpm`, `offset` (detik), dan array `notes`
- *   di bawah ini agar tepat mengikuti ketukan rekaman MP3 Anda.
- * - Selama `bpm` masih bernilai `null` atau berkas MP3 belum tersedia,
- *   permainan otomatis menjalankan pola latihan mudah (Easy) yang santai
- *   tanpa mengklaim sinkronisasi rekaman eksternal.
+ * Konfigurasi aset, pola nada memory game "Rek Ayo Rek", dan panduan ruangan.
  */
-export const songConfig = {
-  title: 'Rek Ayo Rek',
-  subtitle: 'Lagu Daerah Jawa Timur (Tingkat Mudah)',
-  audio: 'assets/audio/rek-ayo-rek.mp3',
-  difficulty: 'easy',
-  // Setel BPM & offset sesuai berkas MP3 asli yang Anda masukkan:
-  bpm: null,
-  offset: 0,
-  // Kecepatan jatuh santai (detik dari puncak papan hingga garis ketuk)
-  fallDuration: 2.35,
-  // Jendela ketuk longgar (detik) agar ramah pengunjung baru
-  perfectWindow: 0.22,
-  goodWindow: 0.42,
-  // Durasi total peta latihan (detik)
-  duration: 36,
-  // Format setiap nada: { time: detik_saat_menyentuh_garis, lane: 0..3 }
-  notes: [
-    { time: 2.2, lane: 0 },
-    { time: 3.1, lane: 1 },
-    { time: 4.0, lane: 2 },
-    { time: 4.9, lane: 3 },
-    { time: 5.9, lane: 2 },
-    { time: 6.8, lane: 1 },
-    { time: 7.8, lane: 0 },
-    { time: 8.8, lane: 2 },
-    { time: 9.8, lane: 1 },
-    { time: 10.7, lane: 3 },
-    { time: 11.7, lane: 2 },
-    { time: 12.7, lane: 0 },
-    { time: 13.7, lane: 1 },
-    { time: 14.6, lane: 2 },
-    { time: 15.6, lane: 3 },
-    { time: 16.6, lane: 1 },
-    { time: 17.6, lane: 2 },
-    { time: 18.5, lane: 0 },
-    { time: 19.5, lane: 3 },
-    { time: 20.5, lane: 2 },
-    { time: 21.5, lane: 1 },
-    { time: 22.4, lane: 0 },
-    { time: 23.4, lane: 2 },
-    { time: 24.4, lane: 3 },
-    { time: 25.4, lane: 1 },
-    { time: 26.4, lane: 2 },
-    { time: 27.3, lane: 0 },
-    { time: 28.3, lane: 1 },
-    { time: 29.3, lane: 3 },
-    { time: 30.3, lane: 2 },
-    { time: 31.3, lane: 1 },
-    { time: 32.3, lane: 0 },
-    { time: 33.4, lane: 2 },
+
+const MUSIK_BASE = 'assets/senimusik/';
+
+export const MUSIK_ASSETS = {
+  bgPendopo: `${MUSIK_BASE}bg_pendopo_musik`,
+  gamelanBackdrop: `${MUSIK_BASE}gamelan_backdrop`,
+  karpetTikar: `${MUSIK_BASE}karpet_tikar`,
+  saronRancakan: `${MUSIK_BASE}saron_rancakan`,
+  saronBilah: `${MUSIK_BASE}saron_bilah`,
+  saronBilahGlow: `${MUSIK_BASE}saron_bilah_glow`,
+  tabuhSaron: `${MUSIK_BASE}tabuh_saron`,
+  pengrawitGuide: `${MUSIK_BASE}pengrawit_guide`,
+  papanLirik: `${MUSIK_BASE}papan_lirik`,
+  medaliGamelan: `${MUSIK_BASE}medali_gamelan`,
+  // Aset existing dari repo yang dipakai ulang
+  lentera: 'assets/lentera',
+  magicalParticles: 'assets/seniperan/magical_particles',
+  paperCorner: 'assets/seniperan/paper_corner',
+};
+
+/**
+ * 4 Babak Memory Game — Lagu "Rek Ayo Rek" (Surabaya, Jawa Timur)
+ * Index bilah: 0(1/C4), 1(2/D4), 2(3/E4), 3(5/G4), 4(6/A4), 5(1̇/C5)
+ */
+export const REK_AYO_REK_ROUNDS = [
+  {
+    id: 'babak-1',
+    title: 'Babak 1 — Pembuka',
+    lyric: '“Rek ayo rek...”',
+    pattern: [3, 3, 4, 3],
+    tempoMs: 620,
+    successMsg: 'Luwes sekali! Nada pembuka sudah kamu kuasai.',
+  },
+  {
+    id: 'babak-2',
+    title: 'Babak 2 — Jalan Tunjungan',
+    lyric: '“...mlaku-mlaku nang Tunjungan”',
+    pattern: [2, 1, 0, 1, 2],
+    tempoMs: 560,
+    successMsg: 'Mantap! Suasana Jalan Tunjungan makin terasa.',
+  },
+  {
+    id: 'babak-3',
+    title: 'Babak 3 — Rame-Rame',
+    lyric: '“Rek ayo rek, rame-rame bebarengan”',
+    pattern: [3, 4, 5, 4, 3, 2],
+    tempoMs: 520,
+    successMsg: 'Luar biasa! Irama gamelanmu sangat selaras.',
+  },
+  {
+    id: 'babak-4',
+    title: 'Babak 4 — Penutup Meriah',
+    lyric: '“Cak ayo cak, dolek kenalan cah ayu!”',
+    pattern: [2, 3, 4, 3, 2, 1, 0],
+    tempoMs: 490,
+    successMsg: 'Sempurna! Kamu resmi menjadi pengrawit Saron!',
+  },
+];
+
+export const MUSIK_TUTORIAL = {
+  eyebrow: 'Panduan Ruang Seni Musik',
+  title: 'Cara Bermain Memory Game Saron',
+  steps: [
+    {
+      heading: 'Simak & Dengarkan Pola Nada',
+      text: 'Ketuk "Mulai Bermain". Tabuh kayu akan mengetuk bilah Saron secara berurutan mengikuti penggalan lagu "Rek Ayo Rek".',
+    },
+    {
+      heading: 'Ulangi Urutan Bilah Saron',
+      text: 'Saat giliranmu tiba, ketuk bilah Saron (atau tekan tombol 1–6 di keyboard) sesuai urutan cahaya dan nada yang baru kamu lihat.',
+    },
+    {
+      heading: 'Ulangi Pola atau Main Bebas',
+      text: 'Jika lupa urutannya, ketuk "Dengarkan Ulang". Kamu juga bisa mengetuk bilah kapan saja di "Mode Bebas" untuk mencoba suara Saron.',
+    },
   ],
 };

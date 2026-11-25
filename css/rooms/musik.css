@@ -1,306 +1,630 @@
 /* =========================================================
-   RUANG III — SENI MUSIK: PIANO TILES REK AYO REK
+   RUANG III — SENI MUSIK: MEMORY GAME SARON "REK AYO REK"
    ========================================================= */
-.musik-shell {
+.sm-room {
+  position: relative;
   width: 100%;
   height: 100%;
-  max-width: 1020px;
-  display: grid;
-  grid-template-columns: minmax(210px, 265px) 1fr;
-  gap: clamp(0.75rem, 2vw, 1.35rem);
-  align-items: stretch;
-}
-
-.musik-sidebar {
+  max-width: 1140px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: clamp(0.8rem, 2.2dvh, 1.25rem);
-  border-radius: 12px;
-  background: rgba(20, 14, 26, 0.86);
-  border: 1px solid rgba(232, 197, 142, 0.35);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+  gap: clamp(0.35rem, 1.1dvh, 0.7rem);
+  overflow: hidden;
 }
 
-.musik-title-block .musik-tag {
+/* =========================================================
+   ATMOSFER PENDOPO GAMELAN BERLAPIS
+   ========================================================= */
+.sm-env {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 42%, #331B0E 0%, #140A06 82%);
+}
+
+.sm-bg-pendopo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.78;
+}
+
+.sm-bg-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 75% 65% at 50% 48%, rgba(255, 200, 110, 0.08) 0%, rgba(16, 8, 4, 0.62) 85%);
+}
+
+.sm-gamelan-backdrop {
+  position: absolute;
+  bottom: 16%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(86vw, 920px);
+  height: auto;
+  max-height: 62dvh;
+  object-fit: contain;
+  opacity: 0.42;
+  will-change: transform, filter;
+}
+
+.sm-lantern {
+  position: absolute;
+  top: -3%;
+  height: clamp(22dvh, 30dvh, 195px);
+  width: auto;
+  opacity: 0.82;
+  transform-origin: top center;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.6));
+}
+
+.sm-lantern.left { left: 4%; }
+.sm-lantern.right { right: 4%; }
+
+.sm-karpet {
+  position: absolute;
+  bottom: -4%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(108vw, 1280px);
+  height: 36dvh;
+  object-fit: cover;
+  opacity: 0.92;
+  filter: drop-shadow(0 -8px 24px rgba(0, 0, 0, 0.65));
+}
+
+.sm-particles {
+  position: absolute;
+  inset: 0;
+}
+
+.sm-sparkle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFF5D6 0%, #E8B85A 60%, transparent 75%);
+  box-shadow: 0 0 10px rgba(255, 218, 138, 0.7);
+}
+
+.sm-sparkle.has-img {
+  width: clamp(36px, 7dvh, 62px);
+  height: clamp(36px, 7dvh, 62px);
+  border-radius: 0;
+  background-color: transparent;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: none;
+}
+
+/* =========================================================
+   HEADER: JUDUL, PAPAN LIRIK & SKOR
+   ========================================================= */
+.sm-header {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: minmax(140px, 210px) 1fr auto;
+  align-items: center;
+  gap: clamp(0.45rem, 1.4vw, 1rem);
+}
+
+.sm-eyebrow {
   display: block;
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
+  font-size: clamp(0.56rem, 1.3dvh, 0.7rem);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold-soft);
-  margin-bottom: 0.2rem;
 }
 
-.musik-title-block h2 {
+.sm-title {
   font-family: var(--font-display);
-  font-size: clamp(1.1rem, 3dvh, 1.5rem);
+  font-size: clamp(0.92rem, 2.5dvh, 1.32rem);
   color: var(--gold-bright);
-  margin-bottom: 0.25rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
-.musik-subtitle {
-  font-size: 0.8rem;
-  color: rgba(245, 233, 211, 0.78);
+.sm-lyric-board {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(54px, 12.5dvh, 84px);
+  padding: 0.4rem 1.2rem;
+  border-radius: 12px;
+  background: rgba(28, 15, 8, 0.82);
+  border: 1px solid rgba(232, 197, 142, 0.45);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
 }
 
-.musik-audio-notice {
-  margin-top: 0.65rem;
-  padding: 0.45rem 0.6rem;
-  border-radius: 8px;
-  background: rgba(201, 154, 85, 0.14);
-  border: 1px solid rgba(232, 197, 142, 0.32);
-  font-size: 0.74rem;
-  line-height: 1.4;
-  color: #F6D8A4;
+.sm-lyric-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  opacity: 0.35;
+  pointer-events: none;
 }
 
-.musik-audio-notice[hidden] {
-  display: none;
-}
-
-.musik-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin: 0.7rem 0;
-}
-
-.musik-stat-card {
-  padding: 0.5rem 0.6rem;
-  border-radius: 8px;
-  background: rgba(255, 225, 168, 0.06);
-  border: 1px solid rgba(232, 197, 142, 0.2);
+.sm-lyric-content {
+  position: relative;
+  z-index: 2;
   text-align: center;
 }
 
-.musik-stat-card span {
+.sm-round-label {
   display: block;
-  font-size: 0.68rem;
+  font-size: clamp(0.6rem, 1.35dvh, 0.72rem);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(232, 197, 142, 0.76);
+  color: var(--gold-soft);
 }
 
-.musik-stat-card strong {
-  font-size: clamp(1rem, 2.6dvh, 1.3rem);
+.sm-lyric-text {
+  font-family: var(--font-display);
+  font-size: clamp(0.82rem, 2.2dvh, 1.12rem);
+  color: #FFF4DC;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
+  margin: 0.1rem 0 0.25rem;
+}
+
+.sm-pattern-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.36rem;
+  min-height: 10px;
+}
+
+.sm-pdot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(245, 233, 211, 0.24);
+  border: 1px solid rgba(232, 197, 142, 0.55);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.sm-pdot.is-demo {
+  background: #FFE1A8;
+  transform: scale(1.35);
+  box-shadow: 0 0 10px rgba(255, 225, 168, 0.9);
+}
+
+.sm-pdot.is-done {
+  background: #67C587;
+  border-color: #B4F2C9;
+  box-shadow: 0 0 8px rgba(103, 197, 135, 0.7);
+}
+
+.sm-score-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 72px;
+  padding: 0.32rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(24, 12, 7, 0.86);
+  border: 1px solid rgba(232, 197, 142, 0.45);
+}
+
+.sm-score-pill span {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--gold-soft);
+}
+
+.sm-score-pill strong {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 2.4dvh, 1.25rem);
   color: var(--gold-bright);
   font-variant-numeric: tabular-nums;
 }
 
-.musik-progress-wrap {
-  margin-bottom: 0.65rem;
+/* =========================================================
+   PANGGUNG UTAMA: PENGRAWIT & SARON
+   ========================================================= */
+.sm-stage {
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(150px, 230px) 1fr;
+  align-items: end;
+  gap: clamp(0.5rem, 1.6vw, 1.2rem);
 }
 
-.musik-progress-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.74rem;
-  color: rgba(245, 233, 211, 0.8);
-  margin-bottom: 0.3rem;
-}
-
-.musik-progress-track {
-  height: 7px;
-  border-radius: 999px;
-  background: rgba(255, 225, 168, 0.14);
-  overflow: hidden;
-}
-
-.musik-progress-fill {
-  width: 0%;
+.sm-guide-wrap {
+  position: relative;
   height: 100%;
-  background: linear-gradient(90deg, #B67F34, #FFE1A8);
-}
-
-.musik-btn-group {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.35rem;
 }
 
-.btn-musik-primary,
-.btn-musik-secondary {
-  min-height: 38px;
-  padding: 0.42rem 0.9rem;
-  border-radius: 999px;
-  font-family: var(--font-body);
-  font-size: 0.84rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.btn-musik-primary {
-  background: linear-gradient(180deg, #D9A659 0%, #9E6E2B 100%);
-  border: 1px solid var(--gold-bright);
-  color: #1A0D07;
-}
-
-.btn-musik-secondary {
-  background: rgba(34, 22, 42, 0.88);
+.sm-speech-bubble {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(24, 13, 8, 0.9);
   border: 1px solid rgba(232, 197, 142, 0.45);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.sm-speech-bubble.is-player-turn {
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 18px rgba(255, 225, 168, 0.35), 0 10px 24px rgba(0, 0, 0, 0.55);
+}
+
+.sm-turn-tag {
+  display: block;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--gold-bright);
+  margin-bottom: 0.15rem;
 }
 
-/* Papan Permainan Piano Tiles Bernuansa Gamelan */
-.tiles-board-wrap {
-  position: relative;
-  border-radius: 14px;
-  border: 1.5px solid rgba(232, 197, 142, 0.48);
-  background:
-    radial-gradient(circle at 50% 85%, rgba(201, 154, 85, 0.16) 0%, rgba(18, 12, 24, 0.95) 68%);
-  overflow: hidden;
-  box-shadow: 0 20px 46px rgba(0, 0, 0, 0.72);
-  touch-action: none;
+.sm-speech-bubble p {
+  font-size: clamp(0.72rem, 1.75dvh, 0.84rem);
+  line-height: 1.4;
+  color: var(--cream-warm);
 }
 
-.tiles-bg-ornament {
-  position: absolute;
-  bottom: 4%;
-  right: 4%;
-  height: 58%;
-  opacity: 0.08;
+.sm-pengrawit-img {
+  max-height: clamp(110px, 34dvh, 225px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.65));
   pointer-events: none;
 }
 
-.tiles-lanes {
+/* Instrumen Saron */
+.sm-saron-stage {
   position: relative;
   width: 100%;
   height: 100%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: clamp(0.2rem, 1.2dvh, 0.8rem);
 }
 
-.tile-lane {
-  position: relative;
-  height: 100%;
-  border-right: 1px solid rgba(232, 197, 142, 0.16);
-  cursor: pointer;
-}
-
-.tile-lane:last-child {
-  border-right: none;
-}
-
-.tile-lane.is-flash {
-  background: linear-gradient(180deg, transparent 35%, rgba(255, 225, 168, 0.2) 100%);
-}
-
-/* Garis ketuk nada di bagian bawah */
-.tiles-hit-zone {
+.sm-saron-shadow {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 14%;
-  height: 14%;
-  border-top: 2px solid rgba(255, 225, 168, 0.65);
-  border-bottom: 2px solid rgba(255, 225, 168, 0.45);
-  background: rgba(255, 225, 168, 0.08);
-  pointer-events: none;
-  z-index: 2;
-}
-
-.lane-key-labels {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 3%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  text-align: center;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.lane-key-labels span {
-  font-family: var(--font-display);
-  font-size: 0.74rem;
-  color: rgba(232, 197, 142, 0.7);
-}
-
-.tiles-layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 4;
-}
-
-.rhythm-tile {
-  position: absolute;
-  width: calc(25% - 14px);
-  height: 64px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #FFE6B3 0%, #D49A45 55%, #8E5B1E 100%);
-  border: 1.5px solid #FFF5DC;
-  box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.55),
-    inset 0 0 0 3px rgba(42, 22, 8, 0.35);
-  will-change: transform;
-}
-
-.rhythm-tile.is-hit {
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFE1A8 100%);
-  opacity: 0;
-  transition: opacity 0.18s ease;
-}
-
-.rhythm-tile.is-missed {
-  opacity: 0.35;
-  filter: grayscale(0.6);
-}
-
-.tiles-feedback {
-  position: absolute;
-  top: 14%;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 9;
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 3dvh, 1.45rem);
-  color: var(--gold-bright);
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
+  width: 88%;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.78) 0%, transparent 72%);
   pointer-events: none;
-  opacity: 0;
 }
 
-.tiles-result-overlay {
+.sm-saron-body {
+  position: relative;
+  width: min(100%, 760px);
+  aspect-ratio: 16 / 7.2;
+  max-height: 54dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sm-rancakan-img {
   position: absolute;
   inset: 0;
-  z-index: 12;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.7));
+  z-index: 1;
+}
+
+/* Rak 6 Bilah Saron di Atas Rancakan */
+.sm-bilah-rack {
+  position: relative;
+  z-index: 3;
+  width: 79%;
+  height: 62%;
+  margin-bottom: 6%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: clamp(4px, 0.9vw, 10px);
+  align-items: center;
+}
+
+.sm-bilah {
+  position: relative;
+  height: calc(100% * var(--bilah-scale-h, 1));
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 1.25rem;
-  background: rgba(14, 10, 20, 0.88);
-  backdrop-filter: blur(4px);
+  outline: none;
 }
 
-.tiles-result-overlay[hidden] {
-  display: none;
+.sm-bilah-visual {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.tiles-result-overlay h3 {
+.sm-bilah-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  transition: opacity 0.14s ease, filter 0.14s ease;
+}
+
+.sm-bilah-img.base {
+  opacity: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.55));
+}
+
+.sm-bilah-img.glow {
+  opacity: 0;
+  filter: drop-shadow(0 0 16px rgba(255, 224, 140, 0.95));
+}
+
+.sm-bilah.is-lit .sm-bilah-img.glow,
+.sm-bilah:active .sm-bilah-img.glow {
+  opacity: 1;
+}
+
+.sm-bilah.is-wrong .sm-bilah-img.base {
+  filter: sepia(1) hue-rotate(-45deg) saturate(3) brightness(0.95);
+}
+
+/* Efek Cincin Cahaya Emas saat Bilah Dipukul (Pengganti nota_emas) */
+.sm-bilah-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 72%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2.5px solid #FFE6B0;
+  box-shadow: 0 0 16px rgba(255, 225, 168, 0.85);
+  transform: translate(-50%, -50%) scale(0.3);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sm-bilah.is-lit .sm-bilah-ripple {
+  animation: smGoldRipple 0.42s ease-out forwards;
+}
+
+@keyframes smGoldRipple {
+  0%   { transform: translate(-50%, -50%) scale(0.35); opacity: 0.95; }
+  100% { transform: translate(-50%, -50%) scale(1.65); opacity: 0; }
+}
+
+.sm-bilah-badge {
+  position: absolute;
+  bottom: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.1rem 0.34rem;
+  border-radius: 6px;
+  background: rgba(20, 10, 5, 0.78);
+  border: 1px solid rgba(232, 197, 142, 0.45);
+  pointer-events: none;
+  line-height: 1.05;
+}
+
+.sm-bilah-badge strong {
   font-family: var(--font-display);
-  font-size: clamp(1.2rem, 3.4dvh, 1.7rem);
+  font-size: clamp(0.72rem, 1.9dvh, 0.95rem);
   color: var(--gold-bright);
-  margin-bottom: 0.45rem;
 }
 
-.tiles-result-overlay p {
-  font-size: 0.9rem;
+.sm-bilah-badge small {
+  font-size: clamp(0.5rem, 1.15dvh, 0.62rem);
+  color: rgba(245, 233, 211, 0.8);
+}
+
+.sm-bilah-rack.is-interactive .sm-bilah:hover .sm-bilah-img.base {
+  filter: drop-shadow(0 0 10px rgba(255, 225, 168, 0.55));
+}
+
+/* Tabuh Saron (Melayang di atas bilah) */
+.sm-tabuh {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: clamp(68px, 14vw, 130px);
+  height: auto;
+  transform: translate(-18%, -78%) rotate(-18deg);
+  transform-origin: 78% 78%;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.65));
+  will-change: transform, left, top;
+}
+
+/* =========================================================
+   KONTROL BAWAH & TOMBOL
+   ========================================================= */
+.sm-controls {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.sm-btn {
+  min-height: 38px;
+  padding: 0.42rem 1.15rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: clamp(0.76rem, 1.8dvh, 0.88rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.2s ease, opacity 0.2s ease;
+}
+
+.sm-btn[hidden] { display: none; }
+.sm-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.sm-btn:active:not(:disabled) { transform: scale(0.97); }
+
+.sm-btn-primary {
+  background: linear-gradient(180deg, #E2B364 0%, #A26E26 100%);
+  border: 1.5px solid var(--gold-bright);
+  color: #1A0C06;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+.sm-btn-secondary {
+  background: rgba(42, 22, 12, 0.92);
+  border: 1px solid rgba(232, 197, 142, 0.65);
+  color: var(--gold-bright);
+}
+
+.sm-btn-ghost {
+  background: rgba(20, 11, 6, 0.78);
+  border: 1px solid rgba(232, 197, 142, 0.35);
+  color: var(--cream-warm);
+}
+
+/* =========================================================
+   OVERLAY KEMENANGAN
+   ========================================================= */
+.sm-victory-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  background: rgba(12, 6, 3, 0.82);
+  backdrop-filter: blur(5px);
+}
+
+.sm-victory-overlay[hidden] { display: none; }
+
+.sm-victory-card {
+  position: relative;
+  width: min(500px, 90vw);
+  padding: clamp(1.1rem, 3.2dvh, 1.8rem) clamp(1.3rem, 3.2vw, 2rem);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #351C0F 0%, #190C07 100%);
+  border: 1.5px solid var(--gold-bright);
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+}
+
+.sm-corner {
+  position: absolute;
+  width: 32px;
+  height: auto;
+  opacity: 0.85;
+  pointer-events: none;
+}
+.sm-corner.tl { top: 8px; left: 8px; }
+.sm-corner.tr { top: 8px; right: 8px; transform: scaleX(-1); }
+.sm-corner.bl { bottom: 8px; left: 8px; transform: scaleY(-1); }
+.sm-corner.br { bottom: 8px; right: 8px; transform: scale(-1, -1); }
+
+.sm-medal-img {
+  width: clamp(68px, 16dvh, 108px);
+  height: auto;
+  margin: 0 auto 0.45rem;
+  display: block;
+  filter: drop-shadow(0 8px 16px rgba(255, 204, 102, 0.4));
+}
+
+.sm-victory-eyebrow {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+.sm-victory-card h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 3.2dvh, 1.65rem);
+  color: var(--gold-bright);
+  margin: 0.2rem 0 0.45rem;
+}
+
+.sm-victory-card p {
+  font-size: clamp(0.8rem, 1.95dvh, 0.92rem);
+  line-height: 1.5;
   color: var(--cream-warm);
   margin-bottom: 1rem;
 }
 
-@media screen and (max-height: 440px) and (orientation: landscape) {
-  .musik-shell {
-    grid-template-columns: 205px 1fr;
+.sm-victory-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   RESPONSIF MOBILE LANDSCAPE PENDEK (<= 460px)
+   ========================================================= */
+@media screen and (max-height: 460px) and (orientation: landscape) {
+  .sm-header {
+    grid-template-columns: 145px 1fr auto;
   }
-  .musik-stats {
-    margin: 0.35rem 0;
+  .sm-lyric-board {
+    min-height: 46px;
+    padding: 0.25rem 0.8rem;
   }
-  .rhythm-tile {
-    height: 48px;
+  .sm-stage {
+    grid-template-columns: 155px 1fr;
   }
+  .sm-pengrawit-img {
+    max-height: 28dvh;
+  }
+  .sm-speech-bubble {
+    padding: 0.35rem 0.55rem;
+  }
+  .sm-bilah-badge small {
+    display: none;
+  }
+  .sm-btn {
+    min-height: 32px;
+    padding: 0.28rem 0.85rem;
+    font-size: 0.74rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sm-bilah.is-lit .sm-bilah-ripple { animation: none; }
 }

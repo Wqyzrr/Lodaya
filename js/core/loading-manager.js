@@ -21,7 +21,6 @@ export const ASSET_MANIFEST = {
     { key: 'lentera', src: 'assets/lentera.webp', label: 'Menyiapkan tata cahaya panggung...' },
   ],
   musik: [
-    { key: 'wayang3', src: 'assets/wayang3.webp', label: 'Menyiapkan ornamen panggung musik...' },
   ],
   makanan: [
     { key: 'lentera', src: 'assets/lentera.webp', label: 'Menyiapkan dapur tradisional...' },
