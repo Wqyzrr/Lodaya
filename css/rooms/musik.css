@@ -456,13 +456,14 @@
 }
 
 /* Tabuh Saron (Melayang di atas bilah) */
+/* css/rooms/musik.css */
 .sm-tabuh {
   position: absolute;
   top: 10%;
   left: 50%;
   width: clamp(68px, 14vw, 130px);
   height: auto;
-  transform: translate(-18%, -78%) rotate(-18deg);
+  transform: translate(-78%, -78%) rotate(-18deg); /* Digeser ke kiri dari -18% */
   transform-origin: 78% 78%;
   z-index: 6;
   pointer-events: none;
