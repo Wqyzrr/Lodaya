@@ -1,4 +1,4 @@
-# Pesona Jawa Timur - XII-INTERNATIONAL 4
+# Pesona Jawa Timur | XII-INTERNATIONAL 4
 
 Website pameran budaya Jawa Timur berbasis **HTML5, CSS3, Vanilla JavaScript (ES6 Modules), dan GSAP 3.12.5**, dirancang khusus untuk **mobile landscape** (dengan dukungan desktop) dan aksesibel bagi seluruh pengunjung termasuk guru, tamu undangan, serta pengunjung usia 40–50+.
 
@@ -12,7 +12,7 @@ Proyek menggunakan ES6 Modules (`<script type="module">`), jalankan melalui serv
 # Opsi 1: Python
 python -m http.server 8080
 
-# Opsi 2: Node.js
+# Opsi 2: VS Code
 melalui Live Server Extension VS Code
 ```
 

@@ -5,6 +5,12 @@
 import { appState } from '../../core/state-manager.js';
 import { KULINER_ASSETS, RECIPES, KULINER_TUTORIAL } from './recipes.js';
 import { CookingEngine } from './cooking-engine.js';
+// Titik tengah 3 tatakan rotan pada bg-meja-warung.webp (0.0 - 1.0)
+const WARUNG_ANCHORS = [
+  { x: 0.225, y: 0.795 }, // Tatakan kiri (Rawon)
+  { x: 0.50,  y: 0.795 }, // Tatakan tengah (Prol Tape)
+  { x: 0.78, y: 0.795 }, // Tatakan kanan (Wedang Angsle)
+];
 
 export const makananRoom = {
   id: 'makanan',
@@ -28,6 +34,7 @@ export const makananRoom = {
 
     this.engine = new CookingEngine(
       {
+        bgMasak: this.dom.bgMasak, // <-- TAMBAHKAN BARIS INI
         stageCenter: this.dom.stageCenter,
         recipeBadge: this.dom.recipeBadge,
         recipeInstruction: this.dom.recipeInstruction,
@@ -54,6 +61,30 @@ export const makananRoom = {
     );
 
     this.bindEvents();
+  },
+
+  syncWarungPositions() {
+    const bg = this.dom.bgWarung;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const nw = (bg && bg.naturalWidth) || 16;
+    const nh = (bg && bg.naturalHeight) || 9;
+
+    // Hitung area render aktual dari object-fit: cover & object-position: center bottom
+    const scale = Math.max(vw / nw, vh / nh);
+    const renderedW = nw * scale;
+    const renderedH = nh * scale;
+    const offsetX = (vw - renderedW) * 0.5;
+    const offsetY = vh - renderedH;
+
+    this.dom.dishSlots.forEach((slot, idx) => {
+      const anchor = WARUNG_ANCHORS[idx];
+      if (!anchor) return;
+      const x = offsetX + anchor.x * renderedW;
+      const y = offsetY + anchor.y * renderedH;
+      slot.style.left = `${x.toFixed(1)}px`;
+      slot.style.top = `${y.toFixed(1)}px`;
+    });
   },
 
   renderShell() {
@@ -346,6 +377,10 @@ export const makananRoom = {
       });
     });
 
+    this.dom.bgWarung.addEventListener('load', () => {
+      if (this.isActive && this.view === 'warung') this.syncWarungPositions();
+    });
+
     this.dom.btnChangeMenu.addEventListener('click', () => this.openWarungView());
     this.dom.btnOtherMenu.addEventListener('click', () => this.openWarungView());
     this.dom.btnCookAgain.addEventListener('click', () => {
@@ -385,8 +420,12 @@ export const makananRoom = {
 
   resize() {
     if (!this.isActive) return;
+    if (this.view === 'warung') {
+      this.syncWarungPositions();
+    }
     if (this.engine) {
       this.engine.cleanupDrag(true);
+      this.engine.syncStovePosition();
     }
   },
 
@@ -405,19 +444,13 @@ export const makananRoom = {
     this.dom.mainTitle.textContent = 'Warung Kuliner Tradisional';
 
     this.updateProgressUI();
+    this.syncWarungPositions();
 
     if (window.gsap && !appState.get('reducedMotion')) {
       window.gsap.fromTo(
         this.dom.dishSlots,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.08,
-          duration: 0.42,
-          ease: 'power2.out',
-          clearProps: 'transform',
-        }
+        { opacity: 0 },
+        { opacity: 1, stagger: 0.08, duration: 0.4, ease: 'power2.out' }
       );
     }
   },

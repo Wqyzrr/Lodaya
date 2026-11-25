@@ -9,7 +9,8 @@
  */
 import { appState } from '../../core/state-manager.js';
 import { KULINER_ASSETS } from './recipes.js';
-
+// Titik tengah tungku kompor pada gambar bg-meja-masak.webp (0.0 - 1.0)
+const STOVE_ANCHOR = { x: 0.795, y: 0.645 };
 class KitchenSfx {
   constructor() {
     this.ctx = null;
@@ -197,6 +198,9 @@ export class CookingEngine {
     this.killVfxTweens();
     if (this.dom.vesselZone) {
       this.dom.vesselZone.removeEventListener('click', this.boundVesselClick);
+      this.dom.vesselZone.classList.remove('is-on-stove');
+      this.dom.vesselZone.style.left = '';
+      this.dom.vesselZone.style.top = '';
     }
     if (this.dom.stageCenter) {
       this.dom.stageCenter.classList.remove('is-on-stove');
@@ -205,6 +209,36 @@ export class CookingEngine {
       this.dom.toast.classList.remove('is-visible');
     }
     this.recipe = null;
+  }
+
+  syncStovePosition() {
+    const zone = this.dom.vesselZone;
+    if (!zone) return;
+
+    if (!zone.classList.contains('is-on-stove')) {
+      zone.style.left = '';
+      zone.style.top = '';
+      return;
+    }
+
+    const bg = this.dom.bgMasak;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const nw = (bg && bg.naturalWidth) || 16;
+    const nh = (bg && bg.naturalHeight) || 9;
+
+    // Hitung area render aktual dari object-fit: cover & object-position: center bottom
+    const scale = Math.max(vw / nw, vh / nh);
+    const renderedW = nw * scale;
+    const renderedH = nh * scale;
+    const offsetX = (vw - renderedW) * 0.5;
+    const offsetY = vh - renderedH; // bottom-aligned
+
+    const x = offsetX + STOVE_ANCHOR.x * renderedW;
+    const y = offsetY + STOVE_ANCHOR.y * renderedH;
+
+    zone.style.left = `${x.toFixed(1)}px`;
+    zone.style.top = `${y.toFixed(1)}px`;
   }
 
   renderStep() {
@@ -222,11 +256,10 @@ export class CookingEngine {
     this.actionTaps = 0;
     this.isStepTransitioning = false;
 
-    // 1. Posisi Meja Tengah vs Kompor Kanan
+    // 1. Posisi Meja Tengah vs Kompor Kanan (terkunci ke koordinat gambar)
     const onStove = step.stationPos === 'stove';
-    if (this.dom.stageCenter) {
-      this.dom.stageCenter.classList.toggle('is-on-stove', onStove);
-    }
+    this.dom.vesselZone.classList.toggle('is-on-stove', onStove);
+    this.syncStovePosition();
 
     // 2. Perbarui Kartu Resep
     this.dom.recipeBadge.textContent = step.title;
