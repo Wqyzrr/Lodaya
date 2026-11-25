@@ -10,6 +10,7 @@ import {
   STORY_PAGES,
   STORY_CLOSING,
   PERAN_TUTORIAL,
+  TOTAL_STORY_IMAGES,
 } from './story-data.js';
 
 const EXTENSIONS = ['.webp', '.png', '.jpg'];
@@ -460,13 +461,10 @@ export const peranRoom = {
     const tasks = [];
 
     if (spreadIdx < STORY_PAGES.length) {
-      const page = STORY_PAGES[spreadIdx];
-      tasks.push(resolveAssetUrl(page.sceneBasePath));
-      if (page.characterKey && STORY_ASSETS.characters[page.characterKey]) {
-        tasks.push(resolveAssetUrl(STORY_ASSETS.characters[page.characterKey].basePath));
-      }
+      const spread = STORY_PAGES[spreadIdx];
+      tasks.push(resolveAssetUrl(spread.leftBasePath));
+      tasks.push(resolveAssetUrl(spread.rightBasePath));
     } else {
-      // Halaman penutup memakai Bima & Singo Barong
       tasks.push(resolveAssetUrl(STORY_ASSETS.characters.boy.basePath));
       tasks.push(resolveAssetUrl(STORY_ASSETS.characters.singo_barong.basePath));
     }
@@ -478,16 +476,16 @@ export const peranRoom = {
      RENDER KONTEN HALAMAN KIRI & KANAN
      ========================================================= */
   buildLeftPageHTML(spreadIdx) {
-    const cornerUrl = getCachedUrl(STORY_ASSETS.paperCorner);
-    const flowerUrl = getCachedUrl(STORY_ASSETS.flowerDecorations);
-    const cornersMarkup = cornerUrl
-      ? `<img class="sb-page-corner tl" src="${cornerUrl}" alt="" draggable="false" />
-         <img class="sb-page-corner bl" src="${cornerUrl}" alt="" draggable="false" />`
-      : '';
-
     if (spreadIdx >= STORY_PAGES.length) {
+      const cornerUrl = getCachedUrl(STORY_ASSETS.paperCorner);
+      const flowerUrl = getCachedUrl(STORY_ASSETS.flowerDecorations);
       const boyUrl = getCachedUrl(STORY_ASSETS.characters.boy.basePath);
       const singoUrl = getCachedUrl(STORY_ASSETS.characters.singo_barong.basePath);
+      const cornersMarkup = cornerUrl
+        ? `<img class="sb-page-corner tl" src="${cornerUrl}" alt="" draggable="false" />
+           <img class="sb-page-corner bl" src="${cornerUrl}" alt="" draggable="false" />`
+        : '';
+
       return `
         <div class="sb-page-inner sb-closing-left">
           ${cornersMarkup}
@@ -501,42 +499,30 @@ export const peranRoom = {
       `;
     }
 
-    const page = STORY_PAGES[spreadIdx];
-    const sceneUrl = getCachedUrl(page.sceneBasePath);
-    const charMeta = page.characterKey ? STORY_ASSETS.characters[page.characterKey] : null;
-    const charUrl = charMeta ? getCachedUrl(charMeta.basePath) : null;
+    const spread = STORY_PAGES[spreadIdx];
+    const leftUrl = getCachedUrl(spread.leftBasePath);
 
     return `
-      <div class="sb-page-inner sb-art-page">
-        ${cornersMarkup}
-        <figure class="sb-scene-frame sb-anim-scene">
-          ${
-            sceneUrl
-              ? `<img class="sb-scene-img" src="${sceneUrl}" alt="${page.sceneAlt}" draggable="false" />`
-              : `<div class="sb-scene-fallback" aria-label="${page.sceneAlt}">Ilustrasi Halaman ${page.pageNumber}</div>`
-          }
-          <figcaption class="sb-scene-caption">${page.sceneCaption}</figcaption>
-        </figure>
+      <div class="sb-comic-page is-left">
         ${
-          charUrl
-            ? `<img class="sb-floating-char pos-${page.characterPos} sb-anim-char" src="${charUrl}" alt="${charMeta.alt}" draggable="false" />`
-            : ''
+          leftUrl
+            ? `<img class="sb-comic-img" src="${leftUrl}" alt="${spread.leftAlt}" draggable="false" />`
+            : `<div class="sb-scene-fallback">Halaman ${spread.leftPageNumber}</div>`
         }
-        <span class="sb-page-folio">${page.pageNumber * 2 - 1}</span>
+        <span class="sb-comic-folio is-left">${spread.leftPageNumber}</span>
       </div>
     `;
   },
 
   buildRightPageHTML(spreadIdx) {
-    const cornerUrl = getCachedUrl(STORY_ASSETS.paperCorner);
-    const flowerUrl = getCachedUrl(STORY_ASSETS.flowerDecorations);
-    const batikUrl = getCachedUrl(STORY_ASSETS.batikDecorations);
-    const cornersMarkup = cornerUrl
-      ? `<img class="sb-page-corner tr" src="${cornerUrl}" alt="" draggable="false" />
-         <img class="sb-page-corner br" src="${cornerUrl}" alt="" draggable="false" />`
-      : '';
-
     if (spreadIdx >= STORY_PAGES.length) {
+      const cornerUrl = getCachedUrl(STORY_ASSETS.paperCorner);
+      const batikUrl = getCachedUrl(STORY_ASSETS.batikDecorations);
+      const cornersMarkup = cornerUrl
+        ? `<img class="sb-page-corner tr" src="${cornerUrl}" alt="" draggable="false" />
+           <img class="sb-page-corner br" src="${cornerUrl}" alt="" draggable="false" />`
+        : '';
+
       return `
         <div class="sb-page-inner sb-closing-right">
           ${cornersMarkup}
@@ -555,30 +541,17 @@ export const peranRoom = {
       `;
     }
 
-    const page = STORY_PAGES[spreadIdx];
-    const badgeClass = page.contextType === 'legend' ? 'is-legend' : 'is-fact';
-    const paragraphsMarkup = page.paragraphs
-      .map((text) => `<p class="sb-story-para sb-anim-text">${text}</p>`)
-      .join('');
+    const spread = STORY_PAGES[spreadIdx];
+    const rightUrl = getCachedUrl(spread.rightBasePath);
 
     return `
-      <div class="sb-page-inner sb-text-page">
-        ${cornersMarkup}
-        ${flowerUrl ? `<img class="sb-ornament-flower corner-tr sb-anim-ornament" src="${flowerUrl}" alt="" draggable="false" />` : ''}
-        ${batikUrl ? `<img class="sb-page-batik-watermark" src="${batikUrl}" alt="" draggable="false" />` : ''}
-        <div class="sb-text-content">
-          <span class="sb-context-badge ${badgeClass} sb-anim-text">${page.contextLabel}</span>
-          <h3 class="sb-story-title sb-anim-text">${page.title}</h3>
-          <div class="sb-title-ornament sb-anim-ornament" aria-hidden="true"></div>
-          <div class="sb-story-body">
-            ${paragraphsMarkup}
-          </div>
-          <aside class="sb-fact-box ${badgeClass} sb-anim-text" aria-label="${page.contextLabel}">
-            <strong class="sb-fact-label">${page.contextLabel}:</strong>
-            <span>${page.culturalFact}</span>
-          </aside>
-        </div>
-        <span class="sb-page-folio">${page.pageNumber * 2}</span>
+      <div class="sb-comic-page is-right">
+        ${
+          rightUrl
+            ? `<img class="sb-comic-img" src="${rightUrl}" alt="${spread.rightAlt}" draggable="false" />`
+            : `<div class="sb-scene-fallback">Halaman ${spread.rightPageNumber}</div>`
+        }
+        <span class="sb-comic-folio is-right">${spread.rightPageNumber}</span>
       </div>
     `;
   },
@@ -602,7 +575,8 @@ export const peranRoom = {
     );
 
     if (this.currentSpread < STORY_PAGES.length) {
-      this.dom.pagePill.textContent = `Halaman ${this.currentSpread + 1} / ${STORY_PAGES.length}`;
+      const spread = STORY_PAGES[this.currentSpread];
+      this.dom.pagePill.textContent = `Halaman ${spread.leftPageNumber}–${spread.rightPageNumber} / ${TOTAL_STORY_IMAGES}`;
     } else {
       this.dom.pagePill.textContent = 'Penutup Kisah';
     }
