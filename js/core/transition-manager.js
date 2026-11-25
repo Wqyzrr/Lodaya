@@ -486,8 +486,16 @@ class TransitionManager {
     ];
     gsap.killTweensOf(targets);
 
-    gsap.set(this.jogloWorld, { clearProps: 'transform', opacity: 1 });
+    gsap.set(this.jogloWorld, { clearProps: 'transform,willChange', opacity: 1 });
     gsap.set([this.layerMountains, this.layerSky], { clearProps: 'transform' });
+
+    // Paksa GPU me-raster ulang grounding.webp setelah zoom 4.4x -> 1x
+    const groundingImg = this.jogloWorld?.querySelector('.grounding-img');
+    if (groundingImg) {
+      groundingImg.style.visibility = 'hidden';
+      void groundingImg.offsetHeight; // trigger reflow ringan
+      groundingImg.style.visibility = '';
+    }
     gsap.set(
       [this.slotLanternLeft, this.slotLanternRight, this.slotFoliageLeft, this.slotFoliageRight],
       { x: 0, y: 0, xPercent: 0, yPercent: 0, scale: 1, opacity: 1, force3D: true }

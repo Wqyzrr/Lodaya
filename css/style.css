@@ -430,14 +430,17 @@ html, body {
   position: absolute;
   bottom: -4dvh;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate3d(-50%, 0, 0);
   width: 112vw;
-  height: 75%;          /* Sesuaikan persentase ini agar pas di kaki rumah */
+  height: 75%;
   z-index: 1;
   pointer-events: none;
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  contain: layout style;
 }
 
 .ground-ambient-shadow {
@@ -462,11 +465,14 @@ html, body {
   z-index: 1;
   width: 100%;
   height: 100%;
-  object-fit: fill;     /* Menampilkan 100% gambar utuh (kiri-kanan & atas-bawah) tanpa crop */
+  object-fit: fill;
   display: block;
-  opacity: 1;           /* Tampil 100% penuh */
+  opacity: 1;
   -webkit-mask-image: none;
   mask-image: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .joglo-img {
