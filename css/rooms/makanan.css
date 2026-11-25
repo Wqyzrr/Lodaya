@@ -355,7 +355,8 @@
 /* Geser posisi wadah & api ke kompor di sisi kanan background dapur */
 .kl-stage-center.is-on-stove {
   justify-content: flex-end;
-  padding-right: clamp(2.5rem, 11vw, 9rem);
+  padding-right: clamp(2.5rem, 7vw, 9rem);
+  transform: translateY(5px); /* positif = turun, negatif = naik */
 }
 
 .kl-vessel-zone {
@@ -403,8 +404,8 @@
 
 .kl-vfx-fire {
   position: absolute;
-  bottom: 13%;
-  left: 50%;
+  bottom: 15%;
+  left: 51%;
   transform: translateX(-50%);
   width: clamp(82px, 20dvh, 140px);
   height: auto;
