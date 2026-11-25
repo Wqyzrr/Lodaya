@@ -8,13 +8,12 @@ import {
   STORY_META,
   STORY_ASSETS,
   STORY_PAGES,
-  STORY_CLOSING,
   PERAN_TUTORIAL,
   TOTAL_STORY_IMAGES,
 } from './story-data.js';
 
 const EXTENSIONS = ['.webp', '.png', '.jpg'];
-const TOTAL_SPREADS = STORY_PAGES.length + 1; // 9 halaman cerita + 1 halaman penutup
+const TOTAL_SPREADS = STORY_PAGES.length;
 
 /**
  * Cache resolusi ekstensi aset (webp -> png -> jpg) agar tidak meminta ulang
@@ -90,7 +89,7 @@ export const peranRoom = {
 
   renderShell() {
     const dotsMarkup = Array.from({ length: TOTAL_SPREADS }, (_, idx) => {
-      const label = idx < STORY_PAGES.length ? `Halaman ${idx + 1}` : 'Penutup';
+      const label = `Halaman ${idx * 2 + 1}–${idx * 2 + 2}`;
       return `<button type="button" class="sb-dot" data-spread="${idx}" aria-label="Buka ${label}"></button>`;
     }).join('');
 
@@ -458,47 +457,17 @@ export const peranRoom = {
 
   preloadSpreadAssets(spreadIdx) {
     if (spreadIdx < 0 || spreadIdx >= TOTAL_SPREADS) return Promise.resolve();
-    const tasks = [];
-
-    if (spreadIdx < STORY_PAGES.length) {
-      const spread = STORY_PAGES[spreadIdx];
-      tasks.push(resolveAssetUrl(spread.leftBasePath));
-      tasks.push(resolveAssetUrl(spread.rightBasePath));
-    } else {
-      tasks.push(resolveAssetUrl(STORY_ASSETS.characters.boy.basePath));
-      tasks.push(resolveAssetUrl(STORY_ASSETS.characters.singo_barong.basePath));
-    }
-
-    return Promise.all(tasks);
+    const spread = STORY_PAGES[spreadIdx];
+    return Promise.all([
+      resolveAssetUrl(spread.leftBasePath),
+      resolveAssetUrl(spread.rightBasePath),
+    ]);
   },
 
   /* =========================================================
      RENDER KONTEN HALAMAN KIRI & KANAN
      ========================================================= */
   buildLeftPageHTML(spreadIdx) {
-    if (spreadIdx >= STORY_PAGES.length) {
-      const cornerUrl = getCachedUrl(STORY_ASSETS.paperCorner);
-      const flowerUrl = getCachedUrl(STORY_ASSETS.flowerDecorations);
-      const boyUrl = getCachedUrl(STORY_ASSETS.characters.boy.basePath);
-      const singoUrl = getCachedUrl(STORY_ASSETS.characters.singo_barong.basePath);
-      const cornersMarkup = cornerUrl
-        ? `<img class="sb-page-corner tl" src="${cornerUrl}" alt="" draggable="false" />
-           <img class="sb-page-corner bl" src="${cornerUrl}" alt="" draggable="false" />`
-        : '';
-
-      return `
-        <div class="sb-page-inner sb-closing-left">
-          ${cornersMarkup}
-          ${flowerUrl ? `<img class="sb-ornament-flower top" src="${flowerUrl}" alt="" draggable="false" />` : ''}
-          <div class="sb-closing-art-stage sb-anim-scene">
-            ${singoUrl ? `<img class="sb-closing-singo sb-anim-char" src="${singoUrl}" alt="Singo Barong" draggable="false" />` : ''}
-            ${boyUrl ? `<img class="sb-closing-boy sb-anim-char" src="${boyUrl}" alt="Bima" draggable="false" />` : ''}
-          </div>
-          <span class="sb-page-folio">Penutup</span>
-        </div>
-      `;
-    }
-
     const spread = STORY_PAGES[spreadIdx];
     const leftUrl = getCachedUrl(spread.leftBasePath);
 
@@ -515,32 +484,6 @@ export const peranRoom = {
   },
 
   buildRightPageHTML(spreadIdx) {
-    if (spreadIdx >= STORY_PAGES.length) {
-      const cornerUrl = getCachedUrl(STORY_ASSETS.paperCorner);
-      const batikUrl = getCachedUrl(STORY_ASSETS.batikDecorations);
-      const cornersMarkup = cornerUrl
-        ? `<img class="sb-page-corner tr" src="${cornerUrl}" alt="" draggable="false" />
-           <img class="sb-page-corner br" src="${cornerUrl}" alt="" draggable="false" />`
-        : '';
-
-      return `
-        <div class="sb-page-inner sb-closing-right">
-          ${cornersMarkup}
-          ${batikUrl ? `<img class="sb-page-batik-watermark" src="${batikUrl}" alt="" draggable="false" />` : ''}
-          <span class="sb-context-badge is-fact sb-anim-text">${STORY_CLOSING.eyebrow}</span>
-          <h3 class="sb-story-title sb-anim-text">${STORY_CLOSING.title}</h3>
-          <div class="sb-title-ornament sb-anim-ornament" aria-hidden="true"></div>
-          <p class="sb-story-para sb-anim-text">${STORY_CLOSING.message}</p>
-          <p class="sb-closing-note sb-anim-text">${STORY_CLOSING.note}</p>
-          <div class="sb-closing-cta-row sb-anim-text">
-            <button type="button" class="sb-btn-primary" data-closing-action="close">Tutup Buku</button>
-            <button type="button" class="sb-btn-secondary" data-closing-action="restart">Baca dari Awal</button>
-          </div>
-          <span class="sb-page-folio">Tamat</span>
-        </div>
-      `;
-    }
-
     const spread = STORY_PAGES[spreadIdx];
     const rightUrl = getCachedUrl(spread.rightBasePath);
 
@@ -574,12 +517,8 @@ export const peranRoom = {
       isLast ? 'Tutup buku cerita' : 'Balik ke halaman berikutnya'
     );
 
-    if (this.currentSpread < STORY_PAGES.length) {
-      const spread = STORY_PAGES[this.currentSpread];
-      this.dom.pagePill.textContent = `Halaman ${spread.leftPageNumber}–${spread.rightPageNumber} / ${TOTAL_STORY_IMAGES}`;
-    } else {
-      this.dom.pagePill.textContent = 'Penutup Kisah';
-    }
+    const spread = STORY_PAGES[this.currentSpread];
+    this.dom.pagePill.textContent = `Halaman ${spread.leftPageNumber}–${spread.rightPageNumber} / ${TOTAL_STORY_IMAGES}`;
 
     this.dom.dots.forEach((dot, idx) => {
       const active = idx === this.currentSpread;
