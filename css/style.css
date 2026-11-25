@@ -148,7 +148,7 @@ html, body {
   pointer-events: none;
   opacity: 0;
   background: radial-gradient(circle at center, #FFF1CE 0%, #D99B4E 48%, #1A0E09 100%);
-  will-change: opacity;
+  transform: translate3d(0, 0, 2px);
 }
 
 /* =========================================================
@@ -340,7 +340,7 @@ html, body {
   height: 112%;
   z-index: 1;
   pointer-events: none;
-  will-change: transform;
+  will-change: auto;
 }
 
 .full-cover-img {
@@ -358,7 +358,7 @@ html, body {
   height: 108%;
   z-index: 2;
   pointer-events: none;
-  will-change: transform;
+  will-change: auto;
 }
 
 .mountain-img {
@@ -398,7 +398,7 @@ html, body {
   align-items: flex-end;
   justify-content: center;
   transform-origin: 50% 50%;
-  will-change: transform;
+  will-change: auto;
 }
 
 .joglo-parallax {
@@ -408,7 +408,7 @@ html, body {
   align-items: flex-end;
   justify-content: center;
   padding-bottom: clamp(0.8dvh, 2dvh, 2.5dvh);
-  will-change: transform;
+  will-change: auto;
 }
 
 /* Rasio ketat 4:3 agar kalibrasi 4 pintu 100% presisi di semua rasio layar */
@@ -519,6 +519,8 @@ html, body {
   background: #140804;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.85);
   transition: box-shadow 0.28s ease;
+  isolation: isolate;
+  contain: paint;
 }
 
 .door-unit:hover .door-frame,

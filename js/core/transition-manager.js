@@ -574,9 +574,10 @@ class TransitionManager {
       const doorX = rect.left + rect.width / 2;
       const doorY = rect.top + rect.height / 2;
 
-      const targetScale = 4.6;
-      const moveX = (vpX - doorX) * targetScale;
-      const moveY = (vpY - doorY) * targetScale;
+      // Gunakan skala aman (1.65x) agar tidak menembus limit tekstur GPU 8192px di HP
+      const targetScale = 1.65;
+      const moveX = (vpX - doorX) * (targetScale - 1);
+      const moveY = (vpY - doorY) * (targetScale - 1);
 
       const leftLeaf = doorUnit.querySelector('.door-leaf.left');
       const rightLeaf = doorUnit.querySelector('.door-leaf.right');
