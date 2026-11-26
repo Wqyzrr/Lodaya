@@ -8,8 +8,8 @@ const ASSET_BASE = 'assets/seniperan/';
 export const TOTAL_STORY_IMAGES = 28;
 
 export const STORY_META = {
-  title: 'Rahasia di Balik<br>Topeng Reog',
-  subtitle: 'Dongeng Budaya<br>Reog Ponorogo',
+  title: 'DONGENG<br>REOG PONOROGO',
+  subtitle: '',
   eyebrow: 'Ruang I • Seni Peran Jawa Timur',
   openCta: 'Buka Buku',
   audioTrackKey: 'peran',
