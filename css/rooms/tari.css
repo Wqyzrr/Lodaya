@@ -1,0 +1,1181 @@
+/* =========================================================
+   RUANG II — SENI TARI: GANDRUNG BANYUWANGI (5-PART EDITORIAL)
+   ========================================================= */
+#section-tari.interior-scene {
+  padding: 0;
+  background: #140906;
+}
+
+.tr-room {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--cream-warm);
+}
+
+.tr-room [hidden] {
+  display: none !important;
+}
+
+/* Kontainer Gulir Utama (Ramah Sentuh Mobile Landscape) */
+.tr-scroller {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 154, 85, 0.55) #1A0D08;
+}
+
+.tr-section {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.tr-section-inner {
+  position: relative;
+  z-index: 2;
+  width: min(1120px, 92vw);
+  margin: 0 auto;
+  padding:
+    calc(clamp(3.6rem, 10dvh, 4.8rem) + var(--safe-top))
+    clamp(1rem, 2.5vw, 2rem)
+    calc(clamp(1.6rem, 4dvh, 2.8rem) + var(--safe-bottom));
+}
+
+/* =========================================================
+   NAVIGASI TITIK VERTIKAL (SISI KANAN)
+   ========================================================= */
+.tr-side-nav {
+  position: fixed;
+  right: calc(clamp(0.55rem, 1.5vw, 1.2rem) + var(--safe-right));
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.5rem 0.32rem;
+  border-radius: 999px;
+  background: rgba(20, 9, 5, 0.68);
+  border: 1px solid rgba(232, 197, 142, 0.32);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.tr-side-dot {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.tr-side-dot-core {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(232, 197, 142, 0.42);
+  transition: transform 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.tr-side-dot.is-active .tr-side-dot-core {
+  background: var(--gold-bright);
+  transform: scale(1.45);
+  box-shadow: 0 0 10px rgba(255, 225, 168, 0.85);
+}
+
+/* =========================================================
+   BAGIAN 1: HERO FULLSCREEN
+   ========================================================= */
+.tr-hero {
+  justify-content: flex-start;
+  background: #140805;
+}
+
+.tr-hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 68% center;
+  z-index: 0;
+}
+
+.tr-hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(18, 7, 4, 0.92) 0%,
+      rgba(22, 9, 5, 0.72) 44%,
+      rgba(22, 9, 5, 0.22) 76%,
+      rgba(18, 7, 4, 0.42) 100%
+    ),
+    linear-gradient(180deg, rgba(16, 7, 4, 0.55) 0%, transparent 25%, rgba(16, 7, 4, 0.72) 100%);
+}
+
+.tr-hero-content {
+  position: relative;
+  z-index: 2;
+  width: min(560px, 60vw);
+  margin-left: calc(clamp(1.5rem, 6vw, 5.5rem) + var(--safe-left));
+  padding-top: clamp(1.5rem, 5dvh, 3rem);
+}
+
+.tr-hero-eyebrow {
+  display: inline-block;
+  font-size: clamp(0.62rem, 1.45dvh, 0.76rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-bottom: 0.35rem;
+}
+
+.tr-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8.2dvh, 4.4rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.02;
+  color: var(--gold-bright);
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.75);
+}
+
+.tr-hero-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 2.7dvh, 1.55rem);
+  color: #F6E6C6;
+  margin-top: 0.2rem;
+  letter-spacing: 0.05em;
+}
+
+.tr-ornament-line {
+  width: 96px;
+  height: 2px;
+  margin: clamp(0.6rem, 1.8dvh, 1rem) 0;
+  background: linear-gradient(90deg, var(--gold-bright), rgba(232, 197, 142, 0.15));
+}
+
+.tr-ornament-line.is-dark {
+  background: linear-gradient(90deg, #8B4B24, rgba(139, 75, 36, 0.12));
+}
+
+.tr-ornament-line.is-center {
+  margin-inline: auto;
+  background: linear-gradient(90deg, transparent, #8B4B24, transparent);
+}
+
+.tr-hero-lead {
+  font-size: clamp(0.8rem, 2.05dvh, 1rem);
+  line-height: 1.55;
+  color: rgba(245, 233, 211, 0.9);
+  margin-bottom: clamp(0.9rem, 2.8dvh, 1.6rem);
+}
+
+.tr-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.tr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  padding: 0.5rem 1.3rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: clamp(0.76rem, 1.85dvh, 0.9rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, filter 0.2s ease, background-color 0.2s ease;
+}
+
+.tr-btn:active {
+  transform: scale(0.97);
+}
+
+.tr-btn-sm {
+  min-height: 36px;
+  padding: 0.4rem 1.05rem;
+  font-size: clamp(0.74rem, 1.75dvh, 0.84rem);
+}
+
+.tr-btn-crimson {
+  background: linear-gradient(180deg, #A92D26 0%, #6F1815 100%);
+  border: 1.5px solid var(--gold-bright);
+  color: #FFF4DC;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+}
+
+.tr-btn-crimson:hover {
+  filter: brightness(1.1);
+}
+
+.tr-btn-outline {
+  background: rgba(24, 11, 7, 0.72);
+  border: 1px solid rgba(232, 197, 142, 0.62);
+  color: var(--gold-bright);
+  backdrop-filter: blur(4px);
+}
+
+.tr-btn-outline:hover {
+  background: rgba(54, 24, 14, 0.88);
+}
+
+.tr-btn-dark-outline {
+  background: transparent;
+  border: 1.5px solid #6E3418;
+  color: #4D210E;
+}
+
+.tr-scroll-cue {
+  position: absolute;
+  bottom: calc(clamp(0.75rem, 2.2dvh, 1.4rem) + var(--safe-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  background: none;
+  border: none;
+  color: var(--gold-soft);
+  font-family: var(--font-body);
+  font-size: clamp(0.62rem, 1.45dvh, 0.74rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.tr-scroll-cue svg {
+  width: 20px;
+  height: 20px;
+  animation: trBounceDown 1.9s ease-in-out infinite;
+}
+
+@keyframes trBounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+/* =========================================================
+   TEMA PERKAMEN HANGAT (BAGIAN 2, 4, 5)
+   ========================================================= */
+.tr-parchment {
+  background-color: #F4E6CC;
+  background-image:
+    linear-gradient(180deg, rgba(247, 234, 208, 0.9) 0%, rgba(234, 212, 173, 0.92) 100%),
+    var(--tr-paper-bg);
+  background-size: cover, cover;
+  color: #2E170B;
+}
+
+.tr-parchment::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--tr-batik-bg);
+  background-size: 380px auto;
+  opacity: 0.055;
+  pointer-events: none;
+}
+
+.tr-sec-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto clamp(1rem, 2.8dvh, 1.8rem);
+}
+
+.tr-sec-eyebrow {
+  display: block;
+  font-size: clamp(0.6rem, 1.35dvh, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #8E4B22;
+  margin-bottom: 0.22rem;
+}
+
+.tr-sec-eyebrow.is-gold {
+  color: var(--gold-soft);
+}
+
+.tr-sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 3.8dvh, 2.25rem);
+  color: #3B1A0B;
+  line-height: 1.18;
+}
+
+.tr-sec-title.is-gold {
+  color: var(--gold-bright);
+}
+
+.tr-sec-desc {
+  font-size: clamp(0.78rem, 1.9dvh, 0.94rem);
+  line-height: 1.5;
+  color: #53311E;
+}
+
+.tr-sec-desc.is-light {
+  color: rgba(245, 233, 211, 0.86);
+}
+
+/* =========================================================
+   BAGIAN 2: KARTU CERITA & TIMELINE
+   ========================================================= */
+.tr-story-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.65rem, 1.8vw, 1.25rem);
+}
+
+.tr-story-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 249, 236, 0.9);
+  border: 1px solid rgba(154, 105, 45, 0.42);
+  box-shadow: 0 10px 24px rgba(56, 28, 12, 0.14);
+}
+
+.tr-story-thumb {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #2C150A;
+}
+
+.tr-story-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.tr-story-card:hover .tr-story-thumb img {
+  transform: scale(1.05);
+}
+
+.tr-story-body {
+  padding: clamp(0.65rem, 1.8dvh, 1rem) clamp(0.75rem, 1.6vw, 1.1rem);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tr-card-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9A4820;
+}
+
+.tr-story-body h3 {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 2.3dvh, 1.2rem);
+  color: #36170A;
+  margin: 0.15rem 0 0.32rem;
+}
+
+.tr-story-body p {
+  font-size: clamp(0.74rem, 1.75dvh, 0.86rem);
+  line-height: 1.45;
+  color: #54311E;
+  margin-bottom: 0.65rem;
+}
+
+.tr-card-link {
+  margin-top: auto;
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: clamp(0.74rem, 1.7dvh, 0.84rem);
+  font-weight: 700;
+  color: #8C281E;
+  cursor: pointer;
+}
+
+.tr-card-link:hover {
+  text-decoration: underline;
+}
+
+/* Timeline Perjalanan Gandrung */
+.tr-timeline-bar {
+  margin-top: clamp(0.85rem, 2.4dvh, 1.4rem);
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.65rem 0.95rem;
+  border-radius: 12px;
+  background: rgba(255, 248, 232, 0.78);
+  border: 1px solid rgba(154, 105, 45, 0.38);
+}
+
+.tr-tl-badge {
+  flex-shrink: 0;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #9A6628 0%, #6A4115 100%);
+  color: #FFF4DC;
+  font-family: var(--font-display);
+  font-size: clamp(0.64rem, 1.45dvh, 0.76rem);
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.tr-tl-track {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+
+.tr-tl-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tr-tl-avatar {
+  width: clamp(34px, 7dvh, 46px);
+  height: clamp(34px, 7dvh, 46px);
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #B5813A;
+}
+
+.tr-tl-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.35);
+}
+
+.tr-tl-text strong {
+  display: block;
+  font-size: clamp(0.7rem, 1.6dvh, 0.82rem);
+  color: #3B1A0B;
+}
+
+.tr-tl-text span {
+  display: block;
+  font-size: clamp(0.62rem, 1.35dvh, 0.72rem);
+  line-height: 1.25;
+  color: #5C3924;
+}
+
+.tr-next-row {
+  margin-top: clamp(0.8rem, 2.2dvh, 1.3rem);
+  display: flex;
+  justify-content: center;
+}
+
+.tr-btn-next-sec {
+  padding: 0.4rem 1.05rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: clamp(0.72rem, 1.65dvh, 0.84rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.16s ease, background-color 0.2s ease;
+}
+
+.tr-btn-next-sec.is-dark {
+  background: rgba(59, 26, 11, 0.08);
+  border: 1px solid rgba(90, 44, 18, 0.42);
+  color: #4A210D;
+}
+
+.tr-btn-next-sec.is-dark:hover {
+  background: rgba(59, 26, 11, 0.16);
+}
+
+.tr-btn-next-sec.is-light {
+  background: rgba(255, 225, 168, 0.12);
+  border: 1px solid rgba(232, 197, 142, 0.48);
+  color: var(--gold-bright);
+}
+
+/* =========================================================
+   BAGIAN 3: EKSPLORASI BUSANA (DARK STAGE + HOTSPOTS)
+   ========================================================= */
+.tr-dark-stage {
+  background: radial-gradient(circle at 50% 42%, #3C1810 0%, #1B0A06 62%, #0E0503 100%);
+}
+
+.tr-stage-spotlight {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 36% 62% at 50% 48%, rgba(255, 206, 122, 0.18) 0%, transparent 72%);
+  pointer-events: none;
+}
+
+.tr-costume-layout {
+  display: grid;
+  grid-template-columns: 0.95fr 1fr 1.05fr;
+  align-items: center;
+  gap: clamp(0.8rem, 2.2vw, 1.8rem);
+}
+
+.tr-costume-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.9rem 0 1.1rem;
+}
+
+.tr-costume-pill {
+  padding: 0.34rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(255, 225, 168, 0.08);
+  border: 1px solid rgba(232, 197, 142, 0.36);
+  color: var(--cream-warm);
+  font-family: var(--font-body);
+  font-size: clamp(0.72rem, 1.65dvh, 0.82rem);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.tr-costume-pill.is-active {
+  background: linear-gradient(180deg, #D9A455 0%, #9E6B24 100%);
+  border-color: var(--gold-bright);
+  color: #1B0C05;
+}
+
+/* Figur Penari Tengah */
+.tr-costume-figure-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tr-costume-figure {
+  position: relative;
+  height: clamp(230px, 68dvh, 470px);
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tr-dancer-full {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.72));
+}
+
+/* Pin Hotspot Interaktif */
+.tr-hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  padding: 0.2rem 0.56rem 0.2rem 0.34rem;
+  border-radius: 999px;
+  background: rgba(22, 10, 6, 0.86);
+  border: 1px solid rgba(232, 197, 142, 0.65);
+  color: var(--gold-bright);
+  font-family: var(--font-body);
+  font-size: clamp(0.62rem, 1.45dvh, 0.76rem);
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  z-index: 5;
+}
+
+.tr-hotspot:hover,
+.tr-hotspot.is-active {
+  transform: translate(-50%, -50%) scale(1.08);
+  background: #8D211B;
+  border-color: var(--gold-bright);
+  z-index: 8;
+}
+
+.tr-hotspot-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--gold-bright);
+  box-shadow: 0 0 0 3px rgba(255, 225, 168, 0.28);
+  animation: trPinPulse 2s ease-in-out infinite;
+}
+
+@keyframes trPinPulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(255, 225, 168, 0.28); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 225, 168, 0.06); }
+}
+
+/* Kartu Detail Busana (Kanan) */
+.tr-costume-card {
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(24, 11, 7, 0.92);
+  border: 1px solid rgba(232, 197, 142, 0.45);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.62);
+}
+
+.tr-costume-card-media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #120704;
+}
+
+.tr-costume-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tr-costume-card-body {
+  padding: clamp(0.7rem, 2dvh, 1.1rem) clamp(0.85rem, 1.8vw, 1.25rem);
+}
+
+.tr-costume-sub {
+  display: block;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+.tr-costume-card-body h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.7dvh, 1.45rem);
+  color: var(--gold-bright);
+  margin: 0.12rem 0 0.35rem;
+}
+
+.tr-costume-card-body p {
+  font-size: clamp(0.75rem, 1.8dvh, 0.88rem);
+  line-height: 1.5;
+  color: rgba(245, 233, 211, 0.9);
+}
+
+.tr-costume-card-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem clamp(0.85rem, 1.8vw, 1.25rem) 0.75rem;
+  border-top: 1px solid rgba(232, 197, 142, 0.18);
+}
+
+.tr-circle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 225, 168, 0.12);
+  border: 1px solid rgba(232, 197, 142, 0.52);
+  color: var(--gold-bright);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tr-costume-counter {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gold-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   BAGIAN 4: RAGAM GERAK KHAS
+   ========================================================= */
+.tr-moves-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: end;
+  gap: clamp(0.8rem, 2.5vw, 2rem);
+  margin-bottom: clamp(1rem, 2.8dvh, 1.8rem);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(139, 75, 36, 0.25);
+}
+
+.tr-moves-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.7rem, 1.8vw, 1.3rem);
+}
+
+.tr-move-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 249, 236, 0.92);
+  border: 1px solid rgba(154, 105, 45, 0.44);
+  box-shadow: 0 10px 24px rgba(56, 28, 12, 0.14);
+}
+
+.tr-move-media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #220E07;
+}
+
+.tr-move-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tr-move-info {
+  padding: clamp(0.7rem, 1.8dvh, 1.05rem);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tr-move-num {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.12rem 0.5rem;
+  border-radius: 4px;
+  background: #C98D3B;
+  color: #1F0E06;
+  font-weight: 700;
+  font-size: 0.7rem;
+  margin-bottom: 0.35rem;
+}
+
+.tr-move-info h3 {
+  font-family: var(--font-display);
+  font-size: clamp(0.98rem, 2.4dvh, 1.28rem);
+  color: #36170A;
+  margin-bottom: 0.25rem;
+}
+
+.tr-move-info p {
+  font-size: clamp(0.74rem, 1.75dvh, 0.86rem);
+  line-height: 1.45;
+  color: #54311E;
+  margin-bottom: 0.7rem;
+}
+
+.tr-btn-mini {
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 0.32rem 0.85rem;
+  border-radius: 999px;
+  background: #4F2312;
+  border: 1px solid #8A5322;
+  color: #FFE4B5;
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tr-btn-mini:hover {
+  background: #6D2E16;
+}
+
+/* =========================================================
+   BAGIAN 5: KUIS BUDAYA INTERAKTIF
+   ========================================================= */
+.tr-quiz-sec {
+  position: relative;
+}
+
+.tr-corner-flower {
+  position: absolute;
+  width: clamp(72px, 14vw, 150px);
+  height: auto;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.tr-corner-flower.tl { top: 8%; left: 1%; }
+.tr-corner-flower.br { bottom: 2%; right: 2%; transform: rotate(180deg); }
+
+.tr-quiz-layout {
+  display: grid;
+  grid-template-columns: 0.78fr 1.22fr;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.4rem);
+}
+
+.tr-quiz-footer-links {
+  margin-top: 1rem;
+}
+
+.tr-quiz-box {
+  padding: clamp(0.95rem, 2.8dvh, 1.7rem) clamp(1.05rem, 2.6vw, 1.8rem);
+  border-radius: 16px;
+  background: rgba(255, 250, 240, 0.94);
+  border: 1.5px solid rgba(154, 105, 45, 0.55);
+  box-shadow: 0 16px 36px rgba(56, 28, 12, 0.16);
+}
+
+.tr-quiz-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.tr-quiz-progress-wrap {
+  flex: 1;
+}
+
+.tr-quiz-progress-wrap span {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #6B391C;
+  margin-bottom: 0.3rem;
+}
+
+.tr-quiz-bar-track {
+  width: 100%;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(110, 56, 24, 0.16);
+  overflow: hidden;
+}
+
+.tr-quiz-bar-fill {
+  width: 20%;
+  height: 100%;
+  background: linear-gradient(90deg, #9A2922, #D29642);
+  transition: width 0.3s ease;
+}
+
+.tr-quiz-score-pill {
+  padding: 0.28rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(154, 105, 45, 0.16);
+  border: 1px solid rgba(154, 105, 45, 0.4);
+  font-size: 0.8rem;
+  color: #4A210D;
+  white-space: nowrap;
+}
+
+.tr-quiz-question {
+  font-family: var(--font-display);
+  font-size: clamp(0.98rem, 2.5dvh, 1.32rem);
+  color: #2E1408;
+  line-height: 1.35;
+  margin-bottom: 0.85rem;
+}
+
+.tr-quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.tr-quiz-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.62rem 0.8rem;
+  border-radius: 10px;
+  background: #FFF9EE;
+  border: 1.5px solid rgba(154, 105, 45, 0.38);
+  color: #36190B;
+  font-family: var(--font-body);
+  font-size: clamp(0.76rem, 1.85dvh, 0.9rem);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.15s ease;
+}
+
+.tr-quiz-opt:hover:not(:disabled) {
+  border-color: #9A2922;
+  background: #FFF1D6;
+  transform: translateY(-1px);
+}
+
+.tr-opt-letter {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #B8833D;
+  color: #FFF9EE;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tr-quiz-opt.is-correct {
+  background: #E2F5E9;
+  border-color: #2E7D4F;
+  color: #16472B;
+}
+
+.tr-quiz-opt.is-correct .tr-opt-letter {
+  background: #2E7D4F;
+}
+
+.tr-quiz-opt.is-wrong {
+  background: #FCE6E3;
+  border-color: #B43228;
+  color: #6B1712;
+}
+
+.tr-quiz-opt.is-wrong .tr-opt-letter {
+  background: #B43228;
+}
+
+.tr-quiz-feedback {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(154, 105, 45, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.tr-quiz-feedback p {
+  font-size: clamp(0.76rem, 1.8dvh, 0.86rem);
+  line-height: 1.42;
+  color: #4A2714;
+}
+
+/* Hasil Akhir Kuis */
+.tr-quiz-result {
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+}
+
+.tr-result-eyebrow {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8E4B22;
+}
+
+.tr-result-rank {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3.3dvh, 1.75rem);
+  color: #3B1A0B;
+  margin: 0.2rem 0 0.5rem;
+}
+
+.tr-result-score-big {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.35rem 1.15rem;
+  border-radius: 999px;
+  background: rgba(154, 41, 34, 0.12);
+  border: 1px solid rgba(154, 41, 34, 0.35);
+  margin-bottom: 0.65rem;
+}
+
+.tr-result-score-big strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4dvh, 2rem);
+  color: #8C231C;
+}
+
+.tr-result-msg {
+  font-size: clamp(0.78rem, 1.9dvh, 0.9rem);
+  line-height: 1.5;
+  color: #52301C;
+  margin-bottom: 1rem;
+}
+
+.tr-result-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+/* =========================================================
+   MODAL DETAIL CERITA / GERAK
+   ========================================================= */
+.tr-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 820;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+}
+
+.tr-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 5, 3, 0.78);
+  backdrop-filter: blur(5px);
+}
+
+.tr-modal-card {
+  position: relative;
+  z-index: 1;
+  width: min(680px, 90vw);
+  max-height: 84dvh;
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #2D160D 0%, #170B06 100%);
+  border: 1.5px solid var(--gold-bright);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+}
+
+.tr-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 4;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(18, 8, 5, 0.85);
+  border: 1px solid rgba(232, 197, 142, 0.55);
+  color: var(--gold-bright);
+  cursor: pointer;
+}
+
+.tr-modal-media {
+  background: #120704;
+}
+
+.tr-modal-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tr-modal-body {
+  padding: 1.25rem 1.35rem;
+  overflow-y: auto;
+}
+
+.tr-modal-body .tr-card-eyebrow {
+  color: var(--gold-soft);
+}
+
+.tr-modal-body h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.8dvh, 1.5rem);
+  color: var(--gold-bright);
+  margin: 0.2rem 0 0.55rem;
+}
+
+.tr-modal-body p {
+  font-size: clamp(0.8rem, 1.95dvh, 0.92rem);
+  line-height: 1.55;
+  color: var(--cream-warm);
+}
+
+.tr-modal-extra {
+  margin-top: 0.7rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--gold-antique);
+  background: rgba(255, 225, 168, 0.08);
+  font-size: 0.82rem !important;
+  color: var(--gold-bright) !important;
+}
+
+/* =========================================================
+   RESPONSIF MOBILE LANDSCAPE PENDEK (<= 460px)
+   ========================================================= */
+@media screen and (max-height: 460px) and (orientation: landscape) {
+  .tr-section-inner {
+    padding-top: calc(3.2rem + var(--safe-top));
+    padding-bottom: 1.1rem;
+  }
+
+  .tr-hero-content {
+    width: min(440px, 58vw);
+  }
+
+  .tr-hero-lead {
+    margin-bottom: 0.75rem;
+  }
+
+  .tr-timeline-bar {
+    padding: 0.45rem 0.7rem;
+  }
+
+  .tr-tl-text span {
+    display: none;
+  }
+
+  .tr-costume-figure {
+    height: 62dvh;
+  }
+
+  .tr-costume-card-body {
+    padding: 0.55rem 0.8rem;
+  }
+
+  .tr-moves-header {
+    margin-bottom: 0.65rem;
+    padding-bottom: 0.45rem;
+  }
+
+  .tr-move-media {
+    aspect-ratio: 16 / 9;
+  }
+
+  .tr-quiz-box {
+    padding: 0.75rem 1rem;
+  }
+
+  .tr-quiz-opt {
+    padding: 0.45rem 0.65rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tr-scroll-cue svg,
+  .tr-hotspot-dot {
+    animation: none;
+  }
+  .tr-story-thumb img,
+  .tr-hotspot,
+  .tr-side-dot-core {
+    transition: none;
+  }
+}
